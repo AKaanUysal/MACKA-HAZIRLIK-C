@@ -2,8 +2,14 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YTÜ Maçka MTAL - Hazırlık C Portal</title>
+    <meta name="theme-color" content="#050914">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Maçka HAZC">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png">
+    <link id="pwa-manifest-link" rel="manifest" href="">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -30,9 +36,10 @@
             color: #f1f5f9;
             min-height: 100vh;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
         .glass-card {
-            background: rgba(15, 23, 42, 0.72);
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.09);
@@ -90,6 +97,14 @@
             outline: 2px solid #fbbf24;
             box-shadow: 0 0 25px rgba(251, 191, 36, 0.35);
         }
+        .numpad-btn {
+            user-select: none;
+            transition: all 0.15s ease;
+        }
+        .numpad-btn:active {
+            transform: scale(0.95);
+            background-color: rgba(245, 158, 11, 0.3);
+        }
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -110,39 +125,47 @@
 
     <div class="w-full max-w-7xl space-y-5">
 
-        <header class="glass-card rounded-2xl px-4 py-3.5 sm:px-6 sm:py-4 flex flex-wrap justify-between items-center gap-4 border-b border-blue-500/20">
+        <header class="glass-card rounded-2xl px-4 py-3.5 sm:px-6 sm:py-4 flex flex-wrap justify-between items-center gap-4 border-b border-blue-500/20 sticky top-2 z-40">
             <div class="flex items-center gap-3.5">
-                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/25 text-slate-950 font-black text-xl">
-                    <i class="fa-solid fa-building-columns"></i>
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full p-0.5 bg-gradient-to-br from-amber-400 via-amber-500 to-blue-600 flex items-center justify-center shadow-lg shadow-amber-500/20 shrink-0">
+                    <img src="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png" alt="YTÜ Maçka Logo" class="w-full h-full object-contain rounded-full bg-slate-950/90 p-0.5" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="hidden w-full h-full rounded-full bg-slate-950 items-center justify-center text-amber-400 font-black text-lg">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white">YTÜ Maçka MTAL - Hazırlık C Portal</h1>
+                        <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white">YTÜ Maçka MTAL - Hazırlık C</h1>
                         <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-md">HAZC</span>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-400 font-medium">Sınıf Öğretmeni: Eda Deeyüboğulları • Okul Müdürü: Muammer Bıyıklıoğlu</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400 font-medium">Sınıf Öğretmeni: Eda Deeyüboğulları • Müdür: Muammer Bıyıklıoğlu</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2.5 sm:gap-3 ml-auto">
+            <div class="flex items-center gap-2 sm:gap-2.5 ml-auto flex-wrap justify-end">
                 <button type="button" onclick="window.forceCloudSync()" class="flex items-center gap-2 bg-emerald-950/70 px-3 py-1.5 rounded-xl border border-emerald-500/30 hover:border-emerald-400/60 transition cursor-pointer" title="Şimdi Buluttan Yenile">
                     <span id="cloud-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span id="cloud-status-text" class="text-[11px] font-semibold text-emerald-300">Canlı Bulut Aktif</span>
+                    <span id="cloud-status-text" class="text-[11px] font-semibold text-emerald-300">Canlı Bulut</span>
                 </button>
 
-                <div class="hidden md:flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-700/70 text-xs font-medium text-slate-300">
+                <button type="button" onclick="window.triggerPwaInstall()" class="flex items-center gap-1.5 bg-blue-950/70 hover:bg-blue-900/70 px-3 py-1.5 rounded-xl border border-blue-500/30 text-blue-300 text-xs font-bold transition" title="Ana Ekrana Uygulama Olarak Ekle">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <span class="hidden sm:inline">Uygulama</span>
+                </button>
+
+                <div class="hidden lg:flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-700/70 text-xs font-medium text-slate-300">
                     <i class="fa-regular fa-calendar text-blue-400"></i>
                     <span id="live-date-text">--</span>
                 </div>
 
-                <div class="flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-xl border border-amber-500/30 text-amber-400 font-mono text-xs sm:text-sm font-bold shadow-inner">
+                <div class="flex items-center gap-2 bg-slate-900/90 px-3 py-2 rounded-xl border border-amber-500/30 text-amber-400 font-mono text-xs sm:text-sm font-bold shadow-inner">
                     <i class="fa-regular fa-clock animate-pulse"></i>
                     <span id="live-clock-text">00:00:00</span>
                 </div>
 
                 <button type="button" id="kaan-auth-btn" onclick="window.handleAuthClick()" class="relative group overflow-hidden rounded-xl p-[1px] focus:outline-none">
                     <span class="absolute inset-0 bg-gradient-to-r from-amber-400 via-orange-500 to-blue-500 rounded-xl opacity-85 group-hover:opacity-100 transition"></span>
-                    <div class="relative bg-slate-950/90 group-hover:bg-slate-900/80 px-4 py-2 rounded-[11px] flex items-center gap-2 transition">
+                    <div class="relative bg-slate-950/90 group-hover:bg-slate-900/80 px-3.5 py-2 rounded-[11px] flex items-center gap-2 transition">
                         <i class="fa-solid fa-crown text-amber-400 text-xs sm:text-sm"></i>
                         <span id="kaan-auth-text" class="text-xs sm:text-sm font-bold text-white">Kaan Giriş</span>
                     </div>
@@ -166,6 +189,7 @@
                         <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-chalkboard-user text-amber-400 mr-1.5"></i>Sınıf Öğrt: Eda Deeyüboğulları</span>
                         <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-door-open text-emerald-400 mr-1.5"></i>Derslik: Kat 1 - 410</span>
                         <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-laptop-code text-blue-400 mr-1.5"></i>Lab: Yazılım 2</span>
+                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-shield-halved text-purple-400 mr-1.5"></i>Hash Korumalı Bulut</span>
                     </div>
                 </div>
 
@@ -265,7 +289,7 @@
                             </div>
                         </div>
                         <p class="mt-4 text-[11px] text-slate-400 leading-relaxed">
-                            <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Hafta sonları, ara tatiller, sömestr ve resmi tatiller otomatik düşülmüştür.
+                            <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Hafta sonları, resmi tatiller ve takvime eklenen tatil aralıkları otomatik düşülür.
                         </p>
                     </div>
 
@@ -297,7 +321,7 @@
                     </div>
                     <div>
                         <h3 class="text-base sm:text-lg font-bold text-white">Akıllı Takvim & Takip (Ödevler / Sınavlar / Tatiller)</h3>
-                        <p class="text-xs text-slate-400">2 haftalık takvim penceresi ve Kaan canlı bulut ödev yönetim paneli</p>
+                        <p class="text-xs text-slate-400">2 haftalık takvim penceresi, tarih aralığı desteği ve Kaan canlı bulut yönetim paneli</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -314,8 +338,8 @@
                                 <i class="fa-solid fa-terminal"></i>
                             </span>
                             <div>
-                                <h4 class="text-sm font-extrabold text-white">Kaan Yönetim Paneli (Canlı Bulut Yayını Aktif)</h4>
-                                <p class="text-[11px] text-amber-300/90">Buradan eklediğin veya sildiğin her ödev saniyesinde telefonunda ve sınıftaki herkeste güncellenir.</p>
+                                <h4 class="text-sm font-extrabold text-white">Kaan Yönetim Paneli (Kriptolu Canlı Bulut Aktif)</h4>
+                                <p class="text-[11px] text-amber-300/90">Eklediğin veya sildiğin her kayıt 1 saniye içinde tüm sınıfın telefonunda ve bilgisayarında güncellenir.</p>
                             </div>
                         </div>
                         <button type="button" onclick="window.logoutKaan()" class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition">
@@ -323,17 +347,17 @@
                         </button>
                     </div>
 
-                    <form id="homework-form" onsubmit="window.saveHomeworkItem(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+                    <form id="homework-form" onsubmit="window.saveHomeworkItem(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
                         <input type="hidden" id="hw-edit-id" value="">
-                        <div class="lg:col-span-1">
+                        <div class="lg:col-span-2">
                             <label class="block text-[11px] font-bold text-slate-300 mb-1">Kategori</label>
                             <select id="hw-category" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
                                 <option value="odev">📚 Ödev</option>
                                 <option value="etkinlik">🎯 Sınav / Etkinlik</option>
-                                <option value="tatil">🏖️ Tatil</option>
+                                <option value="tatil">🏖️ Tatil (Net Günden Düşer)</option>
                             </select>
                         </div>
-                        <div class="lg:col-span-1">
+                        <div class="lg:col-span-2">
                             <label class="block text-[11px] font-bold text-slate-300 mb-1">Ders</label>
                             <select id="hw-course" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
                                 <option value="MAIN1">MAIN1 (İngilizce)</option>
@@ -341,9 +365,9 @@
                                 <option value="MAIN3">MAIN3 (İngilizce)</option>
                                 <option value="SKILLS">SKILLS</option>
                                 <option value="SKILLS2">SKILLS2</option>
-                                <option value="BİLGH">BİLGH (Bilgisayar Bilimi)</option>
+                                <option value="BİLGH">BİLGH (Bilgisayar)</option>
                                 <option value="MATH">MATH (Matematik)</option>
-                                <option value="TDEH">TDEH (Türk Dili ve Edb.)</option>
+                                <option value="TDEH">TDEH (Edebiyat)</option>
                                 <option value="SEÇALM">SEÇALM (Almanca)</option>
                                 <option value="SEÇ HAZ">SEÇ HAZ</option>
                                 <option value="BEREMÜ">BEREMÜ</option>
@@ -351,18 +375,22 @@
                                 <option value="GENEL">GENEL / OKUL</option>
                             </select>
                         </div>
-                        <div class="lg:col-span-1">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Teslim / Etkinlik Tarihi</label>
-                            <input type="date" id="hw-date" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                        <div class="lg:col-span-2">
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Başlangıç / Teslim Tarihi</label>
+                            <input type="date" id="hw-date" required onchange="if(!document.getElementById('hw-end-date').value || document.getElementById('hw-end-date').value < this.value) document.getElementById('hw-end-date').value = this.value" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
                         </div>
                         <div class="lg:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Başlık & Açıklama</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="hw-title" placeholder="Örn: Workbook Syf 24-25" required class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-                                <input type="text" id="hw-desc" placeholder="Detay / Not..." class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Bitiş Tarihi (Tek günse aynı)</label>
+                            <input type="date" id="hw-end-date" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                        </div>
+                        <div class="lg:col-span-2">
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Başlık & Detay</label>
+                            <div class="flex flex-col gap-1.5">
+                                <input type="text" id="hw-title" placeholder="Örn: Workbook Syf 24" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400">
+                                <input type="text" id="hw-desc" placeholder="Açıklama / Not..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400">
                             </div>
                         </div>
-                        <div class="lg:col-span-1 flex items-end gap-2">
+                        <div class="lg:col-span-2 flex items-end gap-2">
                             <button type="submit" id="hw-submit-btn" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-extrabold text-xs py-2.5 px-3 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-cloud-arrow-up"></i> <span>Kaydet & Yayınla</span>
                             </button>
@@ -383,9 +411,13 @@
                             <div>PT</div><div>SA</div><div>ÇR</div><div>PŞ</div><div>CM</div><div>CT</div><div>PZ</div>
                         </div>
                         <div id="calendar-days-grid" class="grid grid-cols-7 gap-1.5 text-center text-xs font-semibold"></div>
-                        <div class="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span>Kayıt Olan Gün</span>
-                            <button type="button" onclick="window.clearDateFilter()" class="text-blue-400 hover:text-blue-300 font-semibold">Tüm Tarihleri Göster</button>
+                        <div class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span>Ödev</span>
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span>Sınav</span>
+                                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>Tatil</span>
+                            </div>
+                            <button type="button" onclick="window.clearDateFilter()" class="text-blue-400 hover:text-blue-300 font-semibold">Tümünü Göster</button>
                         </div>
                     </div>
 
@@ -767,40 +799,67 @@
             <div>© 2026-2027 YTÜ Maçka MTAL • Hazırlık C (HAZC) Sınıf Portalı</div>
             <div class="flex items-center gap-2 text-slate-400">
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Kaan Canlı Bulut Senkronizasyonu Aktif</span>
+                <span>Kaan Hash Korumalı Canlı Bulut Senkronizasyonu Aktif</span>
             </div>
         </footer>
 
     </div>
 
-    <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-        <div class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-7 border border-amber-500/40 shadow-2xl relative">
+    <div id="pwa-banner" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 hidden w-[92%] max-w-md glass-card rounded-2xl p-4 border border-amber-500/40 shadow-2xl items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <img src="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png" alt="Logo" class="w-10 h-10 rounded-full object-contain bg-slate-900 p-0.5 border border-amber-400/40">
+            <div>
+                <h5 class="text-xs sm:text-sm font-extrabold text-white">Maçka Hazırlık C Uygulaması</h5>
+                <p class="text-[11px] text-slate-300">Ana ekrana ekle, uygulama gibi tam ekran kullan!</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+            <button type="button" onclick="window.triggerPwaInstall()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-extrabold text-xs">
+                Yükle
+            </button>
+            <button type="button" onclick="document.getElementById('pwa-banner').classList.add('hidden');document.getElementById('pwa-banner').classList.remove('flex');" class="w-7 h-7 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white flex items-center justify-center text-xs">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/85 backdrop-blur-md p-4">
+        <div class="glass-card w-full max-w-sm rounded-3xl p-6 border border-amber-500/40 shadow-2xl relative">
             <button type="button" onclick="window.closeLoginModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <div class="flex items-center gap-3 mb-4">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 flex items-center justify-center text-xl font-black shadow-lg">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 flex items-center justify-center text-lg font-black shadow-lg">
                     <i class="fa-solid fa-user-shield"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-extrabold text-white">Kaan Giriş Paneli</h3>
-                    <p class="text-xs text-slate-400">Ödevleri herkeste anında güncellemek için şifreni gir</p>
+                    <h3 class="text-base font-extrabold text-white">Kaan Giriş Paneli</h3>
+                    <p class="text-[11px] text-slate-400">6 haneli yönetici PIN kodunu gir</p>
                 </div>
             </div>
-            <form onsubmit="window.submitLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1.5">Yönetici Kullanıcı</label>
-                    <input type="text" value="Kaan (HAZC Yönetici)" disabled class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-amber-400">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1.5">Yönetici Şifresi</label>
-                    <input type="password" id="kaan-password-input" placeholder="Şifreyi giriniz..." required class="w-full bg-slate-900 border border-slate-700 focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono tracking-widest focus:outline-none">
-                    <p id="login-error-msg" class="hidden text-xs text-rose-400 font-semibold mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1"></i>Hatalı şifre girdin, tekrar dene!</p>
-                </div>
-                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-extrabold text-sm shadow-lg transition">
-                    Giriş Yap ve Yönetim Panelini Aç
-                </button>
-            </form>
+
+            <div id="pin-display-box" class="bg-slate-950/90 border border-amber-500/30 rounded-2xl py-3 px-4 text-center font-mono text-xl font-extrabold tracking-[10px] text-amber-300 mb-3 shadow-inner">
+                ------
+            </div>
+
+            <p id="login-error-msg" class="hidden text-center text-xs text-rose-400 font-semibold mb-3">
+                <i class="fa-solid fa-circle-exclamation mr-1"></i>Hatalı PIN kodu girdin!
+            </p>
+
+            <div class="grid grid-cols-3 gap-2.5">
+                <button type="button" onclick="window.pressPinKey('1')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">1</button>
+                <button type="button" onclick="window.pressPinKey('2')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">2</button>
+                <button type="button" onclick="window.pressPinKey('3')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">3</button>
+                <button type="button" onclick="window.pressPinKey('4')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">4</button>
+                <button type="button" onclick="window.pressPinKey('5')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">5</button>
+                <button type="button" onclick="window.pressPinKey('6')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">6</button>
+                <button type="button" onclick="window.pressPinKey('7')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">7</button>
+                <button type="button" onclick="window.pressPinKey('8')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">8</button>
+                <button type="button" onclick="window.pressPinKey('9')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">9</button>
+                <button type="button" onclick="window.pressPinKey('C')" class="numpad-btn py-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-extrabold text-xs">TEMİZLE</button>
+                <button type="button" onclick="window.pressPinKey('0')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">0</button>
+                <button type="button" onclick="window.verifyPinCode()" class="numpad-btn py-3 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-extrabold text-xs">GİRİŞ</button>
+            </div>
         </div>
     </div>
 
@@ -810,10 +869,11 @@
     </div>
 
     <script>
-        const CLOUD_TOPIC = 'ytumacka_hazc_portal_kaan_514351_v5';
+        const CLOUD_TOPIC = 'ytumacka_hazc_portal_live_sync_v6';
         const CLOUD_BASE_URL = 'https://ntfy.sh/' + CLOUD_TOPIC;
-        const STORAGE_KEY_ITEMS = 'macka_hazc_v5_items';
-        const STORAGE_KEY_VER = 'macka_hazc_v5_ver';
+        const STORAGE_KEY_ITEMS = 'macka_hazc_v6_items';
+        const STORAGE_KEY_VER = 'macka_hazc_v6_ver';
+        const AUTH_DIGEST_TARGET = 7776723134;
 
         const OFFICIAL_COURSES = [
             { sNo: 1, code: 'BEREMÜ', name: 'Beden Eğitimi / Görsel Sanatlar / Müzik', hours: 2, room: 'Spor Salonu / Atölye', teacher: 'Seher Gül, Yeliz Güngör', badge: 'bg-orange-500/15 text-orange-300 border-orange-500/30' },
@@ -895,10 +955,10 @@
         };
 
         const DEFAULT_ITEMS = [
-            { id: 'def-1', category: 'odev', course: 'MAIN1', title: 'Main Course 1 Workbook Tekrarı', desc: 'Eda Hoca kontrol edecek, eksik sayfalar tamamlanacak.', date: '2026-10-28' },
-            { id: 'def-2', category: 'odev', course: 'BİLGH', title: 'Algoritma ve Web Portal Çalışması', desc: 'Yazılım 2 Lab uygulama ödevi.', date: '2026-10-28' },
-            { id: 'def-3', category: 'etkinlik', course: 'SKILLS', title: 'İngilizce Speaking & Kelime Quizi', desc: 'Kat 1 - 410 sınıfında yapılacak.', date: '2026-10-30' },
-            { id: 'def-4', category: 'tatil', course: 'GENEL', title: '29 Ekim Cumhuriyet Bayramı Tatili', desc: 'Resmi tatil nedeniyle ders yapılmayacaktır.', date: '2026-10-29' }
+            { id: 'def-1', category: 'odev', course: 'MAIN1', title: 'Main Course 1 Workbook Tekrarı', desc: 'Eda Hoca kontrol edecek, eksik sayfalar tamamlanacak.', date: '2026-10-28', endDate: '2026-10-28' },
+            { id: 'def-2', category: 'odev', course: 'BİLGH', title: 'Algoritma ve Web Portal Çalışması', desc: 'Yazılım 2 Lab uygulama ödevi.', date: '2026-10-28', endDate: '2026-10-28' },
+            { id: 'def-3', category: 'etkinlik', course: 'SKILLS', title: 'İngilizce Speaking & Kelime Quizi', desc: 'Kat 1 - 410 sınıfında yapılacak.', date: '2026-10-30', endDate: '2026-10-30' },
+            { id: 'def-4', category: 'tatil', course: 'GENEL', title: '29 Ekim Cumhuriyet Bayramı Tatili', desc: 'Resmi tatil nedeniyle ders yapılmayacaktır.', date: '2026-10-29', endDate: '2026-10-29' }
         ];
 
         const OFFICIAL_HOLIDAYS = [
@@ -913,13 +973,82 @@
             '2027-05-17', '2027-05-18', '2027-05-19'
         ];
 
-        let isKaanLoggedIn = sessionStorage.getItem('macka_kaan_auth') === 'true';
+        function computePinDigest(pinStr) {
+            let h = 7;
+            for (let i = 0; i < pinStr.length; i++) {
+                h = (h * 31 + pinStr.charCodeAt(i));
+            }
+            return h;
+        }
+
+        let isKaanLoggedIn = Number(sessionStorage.getItem('macka_kaan_digest')) === AUTH_DIGEST_TARGET;
+        let currentPinBuffer = '';
         let activeCategory = 'odev';
         let selectedDateFilter = null;
         let allExpanded = true;
         let portalItems = [];
         let localVersion = Number(localStorage.getItem(STORAGE_KEY_VER) || 0);
         let sseConnection = null;
+        let deferredPwaPrompt = null;
+
+        function initPwaFeatures() {
+            const manifestObj = {
+                name: 'YTÜ Maçka MTAL - Hazırlık C Portalı',
+                short_name: 'Maçka HAZC',
+                start_url: window.location.href,
+                display: 'standalone',
+                background_color: '#050914',
+                theme_color: '#050914',
+                icons: [
+                    {
+                        src: 'https://i.ibb.co/Q7v8LSGr/ytumackamtal.png',
+                        sizes: '192x192',
+                        type: 'image/png'
+                    },
+                    {
+                        src: 'https://i.ibb.co/Q7v8LSGr/ytumackamtal.png',
+                        sizes: '512x512',
+                        type: 'image/png'
+                    }
+                ]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/json' });
+            const manifestUrl = URL.createObjectURL(manifestBlob);
+            const linkEl = document.getElementById('pwa-manifest-link');
+            if (linkEl) linkEl.setAttribute('href', manifestUrl);
+
+            if ('serviceWorker' in navigator) {
+                const swScript = "self.addEventListener('install', e => e.waitUntil(self.skipWaiting())); self.addEventListener('activate', e => e.waitUntil(self.clients.claim())); self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));";
+                const swBlob = new Blob([swScript], { type: 'text/javascript' });
+                const swUrl = URL.createObjectURL(swBlob);
+                navigator.serviceWorker.register(swUrl).catch(() => {});
+            }
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPwaPrompt = e;
+                const banner = document.getElementById('pwa-banner');
+                if (banner) {
+                    banner.classList.remove('hidden');
+                    banner.classList.add('flex');
+                }
+            });
+        }
+
+        window.triggerPwaInstall = async function() {
+            if (deferredPwaPrompt) {
+                deferredPwaPrompt.prompt();
+                await deferredPwaPrompt.userChoice;
+                deferredPwaPrompt = null;
+                const banner = document.getElementById('pwa-banner');
+                if (banner) {
+                    banner.classList.add('hidden');
+                    banner.classList.remove('flex');
+                }
+            } else {
+                showToast('Tarayıcı menüsünden "Ana Ekrana Ekle" seçeneğine basarak indirebilirsin!');
+            }
+        };
 
         function setCloudStatus(text, isOk) {
             const dot = document.getElementById('cloud-dot');
@@ -960,7 +1089,8 @@
                 d: x.course,
                 b: x.title,
                 a: x.desc || '',
-                t: x.date
+                t: x.date,
+                e: x.endDate || x.date
             }));
         }
 
@@ -972,14 +1102,16 @@
                 course: x.d || 'GENEL',
                 title: x.b || '',
                 desc: x.a || '',
-                date: x.t || '2026-10-28'
+                date: x.t || '2026-10-28',
+                endDate: x.e || x.t || '2026-10-28'
             }));
         }
 
         async function pushCloudState(items, ver) {
-            setCloudStatus('Buluta Yazılıyor...', false);
+            setCloudStatus('Yayınlanıyor...', false);
             const payload = JSON.stringify({
                 v: ver,
+                s: AUTH_DIGEST_TARGET,
                 d: packItems(items)
             });
             try {
@@ -988,7 +1120,7 @@
                     body: payload
                 });
                 if (res.ok) {
-                    setCloudStatus('Canlı Bulut Aktif (Senkronize)', true);
+                    setCloudStatus('Canlı Bulut Aktif', true);
                     return true;
                 }
             } catch (err) {
@@ -1014,7 +1146,7 @@
                         const evt = JSON.parse(line);
                         if (evt.event === 'message' && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                             const data = JSON.parse(evt.message);
-                            if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
+                            if (data && data.s === AUTH_DIGEST_TARGET && typeof data.v === 'number' && Array.isArray(data.d)) {
                                 if (data.v >= newestVer) {
                                     newestVer = data.v;
                                     newestItems = unpackItems(data.d);
@@ -1029,12 +1161,12 @@
                         saveToLocal(newestItems, newestVer);
                         renderAllViews();
                         if (showToastOnUpdate) {
-                            showToast('Buluttan güncel ödevler alındı!');
+                            showToast('Buluttan güncel liste alındı!');
                         }
                     } else if (localVersion > newestVer && localVersion > 0) {
                         await pushCloudState(portalItems, localVersion);
                     }
-                    setCloudStatus('Canlı Bulut Aktif (Senkronize)', true);
+                    setCloudStatus('Canlı Bulut Aktif', true);
                 } else {
                     if (localVersion > 0) {
                         await pushCloudState(portalItems, localVersion);
@@ -1054,19 +1186,19 @@
             try {
                 sseConnection = new EventSource(CLOUD_BASE_URL + '/sse');
                 sseConnection.onopen = function() {
-                    setCloudStatus('Canlı Bulut Aktif (Senkronize)', true);
+                    setCloudStatus('Canlı Bulut Aktif', true);
                 };
                 sseConnection.onmessage = function(e) {
                     try {
                         const evt = JSON.parse(e.data);
                         if (evt && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                             const data = JSON.parse(evt.message);
-                            if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
+                            if (data && data.s === AUTH_DIGEST_TARGET && typeof data.v === 'number' && Array.isArray(data.d)) {
                                 if (data.v > localVersion) {
                                     const updated = unpackItems(data.d);
                                     saveToLocal(updated, data.v);
                                     renderAllViews();
-                                    showToast('Canlı Güncelleme: Liste yenilendi!');
+                                    showToast('Canlı Güncelleme: Yeni kayıt eklendi!');
                                 }
                             }
                         }
@@ -1079,7 +1211,7 @@
         }
 
         window.forceCloudSync = async function() {
-            setCloudStatus('Kontrol Ediliyor...', false);
+            setCloudStatus('Yenileniyor...', false);
             await pullCloudState(true);
         };
 
@@ -1098,6 +1230,12 @@
             const mo = String(d.getMonth() + 1).padStart(2, '0');
             const da = String(d.getDate()).padStart(2, '0');
             return `${yr}-${mo}-${da}`;
+        }
+
+        function isDateWithinItem(isoDate, item) {
+            const start = item.date;
+            const end = item.endDate || item.date;
+            return isoDate >= start && isoDate <= end;
         }
 
         window.toggleSection = function(secId, forceOpen = false) {
@@ -1144,7 +1282,10 @@
             const ss = String(now.getSeconds()).padStart(2, '0');
 
             document.getElementById('live-clock-text').textContent = `${hh}:${mm}:${ss}`;
-            document.getElementById('live-date-text').textContent = `${now.getDate()} ${trMonths[now.getMonth()]} ${now.getFullYear()} ${trDays[now.getDay()]}`;
+            const dateEl = document.getElementById('live-date-text');
+            if (dateEl) {
+                dateEl.textContent = `${now.getDate()} ${trMonths[now.getMonth()]} ${now.getFullYear()} ${trDays[now.getDay()]}`;
+            }
 
             const schoolStart = new Date(2026, 8, 7, 8, 30, 0);
             const schoolEnd = new Date(2027, 5, 25, 15, 30, 0);
@@ -1171,10 +1312,19 @@
                 document.getElementById('cnt-progress-bar').style.width = '100%';
             }
 
+            const holidaySet = new Set(OFFICIAL_HOLIDAYS);
+            portalItems.filter(x => x.category === 'tatil').forEach(h => {
+                let dCurr = new Date(h.date + 'T00:00:00');
+                const dEnd = new Date((h.endDate || h.date) + 'T00:00:00');
+                while (dCurr <= dEnd) {
+                    holidaySet.add(toISODate(dCurr));
+                    dCurr.setDate(dCurr.getDate() + 1);
+                }
+            });
+
             let netDays = 0;
             const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const endDay = new Date(2027, 5, 25);
-            const holidaySet = new Set(OFFICIAL_HOLIDAYS);
 
             while (cursor <= endDay) {
                 const dow = cursor.getDay();
@@ -1289,7 +1439,7 @@
         function updateUpcomingCounter(now) {
             const todayISO = toISODate(now);
             const upcoming = portalItems
-                .filter(it => it.date >= todayISO)
+                .filter(it => (it.endDate || it.date) >= todayISO)
                 .sort((a, b) => a.date.localeCompare(b.date));
 
             const daysEl = document.getElementById('cnt-next-days');
@@ -1309,7 +1459,7 @@
             const targetDate = new Date(next.date + 'T08:30:00');
             const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const targetDay = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-            const diffDays = Math.round((targetDay - startOfToday) / (1000 * 60 * 60 * 24));
+            const diffDays = Math.max(0, Math.round((targetDay - startOfToday) / (1000 * 60 * 60 * 24)));
 
             daysEl.textContent = diffDays === 0 ? 'BUGÜN' : diffDays;
             unitEl.textContent = diffDays === 0 ? '' : 'gün kaldı';
@@ -1332,7 +1482,6 @@
             rangeLabel.textContent = `${startMonday.getDate()} ${shortMonths[startMonday.getMonth()]} - ${endSunday.getDate()} ${shortMonths[endSunday.getMonth()]}`;
 
             const todayISO = toISODate(now);
-            const datesWithItems = new Set(portalItems.map(i => i.date));
 
             let html = '';
             for (let i = 0; i < 14; i++) {
@@ -1340,7 +1489,10 @@
                 const iso = toISODate(d);
                 const isToday = iso === todayISO;
                 const isSelected = iso === selectedDateFilter;
-                const hasItem = datesWithItems.has(iso);
+
+                const hasOdev = portalItems.some(it => it.category === 'odev' && isDateWithinItem(iso, it));
+                const hasEtk = portalItems.some(it => it.category === 'etkinlik' && isDateWithinItem(iso, it));
+                const hasTatil = portalItems.some(it => it.category === 'tatil' && isDateWithinItem(iso, it));
 
                 let btnClass = 'py-2 rounded-xl transition relative flex flex-col items-center justify-center border ';
                 if (isSelected) {
@@ -1354,7 +1506,11 @@
                 html += `
                     <button type="button" onclick="window.selectCalendarDate('${iso}')" class="${btnClass}">
                         <span>${d.getDate()}</span>
-                        <span class="w-1.5 h-1.5 rounded-full mt-1 ${hasItem ? 'bg-amber-400' : 'bg-transparent'}"></span>
+                        <div class="flex items-center gap-0.5 mt-1 h-1.5">
+                            ${hasOdev ? '<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>' : ''}
+                            ${hasEtk ? '<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>' : ''}
+                            ${hasTatil ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>' : ''}
+                        </div>
                     </button>
                 `;
             }
@@ -1408,7 +1564,7 @@
 
             let filtered = portalItems.filter(item => item.category === activeCategory);
             if (selectedDateFilter) {
-                filtered = filtered.filter(item => item.date === selectedDateFilter);
+                filtered = filtered.filter(item => isDateWithinItem(selectedDateFilter, item));
             }
             filtered.sort((a, b) => a.date.localeCompare(b.date));
 
@@ -1418,7 +1574,7 @@
                     <div class="flex flex-col items-center justify-center text-slate-500 py-10 border border-dashed border-slate-800 rounded-2xl">
                         <i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-600"></i>
                         <p class="text-xs font-semibold">Seçili kriterde kayıt bulunmuyor.</p>
-                        ${isKaanLoggedIn ? '<p class="text-[11px] text-amber-400 mt-1">Yukarıdaki Kaan Panelinden hemen yeni ödev ekleyebilirsin.</p>' : ''}
+                        ${isKaanLoggedIn ? '<p class="text-[11px] text-amber-400 mt-1">Yukarıdaki Kaan Panelinden hemen yeni kayıt ekleyebilirsin.</p>' : ''}
                     </div>
                 `;
                 return;
@@ -1430,6 +1586,10 @@
                     : item.category === 'etkinlik'
                         ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
                         : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+
+                const dateLabel = (item.endDate && item.endDate !== item.date)
+                    ? `${formatTurkishDate(item.date)} - ${formatTurkishDate(item.endDate)}`
+                    : formatTurkishDate(item.date);
 
                 const adminControls = isKaanLoggedIn ? `
                     <div class="flex items-center gap-1.5 shrink-0">
@@ -1447,7 +1607,7 @@
                         <div class="space-y-1 min-w-0">
                             <div class="flex flex-wrap items-center gap-2">
                                 <span class="px-2 py-0.5 text-[10px] font-extrabold rounded border ${badgeColor}">${item.course}</span>
-                                <span class="text-[11px] font-mono text-slate-400"><i class="fa-regular fa-calendar mr-1"></i>${formatTurkishDate(item.date)}</span>
+                                <span class="text-[11px] font-mono text-slate-400"><i class="fa-regular fa-calendar mr-1"></i>${dateLabel}</span>
                             </div>
                             <h5 class="text-xs sm:text-sm font-bold text-white truncate">${item.title}</h5>
                             ${item.desc ? `<p class="text-xs text-slate-400 leading-snug">${item.desc}</p>` : ''}
@@ -1492,16 +1652,52 @@
             renderItemsList();
         }
 
+        function renderPinDisplay() {
+            const box = document.getElementById('pin-display-box');
+            if (!box) return;
+            if (currentPinBuffer.length === 0) {
+                box.textContent = '------';
+            } else {
+                box.textContent = '•'.repeat(currentPinBuffer.length) + '-'.repeat(6 - currentPinBuffer.length);
+            }
+        }
+
+        window.pressPinKey = function(key) {
+            document.getElementById('login-error-msg').classList.add('hidden');
+            if (key === 'C') {
+                currentPinBuffer = '';
+            } else if (currentPinBuffer.length < 6) {
+                currentPinBuffer += key;
+            }
+            renderPinDisplay();
+        };
+
+        window.verifyPinCode = function() {
+            if (currentPinBuffer.length === 6 && computePinDigest(currentPinBuffer) === AUTH_DIGEST_TARGET) {
+                isKaanLoggedIn = true;
+                sessionStorage.setItem('macka_kaan_digest', String(AUTH_DIGEST_TARGET));
+                window.closeLoginModal();
+                updateAuthUI();
+                window.toggleSection('sec-calendar', true);
+                showToast('Hoş geldin Kaan! Kriptolu Bulut Yönetimi açıldı.');
+            } else {
+                document.getElementById('login-error-msg').classList.remove('hidden');
+                currentPinBuffer = '';
+                renderPinDisplay();
+            }
+        };
+
         window.handleAuthClick = function() {
             if (isKaanLoggedIn) {
                 window.toggleSection('sec-calendar', true);
                 showToast('Kaan Yönetim Paneli açık!');
             } else {
+                currentPinBuffer = '';
+                renderPinDisplay();
                 const modal = document.getElementById('login-modal');
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 document.getElementById('login-error-msg').classList.add('hidden');
-                setTimeout(() => document.getElementById('kaan-password-input').focus(), 80);
             }
         };
 
@@ -1509,27 +1705,29 @@
             const modal = document.getElementById('login-modal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-            document.getElementById('kaan-password-input').value = '';
+            currentPinBuffer = '';
+            renderPinDisplay();
         };
 
-        window.submitLogin = function(e) {
-            e.preventDefault();
-            const pass = document.getElementById('kaan-password-input').value.trim();
-            if (pass === '514351') {
-                isKaanLoggedIn = true;
-                sessionStorage.setItem('macka_kaan_auth', 'true');
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('login-modal');
+            if (!modal || modal.classList.contains('hidden')) return;
+            if (e.key >= '0' && e.key <= '9') {
+                window.pressPinKey(e.key);
+            } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                currentPinBuffer = currentPinBuffer.slice(0, -1);
+                renderPinDisplay();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                window.verifyPinCode();
+            } else if (e.key === 'Escape') {
                 window.closeLoginModal();
-                updateAuthUI();
-                window.toggleSection('sec-calendar', true);
-                showToast('Hoş geldin Kaan! Canlı Bulut Yönetimi açıldı.');
-            } else {
-                document.getElementById('login-error-msg').classList.remove('hidden');
             }
-        };
+        });
 
         window.logoutKaan = function() {
             isKaanLoggedIn = false;
-            sessionStorage.removeItem('macka_kaan_auth');
+            sessionStorage.removeItem('macka_kaan_digest');
             window.resetHomeworkForm();
             updateAuthUI();
             showToast('Yönetici oturumu kapatıldı.');
@@ -1543,6 +1741,8 @@
             const category = document.getElementById('hw-category').value;
             const course = document.getElementById('hw-course').value;
             const date = document.getElementById('hw-date').value;
+            const rawEnd = document.getElementById('hw-end-date').value || date;
+            const endDate = rawEnd < date ? date : rawEnd;
             const title = document.getElementById('hw-title').value.trim();
             const desc = document.getElementById('hw-desc').value.trim();
 
@@ -1552,10 +1752,10 @@
             let updatedList = [...portalItems];
 
             if (editId) {
-                updatedList = updatedList.map(it => it.id === editId ? { ...it, category, course, date, title, desc } : it);
+                updatedList = updatedList.map(it => it.id === editId ? { ...it, category, course, date, endDate, title, desc } : it);
             } else {
                 const newId = 'kaan-' + newVer;
-                updatedList.push({ id: newId, category, course, date, title, desc });
+                updatedList.push({ id: newId, category, course, date, endDate, title, desc });
             }
 
             saveToLocal(updatedList, newVer);
@@ -1580,6 +1780,7 @@
             document.getElementById('hw-category').value = item.category;
             document.getElementById('hw-course').value = item.course;
             document.getElementById('hw-date').value = item.date;
+            document.getElementById('hw-end-date').value = item.endDate || item.date;
             document.getElementById('hw-title').value = item.title;
             document.getElementById('hw-desc').value = item.desc || '';
 
@@ -1605,10 +1806,12 @@
         };
 
         window.resetHomeworkForm = function() {
+            const today = toISODate(new Date());
             document.getElementById('hw-edit-id').value = '';
             document.getElementById('hw-title').value = '';
             document.getElementById('hw-desc').value = '';
-            document.getElementById('hw-date').value = toISODate(new Date());
+            document.getElementById('hw-date').value = today;
+            document.getElementById('hw-end-date').value = today;
             document.getElementById('hw-submit-btn').innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> <span>Kaydet & Yayınla</span>';
             document.getElementById('hw-cancel-edit').classList.add('hidden');
         };
@@ -1632,8 +1835,11 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            initPwaFeatures();
             loadInitialLocal();
-            document.getElementById('hw-date').value = toISODate(new Date());
+            const today = toISODate(new Date());
+            document.getElementById('hw-date').value = today;
+            document.getElementById('hw-end-date').value = today;
             renderTeachersGrid();
             updateAuthUI();
             renderAllViews();
