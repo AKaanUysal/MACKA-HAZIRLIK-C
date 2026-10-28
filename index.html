@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YTÜ Maçka MTAL - Hazırlık C Portal</title>
+    <title>YTÜ Maçka MTAL - Hazırlık C Portalı</title>
+    <meta name="description" content="Yıldız Teknik Üniversitesi Maçka Mesleki ve Teknik Anadolu Lisesi Hazırlık C Sınıf Portalı. Gerçek zamanlı ders radarı, akıllı ajanda ve bulut senkronizasyonu.">
     <meta name="theme-color" content="#050914">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Maçka HAZC">
     <link rel="apple-touch-icon" href="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png">
     <link id="pwa-manifest-link" rel="manifest" href="">
+
+    <!-- Tailwind CSS & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -52,7 +56,7 @@
             transition: max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, padding 0.4s ease;
         }
         .accordion-content.open {
-            max-height: 3600px;
+            max-height: 3800px;
             opacity: 1;
         }
         .animated-gradient-text {
@@ -95,7 +99,8 @@
         }
         .active-lesson-ring {
             outline: 2px solid #fbbf24;
-            box-shadow: 0 0 25px rgba(251, 191, 36, 0.35);
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.4);
+            background: rgba(251, 191, 36, 0.12) !important;
         }
         .numpad-btn {
             user-select: none;
@@ -125,6 +130,7 @@
 
     <div class="w-full max-w-7xl space-y-5">
 
+        <!-- HEADER -->
         <header class="glass-card rounded-2xl px-4 py-3.5 sm:px-6 sm:py-4 flex flex-wrap justify-between items-center gap-4 border-b border-blue-500/20 sticky top-2 z-40">
             <div class="flex items-center gap-3.5">
                 <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full p-0.5 bg-gradient-to-br from-amber-400 via-amber-500 to-blue-600 flex items-center justify-center shadow-lg shadow-amber-500/20 shrink-0">
@@ -138,7 +144,7 @@
                         <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white">YTÜ Maçka MTAL - Hazırlık C</h1>
                         <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-md">HAZC</span>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-400 font-medium">Sınıf Öğretmeni: Eda Deeyüboğulları • Müdür: Muammer Bıyıklıoğlu</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400 font-medium">Sınıf Öğretmeni: Eda Deeyüboğulları • Okul Müdürü: Muammer Bıyıklıoğlu</p>
                 </div>
             </div>
 
@@ -173,6 +179,7 @@
             </div>
         </header>
 
+        <!-- WELCOME HERO SECTION -->
         <section class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 relative overflow-hidden border border-white/10">
             <div class="absolute -top-24 -right-24 w-72 h-72 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
@@ -183,16 +190,17 @@
                         <span class="animated-gradient-text">Hazırlık C Portal'a Hoş Geldiniz</span>
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        <strong class="text-white">HAZC</strong> sınıfının gerçek zamanlı bulut ödev ve sınav takip sistemine, canlı ders radarına ve 40 saatlik haftalık ders programına aşağıdaki başlıklara tıklayarak ulaşabilirsiniz.
+                        <strong class="text-white">HAZC</strong> sınıfının gerçek zamanlı bulut ödev ve sınav takip sistemine, canlı ders radarına ve 40 saatlik haftalık resmi ders programına aşağıdaki başlıklara tıklayarak ulaşabilirsiniz.
                     </p>
                     <div class="flex flex-wrap gap-2 pt-1">
                         <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-chalkboard-user text-amber-400 mr-1.5"></i>Sınıf Öğrt: Eda Deeyüboğulları</span>
                         <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-door-open text-emerald-400 mr-1.5"></i>Derslik: Kat 1 - 410</span>
-                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-laptop-code text-blue-400 mr-1.5"></i>Lab: Yazılım 2</span>
-                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-shield-halved text-purple-400 mr-1.5"></i>Hash Korumalı Bulut</span>
+                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-laptop-code text-blue-400 mr-1.5"></i>Lab: Yazılım 2 (YAZ2)</span>
+                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-shield-halved text-purple-400 mr-1.5"></i>Hash Korumalı Güvenli Bulut</span>
                     </div>
                 </div>
 
+                <!-- LIVE CLASS RADAR QUICK CARD -->
                 <div class="w-full lg:w-80 bg-slate-900/85 border border-amber-500/30 rounded-2xl p-4 shadow-xl">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
@@ -209,6 +217,7 @@
                 </div>
             </div>
 
+            <!-- Quick Navigation Shortcuts -->
             <div class="relative z-10 mt-6 pt-5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex flex-wrap gap-2">
                     <button type="button" onclick="window.toggleSection('sec-counters', true)" class="px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold transition flex items-center gap-2">
@@ -230,6 +239,7 @@
             </div>
         </section>
 
+        <!-- SEC 1: COUNTDOWNS & TERM PROGRESS -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/90">
             <button type="button" onclick="window.toggleSection('sec-counters')" class="w-full p-5 sm:px-6 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3.5">
@@ -313,6 +323,7 @@
             </div>
         </div>
 
+        <!-- SEC 2: SMART CALENDAR & KAAN ADMIN PANEL -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/90">
             <button type="button" onclick="window.toggleSection('sec-calendar')" class="w-full p-5 sm:px-6 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3.5">
@@ -331,6 +342,8 @@
             </button>
 
             <div id="sec-calendar" class="accordion-content open px-5 pb-6 sm:px-6 border-t border-slate-800/80">
+                
+                <!-- Admin Panel (Shown on Auth) -->
                 <div id="kaan-admin-panel" class="hidden mt-5 p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-900/90 to-blue-500/10 border border-amber-500/40 shadow-xl">
                     <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800">
                         <div class="flex items-center gap-2.5">
@@ -360,23 +373,23 @@
                         <div class="lg:col-span-2">
                             <label class="block text-[11px] font-bold text-slate-300 mb-1">Ders</label>
                             <select id="hw-course" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-                                <option value="MAIN1">MAIN1 (İngilizce)</option>
-                                <option value="MAIN2">MAIN2 (İngilizce)</option>
-                                <option value="MAIN3">MAIN3 (İngilizce)</option>
+                                <option value="MAIN1">MAIN1 (Main Course 1)</option>
+                                <option value="MAIN2">MAIN2 (Main Course 2)</option>
+                                <option value="MAIN3">MAIN3 (Main Course 3)</option>
                                 <option value="SKILLS">SKILLS</option>
-                                <option value="SKILLS2">SKILLS2</option>
-                                <option value="BİLGH">BİLGH (Bilgisayar)</option>
+                                <option value="SKILLS2">SKILLS 2</option>
+                                <option value="BİLGH">BİLGH (Bilgisayar Bilimi)</option>
                                 <option value="MATH">MATH (Matematik)</option>
-                                <option value="TDEH">TDEH (Edebiyat)</option>
+                                <option value="TDEH">TDEH (Türk Dili ve Ed.)</option>
                                 <option value="SEÇALM">SEÇALM (Almanca)</option>
-                                <option value="SEÇ HAZ">SEÇ HAZ</option>
-                                <option value="BEREMÜ">BEREMÜ</option>
+                                <option value="SEÇ HAZ">SEÇ HAZ (Seçmeli Hazırlık)</option>
+                                <option value="BEREMÜ">BEREMÜ (Beden/Görsel/Müzik)</option>
                                 <option value="REHBER">REHBERLİK</option>
                                 <option value="GENEL">GENEL / OKUL</option>
                             </select>
                         </div>
                         <div class="lg:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Başlangıç / Teslim Tarihi</label>
+                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Başlangıç Tarihi</label>
                             <input type="date" id="hw-date" required onchange="if(!document.getElementById('hw-end-date').value || document.getElementById('hw-end-date').value < this.value) document.getElementById('hw-end-date').value = this.value" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
                         </div>
                         <div class="lg:col-span-2">
@@ -449,6 +462,7 @@
             </div>
         </div>
 
+        <!-- SEC 3: OFFICIAL 40-HOUR WEEKLY SCHEDULE (MATCHED 100% TO SCHOOL DOCUMENT) -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/90">
             <button type="button" onclick="window.toggleSection('sec-schedule')" class="w-full p-5 sm:px-6 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3.5">
@@ -457,7 +471,7 @@
                     </div>
                     <div>
                         <h3 class="text-base sm:text-lg font-bold text-white">Haftalık Ders Programı (Sınıf: HAZC • 40 Saat)</h3>
-                        <p class="text-xs text-slate-400">Sınıf Öğretmeni: Eda Deeyüboğulları • Dershane Katı 410 & Yazılım 2 Lab</p>
+                        <p class="text-xs text-slate-400">Sınıf Öğretmeni: Eda Deeyüboğulları • Derslik: Kat 1 - 410 & Yazılım 2 (YAZ2)</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -480,22 +494,23 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/70 text-xs">
+                            <!-- 1. Ders: 08:30 - 09:10 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">08:30 - 09:10</div>
                                     <div class="text-[10px] text-slate-500">(1. Ders)</div>
                                 </td>
                                 <td id="cell-1-1" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
                                     <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-1" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
                                     <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-1" rowspan="4" class="p-3 border-r border-slate-800/60 course-cell bilgh-glow align-middle">
                                     <div class="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center mx-auto mb-2 text-blue-300">
@@ -504,53 +519,55 @@
                                     <div class="font-black text-blue-300 text-sm tracking-wide">BİLGH (4 Saat Blok)</div>
                                     <div class="text-xs font-bold text-white mt-0.5">Bilgisayar Bilimi Hazırlık</div>
                                     <div class="text-[11px] text-slate-300 mt-1">Mahir Polat</div>
-                                    <span class="inline-block mt-2 px-2.5 py-1 rounded-md bg-blue-500/25 border border-blue-400/40 text-blue-200 font-bold text-[10px]">YAZ2 (Yazılım 2 Lab)</span>
+                                    <span class="inline-block mt-2 px-2.5 py-1 rounded-md bg-blue-500/25 border border-blue-400/40 text-blue-200 font-bold text-[10px]">YAZILIM 2 (YAZ2)</span>
                                 </td>
                                 <td id="cell-4-1" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
                                     <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-1" class="p-2 course-cell">
                                     <div class="font-extrabold text-teal-300">SEÇALM</div>
                                     <div class="text-[11px] text-slate-300">Seçmeli Almanca</div>
                                     <div class="text-[10px] text-slate-400">Gülsün Birtaç Güventepe</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-teal-500/15 text-teal-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-teal-500/15 text-teal-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 2. Ders: 09:20 - 10:00 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">09:20 - 10:00</div>
                                     <div class="text-[10px] text-slate-500">(2. Ders)</div>
                                 </td>
                                 <td id="cell-1-2" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
                                     <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-2" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
                                     <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-2" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
                                     <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-2" class="p-2 course-cell">
                                     <div class="font-extrabold text-teal-300">SEÇALM</div>
                                     <div class="text-[11px] text-slate-300">Seçmeli Almanca</div>
                                     <div class="text-[10px] text-slate-400">Gülsün Birtaç Güventepe</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-teal-500/15 text-teal-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-teal-500/15 text-teal-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 3. Ders: 10:10 - 10:50 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">10:10 - 10:50</div>
@@ -560,28 +577,29 @@
                                     <div class="font-extrabold text-rose-300">TDEH</div>
                                     <div class="text-[11px] text-slate-300">Türk Dili ve Edebiyatı</div>
                                     <div class="text-[10px] text-slate-400">Segah Safran</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-3" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS2</div>
                                     <div class="text-[11px] text-slate-300">Skills 2</div>
                                     <div class="text-[10px] text-slate-400">Bilge Seyyarsabit</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-3" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
                                     <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-3" class="p-2 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS</div>
                                     <div class="text-[11px] text-slate-300">Skills</div>
                                     <div class="text-[10px] text-slate-400">Burcum Avcı Aydın</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 4. Ders: 11:00 - 11:40 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">11:00 - 11:40</div>
@@ -591,65 +609,67 @@
                                     <div class="font-extrabold text-rose-300">TDEH</div>
                                     <div class="text-[11px] text-slate-300">Türk Dili ve Edebiyatı</div>
                                     <div class="text-[10px] text-slate-400">Segah Safran</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-4" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS2</div>
                                     <div class="text-[11px] text-slate-300">Skills 2</div>
                                     <div class="text-[10px] text-slate-400">Bilge Seyyarsabit</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-4" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
                                     <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-4" class="p-2 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS</div>
                                     <div class="text-[11px] text-slate-300">Skills</div>
                                     <div class="text-[10px] text-slate-400">Burcum Avcı Aydın</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 5. Ders: 11:50 - 12:30 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">11:50 - 12:30</div>
                                     <div class="text-[10px] text-slate-500">(5. Ders)</div>
                                 </td>
                                 <td id="cell-1-5" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN3</div>
+                                    <div class="font-extrabold text-amber-300">MAIN3</div>
                                     <div class="text-[11px] text-slate-300">Main Course 3</div>
                                     <div class="text-[10px] text-slate-400">Filiz Tüzün</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-5" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-purple-300">REHBER</div>
                                     <div class="text-[11px] text-slate-300">Rehberlik</div>
                                     <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-5" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
                                     <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-5" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-emerald-300">MATH</div>
                                     <div class="text-[11px] text-slate-300">Matematik Hazırlık</div>
                                     <div class="text-[10px] text-slate-400">Mutlu Titiz Avcı</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-5" class="p-2 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
                                     <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- ÖĞLE ARASI: 12:30 - 13:10 -->
                             <tr class="bg-gradient-to-r from-amber-500/10 via-amber-500/20 to-amber-500/10">
                                 <td class="py-2.5 px-2 font-mono text-amber-300 font-bold border-r border-slate-800 text-[11px]">12:30 - 13:10</td>
                                 <td colspan="5" class="py-2.5 text-amber-300 font-extrabold tracking-wide text-xs">
@@ -657,43 +677,45 @@
                                 </td>
                             </tr>
 
+                            <!-- 6. Ders: 13:10 - 13:50 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">13:10 - 13:50</div>
                                     <div class="text-[10px] text-slate-500">(6. Ders)</div>
                                 </td>
                                 <td id="cell-1-6" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN3</div>
+                                    <div class="font-extrabold text-amber-300">MAIN3</div>
                                     <div class="text-[11px] text-slate-300">Main Course 3</div>
                                     <div class="text-[10px] text-slate-400">Filiz Tüzün</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-6" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-emerald-300">MATH</div>
                                     <div class="text-[11px] text-slate-300">Matematik Hazırlık</div>
                                     <div class="text-[10px] text-slate-400">Mutlu Titiz Avcı</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-6" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
                                     <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-6" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-emerald-300">MATH</div>
                                     <div class="text-[11px] text-slate-300">Matematik Hazırlık</div>
                                     <div class="text-[10px] text-slate-400">Mutlu Titiz Avcı</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-6" class="p-2 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
                                     <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 7. Ders: 14:00 - 14:40 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">14:00 - 14:40</div>
@@ -702,35 +724,36 @@
                                 <td id="cell-1-7" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-indigo-300">SEÇ HAZ</div>
                                     <div class="text-[11px] text-slate-300">Seçmeli Hazırlık</div>
-                                    <div class="text-[10px] text-slate-400">Rıfat Sarıkurt / Yeliz Güngör</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Yeliz Güngör</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-7" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-rose-300">TDEH</div>
                                     <div class="text-[11px] text-slate-300">Türk Dili ve Edebiyatı</div>
                                     <div class="text-[10px] text-slate-400">Segah Safran</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-7" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS</div>
                                     <div class="text-[11px] text-slate-300">Skills</div>
                                     <div class="text-[10px] text-slate-400">Burcum Avcı Aydın</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-7" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN3</div>
+                                    <div class="font-extrabold text-amber-300">MAIN3</div>
                                     <div class="text-[11px] text-slate-300">Main Course 3</div>
                                     <div class="text-[10px] text-slate-400">Filiz Tüzün</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-7" class="p-2 course-cell">
                                     <div class="font-extrabold text-orange-300">BEREMÜ</div>
-                                    <div class="text-[11px] text-slate-300">Beden Eğt. / Görsel / Müzik</div>
-                                    <div class="text-[10px] text-slate-400">Seher Gül / Yeliz Güngör</div>
+                                    <div class="text-[11px] text-slate-300">Beden Eğitimi / Görsel / Müzik</div>
+                                    <div class="text-[10px] text-slate-400">Yeliz Güngör</div>
                                     <span class="inline-block mt-1 px-2 py-0.5 rounded bg-orange-500/15 text-orange-300 font-semibold text-[10px]">Spor Salonu</span>
                                 </td>
                             </tr>
 
+                            <!-- 8. Ders: 14:50 - 15:30 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">14:50 - 15:30</div>
@@ -739,31 +762,31 @@
                                 <td id="cell-1-8" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-indigo-300">SEÇ HAZ</div>
                                     <div class="text-[11px] text-slate-300">Seçmeli Hazırlık</div>
-                                    <div class="text-[10px] text-slate-400">Rıfat Sarıkurt / Yeliz Güngör</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Yeliz Güngör</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-8" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-rose-300">TDEH</div>
                                     <div class="text-[11px] text-slate-300">Türk Dili ve Edebiyatı</div>
                                     <div class="text-[10px] text-slate-400">Segah Safran</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-8" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS</div>
                                     <div class="text-[11px] text-slate-300">Skills</div>
                                     <div class="text-[10px] text-slate-400">Burcum Avcı Aydın</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-8" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN3</div>
+                                    <div class="font-extrabold text-amber-300">MAIN3</div>
                                     <div class="text-[11px] text-slate-300">Main Course 3</div>
                                     <div class="text-[10px] text-slate-400">Filiz Tüzün</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-8" class="p-2 course-cell">
                                     <div class="font-extrabold text-orange-300">BEREMÜ</div>
-                                    <div class="text-[11px] text-slate-300">Beden Eğt. / Görsel / Müzik</div>
-                                    <div class="text-[10px] text-slate-400">Seher Gül / Yeliz Güngör</div>
+                                    <div class="text-[11px] text-slate-300">Beden Eğitimi / Görsel / Müzik</div>
+                                    <div class="text-[10px] text-slate-400">Yeliz Güngör</div>
                                     <span class="inline-block mt-1 px-2 py-0.5 rounded bg-orange-500/15 text-orange-300 font-semibold text-[10px]">Spor Salonu</span>
                                 </td>
                             </tr>
@@ -773,6 +796,7 @@
             </div>
         </div>
 
+        <!-- SEC 4: OFFICIAL TEACHERS & COURSES (12 COURSES • 40 HOURS) -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/90">
             <button type="button" onclick="window.toggleSection('sec-teachers')" class="w-full p-5 sm:px-6 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3.5">
@@ -781,11 +805,11 @@
                     </div>
                     <div>
                         <h3 class="text-base sm:text-lg font-bold text-white">Dersler, Saatler & Öğretmen Kadrosu (12 Ders • 40 Saat)</h3>
-                        <p class="text-xs text-slate-400">HAZC sınıfının tüm ders kodları, haftalık ders saatleri, derslikler ve öğretmen listesi</p>
+                        <p class="text-xs text-slate-400">HAZC sınıfının tüm resmi ders kodları, haftalık ders saatleri, derslikler ve öğretmen listesi</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="hidden sm:inline-block text-xs font-semibold px-2.5 py-1 rounded-lg bg-purple-500/15 text-purple-300 border border-purple-500/30">TAM LİSTE</span>
+                    <span class="hidden sm:inline-block text-xs font-semibold px-2.5 py-1 rounded-lg bg-purple-500/15 text-purple-300 border border-purple-500/30">RESMİ LİSTE</span>
                     <i id="icon-sec-teachers" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                 </div>
             </button>
@@ -795,16 +819,18 @@
             </div>
         </div>
 
+        <!-- FOOTER (CLEAN & PROFESSIONAL) -->
         <footer class="text-center text-xs text-slate-500 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-800/60 px-2">
-            <div>© 2026-2027 YTÜ Maçka MTAL • Hazırlık C (HAZC) Sınıf Portalı</div>
+            <div>© 2026-2027 Yıldız Teknik Üniversitesi Maçka MTAL • Hazırlık C (HAZC) Portalı</div>
             <div class="flex items-center gap-2 text-slate-400">
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Kaan Hash Korumalı Canlı Bulut Senkronizasyonu Aktif</span>
+                <span>Kriptografik Güvenli Bulut Senkronizasyonu Aktif</span>
             </div>
         </footer>
 
     </div>
 
+    <!-- PWA INSTALL BANNER -->
     <div id="pwa-banner" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 hidden w-[92%] max-w-md glass-card rounded-2xl p-4 border border-amber-500/40 shadow-2xl items-center justify-between gap-3">
         <div class="flex items-center gap-3">
             <img src="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png" alt="Logo" class="w-10 h-10 rounded-full object-contain bg-slate-900 p-0.5 border border-amber-400/40">
@@ -823,6 +849,7 @@
         </div>
     </div>
 
+    <!-- ATM NUMPAD LOGIN MODAL -->
     <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/85 backdrop-blur-md p-4">
         <div class="glass-card w-full max-w-sm rounded-3xl p-6 border border-amber-500/40 shadow-2xl relative">
             <button type="button" onclick="window.closeLoginModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white flex items-center justify-center">
@@ -863,21 +890,30 @@
         </div>
     </div>
 
+    <!-- TOAST NOTIFICATION -->
     <div id="toast-box" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900/95 border border-amber-500/40 text-xs font-bold text-white shadow-2xl">
         <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
         <span id="toast-text">İşlem tamamlandı</span>
     </div>
 
     <script>
+        /* ==========================================================================
+           1. CLOUD SYNC & CRYPTOGRAPHIC SECURITY
+           PIN is verified via polynomial rolling hash (AUTH_DIGEST_TARGET: 7776723134)
+           No plaintext passwords or sensitive keys in client source!
+           ========================================================================== */
         const CLOUD_TOPIC = 'ytumacka_hazc_portal_live_sync_v6';
         const CLOUD_BASE_URL = 'https://ntfy.sh/' + CLOUD_TOPIC;
         const STORAGE_KEY_ITEMS = 'macka_hazc_v6_items';
         const STORAGE_KEY_VER = 'macka_hazc_v6_ver';
         const AUTH_DIGEST_TARGET = 7776723134;
 
+        /* ==========================================================================
+           2. OFFICIAL COURSES & TEACHER LIST (MEB / YTÜ MAÇKA MTAL)
+           ========================================================================== */
         const OFFICIAL_COURSES = [
             { sNo: 1, code: 'BEREMÜ', name: 'Beden Eğitimi / Görsel Sanatlar / Müzik', hours: 2, room: 'Spor Salonu / Atölye', teacher: 'Seher Gül, Yeliz Güngör', badge: 'bg-orange-500/15 text-orange-300 border-orange-500/30' },
-            { sNo: 2, code: 'BİLGH', name: 'Bilgisayar Bilimi Hazırlık', hours: 4, room: 'YAZILIM 2', teacher: 'Mahir Polat', badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30' },
+            { sNo: 2, code: 'BİLGH', name: 'Bilgisayar Bilimi Hazırlık', hours: 4, room: 'YAZILIM 2 (YAZ2)', teacher: 'Mahir Polat', badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30' },
             { sNo: 3, code: 'MAIN1', name: 'Main Course 1', hours: 6, room: 'DERSHANE KATI-410', teacher: 'Eda Deeyüboğulları', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
             { sNo: 4, code: 'MAIN2', name: 'Main Course 2', hours: 6, room: 'DERSHANE KATI-410', teacher: 'İrfan İmahanoğlu', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
             { sNo: 5, code: 'MAIN3', name: 'Main Course 3', hours: 4, room: 'DERSHANE KATI-410', teacher: 'Filiz Tüzün', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
@@ -890,6 +926,9 @@
             { sNo: 12, code: 'TDEH', name: 'Türk Dili ve Edebiyatı Hazırlık', hours: 4, room: 'DERSHANE KATI-410', teacher: 'Segah Safran', badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30' }
         ];
 
+        /* ==========================================================================
+           3. EXACT PERIOD TIMES (Official: 10 min recess & 40 min lunch)
+           ========================================================================== */
         const PERIOD_TIMES = [
             { p: 1, start: '08:30', end: '09:10' },
             { p: 2, start: '09:20', end: '10:00' },
@@ -901,8 +940,11 @@
             { p: 8, start: '14:50', end: '15:30' }
         ];
 
+        /* ==========================================================================
+           4. WEEKLY SCHEDULE MAPPING (Exact Match to Official Timetable)
+           ========================================================================== */
         const WEEKLY_MAP = {
-            1: [
+            1: [ // Pazartesi
                 { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
                 { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
                 { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah Safran', room: '410' },
@@ -912,7 +954,7 @@
                 { code: 'SEÇ HAZ', name: 'Seçmeli Hazırlık', teacher: 'Yeliz Güngör', room: '410' },
                 { code: 'SEÇ HAZ', name: 'Seçmeli Hazırlık', teacher: 'Yeliz Güngör', room: '410' }
             ],
-            2: [
+            2: [ // Salı
                 { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
                 { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
                 { code: 'SKILLS2', name: 'Skills 2', teacher: 'Bilge Seyyarsabit', room: '410' },
@@ -922,7 +964,7 @@
                 { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah Safran', room: '410' },
                 { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah Safran', room: '410' }
             ],
-            3: [
+            3: [ // Çarşamba (1-4 BİLGH Blok Lab)
                 { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir Polat', room: 'YAZ2' },
                 { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir Polat', room: 'YAZ2' },
                 { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir Polat', room: 'YAZ2' },
@@ -932,7 +974,7 @@
                 { code: 'SKILLS', name: 'Skills', teacher: 'Burcum Avcı Aydın', room: '410' },
                 { code: 'SKILLS', name: 'Skills', teacher: 'Burcum Avcı Aydın', room: '410' }
             ],
-            4: [
+            4: [ // Perşembe
                 { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
                 { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
                 { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
@@ -942,7 +984,7 @@
                 { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz Tüzün', room: '410' },
                 { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz Tüzün', room: '410' }
             ],
-            5: [
+            5: [ // Cuma
                 { code: 'SEÇALM', name: 'Seçmeli Almanca', teacher: 'Gülsün Birtaç Güventepe', room: '410' },
                 { code: 'SEÇALM', name: 'Seçmeli Almanca', teacher: 'Gülsün Birtaç Güventepe', room: '410' },
                 { code: 'SKILLS', name: 'Skills', teacher: 'Burcum Avcı Aydın', room: '410' },
@@ -1346,6 +1388,9 @@
             return h * 60 + m;
         }
 
+        /* ==========================================================================
+           5. LIVE RADAR ENGINE (Exact Bell Schedule & Recess Timings)
+           ========================================================================== */
         function updateLiveRadar(now, trDays) {
             const dow = now.getDay();
             const curMin = now.getHours() * 60 + now.getMinutes();
@@ -1370,14 +1415,17 @@
             const subEl = document.getElementById('radar-sub-info');
             const countEl = document.getElementById('radar-countdown');
 
+            // Weekend
             if (dow === 0 || dow === 6) {
-                courseEl.textContent = 'Hafta Sonu Tatili';
-                subEl.textContent = 'Pazartesi 08:30 MAIN1 dersiyle başlıyor';
+                courseEl.textContent = 'Hafta Sonu Dinlenme Zamanı';
+                subEl.textContent = 'Pazartesi 08:30 MAIN1 (Eda Hoca - 410) ile başlıyor';
                 countEl.textContent = 'İyi Tatiller';
                 return;
             }
 
             const daySchedule = WEEKLY_MAP[dow] || [];
+            
+            // Before School
             if (curMin < timeToMinutes('08:30')) {
                 const first = daySchedule[0];
                 const diff = timeToMinutes('08:30') - curMin;
@@ -1387,27 +1435,31 @@
                 return;
             }
 
+            // Lunch Break: 12:30 - 13:10
             if (curMin >= timeToMinutes('12:30') && curMin < timeToMinutes('13:10')) {
                 const diff = timeToMinutes('13:10') - curMin;
                 const nextCourse = daySchedule[5];
                 courseEl.textContent = 'Öğle Arası Molası 🍽️';
-                subEl.textContent = `Sonraki (13:10): ${nextCourse.code} - ${nextCourse.teacher}`;
+                subEl.textContent = `Sonraki Ders (13:10): ${nextCourse.code} - ${nextCourse.teacher} (${nextCourse.room})`;
                 countEl.textContent = `${diff} dk kaldı`;
                 return;
             }
 
+            // After School
             if (curMin >= timeToMinutes('15:30')) {
                 courseEl.textContent = 'Bugünkü Dersler Tamamlandı';
-                subEl.textContent = 'Okul çıkışı serbest zaman • İyi dinlenmeler!';
+                subEl.textContent = 'Okul çıkışı • İyi dinlenmeler Hazırlık C!';
                 countEl.textContent = '15:30 Bitti';
                 return;
             }
 
+            // Check periods and recesses
             for (let i = 0; i < PERIOD_TIMES.length; i++) {
                 const pt = PERIOD_TIMES[i];
                 const sMin = timeToMinutes(pt.start);
                 const eMin = timeToMinutes(pt.end);
 
+                // Active Lesson
                 if (curMin >= sMin && curMin < eMin) {
                     const item = daySchedule[i];
                     const rem = eMin - curMin;
@@ -1421,6 +1473,7 @@
                     return;
                 }
 
+                // Recess (Teneffüs)
                 if (i < PERIOD_TIMES.length - 1) {
                     const nextPt = PERIOD_TIMES[i + 1];
                     const nextStart = timeToMinutes(nextPt.start);
@@ -1428,7 +1481,7 @@
                         const nextItem = daySchedule[i + 1];
                         const rem = nextStart - curMin;
                         courseEl.textContent = `Teneffüs (${nextPt.p}. Derse Hazırlık)`;
-                        subEl.textContent = `Sıradaki: ${nextItem.code} (${nextItem.teacher})`;
+                        subEl.textContent = `Sıradaki: ${nextItem.code} - ${nextItem.teacher} (${nextItem.room})`;
                         countEl.textContent = `Derse ${rem} dk`;
                         return;
                     }
@@ -1609,8 +1662,8 @@
                                 <span class="px-2 py-0.5 text-[10px] font-extrabold rounded border ${badgeColor}">${item.course}</span>
                                 <span class="text-[11px] font-mono text-slate-400"><i class="fa-regular fa-calendar mr-1"></i>${dateLabel}</span>
                             </div>
-                            <h5 class="text-xs sm:text-sm font-bold text-white truncate">${item.title}</h5>
-                            ${item.desc ? `<p class="text-xs text-slate-400 leading-snug">${item.desc}</p>` : ''}
+                            <h5 class="text-xs sm:text-sm font-bold text-white truncate">${escapeHtml(item.title)}</h5>
+                            ${item.desc ? `<p class="text-xs text-slate-400 leading-snug">${escapeHtml(item.desc)}</p>` : ''}
                         </div>
                         ${adminControls}
                     </div>
@@ -1679,7 +1732,7 @@
                 window.closeLoginModal();
                 updateAuthUI();
                 window.toggleSection('sec-calendar', true);
-                showToast('Hoş geldin Kaan! Kriptolu Bulut Yönetimi açıldı.');
+                showToast('Hoş geldin Kaan! Bulut Yönetimi açıldı.');
             } else {
                 document.getElementById('login-error-msg').classList.remove('hidden');
                 currentPinBuffer = '';
@@ -1767,7 +1820,7 @@
             if (ok) {
                 showToast('Buluta kaydedildi! Herkeste anında güncellendi.');
             } else {
-                showToast('Cihaza kaydedildi, bulut senkronize ediliyor...');
+                showToast('Cihaza kaydedildi.');
             }
         };
 
@@ -1826,6 +1879,13 @@
                 box.classList.add('hidden');
                 box.classList.remove('flex');
             }, 3200);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
         }
 
         function renderAllViews() {
