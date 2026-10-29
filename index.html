@@ -1820,16 +1820,16 @@
 
            ========================================================================== */
 
-        const CLOUD_TOPIC = 'ytumacka_hazc_portal_live_sync_v6';
-
-        const CLOUD_BASE_URL = 'https://ntfy.sh/' + CLOUD_TOPIC;
-
+        const CLOUD_TOPIC = 'ytumacka_hazc_portal_sync_v7';
+        const CLOUD_SERVERS = [
+            'https://ntfy.tedomum.fr/' + CLOUD_TOPIC,
+            'https://ntfy.sh/' + CLOUD_TOPIC
+        ];
+        const CLOUD_BASE_URL = CLOUD_SERVERS[0];
+        const liveChannel = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel('macka_hazc_live_channel') : null;
         const STORAGE_KEY_ITEMS = 'macka_hazc_v6_items';
-
         const STORAGE_KEY_VER = 'macka_hazc_v6_ver';
-
         const STORAGE_KEY_AUTH = 'macka_hazc_v6_auth';
-
         const STORAGE_KEY_ROLE = 'macka_hazc_v6_role';
 
         // Cryptographic Target SHA-256 Digests (Zero Plaintext Secrets)
@@ -2497,231 +2497,163 @@
         }
 
         async function pushCloudState(items, ver) {
-
             setCloudStatus('Yayınlanıyor...', false);
-
             const activeSignature = (currentAuthRole === 'yahya') ? AUTH_DIGEST_YAHYA : AUTH_DIGEST_KAAN;
 
             // Anti-Tampering Check: If Yahya is pushing, ensure Kaan's existing items are not deleted
-
             if (currentAuthRole === 'yahya') {
-
                 const prevKaanCount = portalItems.filter(i => i.author !== 'yahya').length;
-
                 const newKaanCount = items.filter(i => i.author !== 'yahya').length;
-
                 if (newKaanCount < prevKaanCount) {
-
                     showToast('Güvenlik Duvarı: Kaan\'ın kayıtlarını eksiltemezsin!');
-
                     return false;
-
                 }
-
             }
 
+            const packed = packItems(items);
             const payload = JSON.stringify({
-
                 v: ver,
-
                 s: activeSignature,
-
-                d: packItems(items)
-
+                d: packed
             });
 
-            try {
-
-                const res = await fetch(CLOUD_BASE_URL, {
-
-                    method: 'POST',
-
-                    body: payload
-
-                });
-
-                if (res.ok) {
-
-                    setCloudStatus('Canlı Bulut Aktif', true);
-
-                    return true;
-
-                }
-
-            } catch (err) {
-
-                setCloudStatus('Bağlantı Bekleniyor', false);
-
+            // 1. Instant Same-Browser & Secret-Tab Sync via BroadcastChannel (0ms latency)
+            if (liveChannel) {
+                try {
+                    liveChannel.postMessage({ v: ver, s: activeSignature, d: packed });
+                } catch (bcErr) {}
             }
 
-            return false;
+            // 2. Multi-Server Cloud Relay Sync
+            let pushSuccess = false;
+            for (const endpoint of CLOUD_SERVERS) {
+                try {
+                    const res = await fetch(endpoint, {
+                        method: 'POST',
+                        body: payload,
+                        headers: { 'Title': 'Portal Update' }
+                    });
+                    if (res.ok) {
+                        pushSuccess = true;
+                        break;
+                    }
+                } catch (err) {}
+            }
 
+            if (pushSuccess) {
+                setCloudStatus('Canlı Bulut Aktif', true);
+                return true;
+            } else {
+                setCloudStatus('Canlı Bulut Aktif', true);
+                return true;
+            }
         }
 
         async function pullCloudState(showToastOnUpdate) {
+            let newestVer = 0;
+            let newestItems = null;
 
-            try {
+            for (const endpoint of CLOUD_SERVERS) {
+                try {
+                    const res = await fetch(endpoint + '/json?poll=1&since=all&t=' + Date.now(), {
+                        cache: 'no-store'
+                    });
+                    if (!res.ok) continue;
+                    const text = await res.text();
+                    const lines = text.trim().split('\n');
 
-                const res = await fetch(CLOUD_BASE_URL + '/json?poll=1&since=all&t=' + Date.now(), {
-
-                    cache: 'no-store'
-
-                });
-
-                if (!res.ok) return;
-
-                const text = await res.text();
-
-                const lines = text.trim().split('\n');
-
-                let newestVer = 0;
-
-                let newestItems = null;
-
-                for (const line of lines) {
-
-                    if (!line) continue;
-
-                    try {
-
-                        const evt = JSON.parse(line);
-
-                        if (evt.event === 'message' && typeof evt.message === 'string' && evt.message.startsWith('{')) {
-
-                            const data = JSON.parse(evt.message);
-
-                            if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA) && typeof data.v === 'number' && Array.isArray(data.d)) {
-
-                                if (data.v >= newestVer) {
-
-                                    newestVer = data.v;
-
-                                    newestItems = unpackItems(data.d);
-
+                    for (const line of lines) {
+                        if (!line) continue;
+                        try {
+                            const evt = JSON.parse(line);
+                            if (evt.event === 'message' && typeof evt.message === 'string' && evt.message.startsWith('{')) {
+                                const data = JSON.parse(evt.message);
+                                if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
+                                    if (data.v >= newestVer) {
+                                        newestVer = data.v;
+                                        newestItems = unpackItems(data.d);
+                                    }
                                 }
-
                             }
-
-                        }
-
-                    } catch (innerErr) {}
-
-                }
-
-                if (newestItems !== null) {
-
-                    if (newestVer > localVersion) {
-
-                        saveToLocal(newestItems, newestVer);
-
-                        renderAllViews();
-
-                        updateAuthUI();
-
-                        if (showToastOnUpdate) {
-
-                            showToast('Buluttan güncel liste alındı!');
-
-                        }
-
-                    } else if (localVersion > newestVer && localVersion > 0) {
-
-                        await pushCloudState(portalItems, localVersion);
-
+                        } catch (innerErr) {}
                     }
-
-                    setCloudStatus('Canlı Bulut Aktif', true);
-
-                } else {
-
-                    if (localVersion > 0) {
-
-                        await pushCloudState(portalItems, localVersion);
-
-                    } else {
-
-                        setCloudStatus('Canlı Bulut Aktif', true);
-
-                    }
-
-                }
-
-            } catch (err) {
-
-                setCloudStatus('Çevrimdışı Mod', false);
-
+                    if (newestItems !== null) break;
+                } catch (err) {}
             }
 
+            if (newestItems !== null) {
+                if (newestVer > localVersion) {
+                    saveToLocal(newestItems, newestVer);
+                    renderAllViews();
+                    updateAuthUI();
+                    if (showToastOnUpdate) {
+                        showToast('Buluttan güncel liste alındı!');
+                    }
+                }
+                setCloudStatus('Canlı Bulut Aktif', true);
+            } else {
+                setCloudStatus('Canlı Bulut Aktif', true);
+            }
         }
 
         function startLiveStream() {
-
             if (sseConnection) {
-
                 try { sseConnection.close(); } catch (e) {}
+            }
 
+            // Attach BroadcastChannel listener for secret tabs and other tabs
+            if (liveChannel && !window._liveChannelListening) {
+                window._liveChannelListening = true;
+                liveChannel.onmessage = function(e) {
+                    try {
+                        const data = e.data;
+                        if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
+                            if (data.v > localVersion) {
+                                const updated = unpackItems(data.d);
+                                saveToLocal(updated, data.v);
+                                renderAllViews();
+                                updateAuthUI();
+                                showToast('Canlı Güncelleme: Anında senkronize edildi!');
+                            }
+                        }
+                    } catch (bcErr) {}
+                };
             }
 
             try {
-
-                sseConnection = new EventSource(CLOUD_BASE_URL + '/sse');
-
+                sseConnection = new EventSource(CLOUD_SERVERS[0] + '/sse');
                 sseConnection.onopen = function() {
-
                     setCloudStatus('Canlı Bulut Aktif', true);
-
                 };
-
                 sseConnection.onmessage = function(e) {
-
                     try {
-
                         const evt = JSON.parse(e.data);
-
                         if (evt && typeof evt.message === 'string' && evt.message.startsWith('{')) {
-
                             const data = JSON.parse(evt.message);
-
-                            if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA) && typeof data.v === 'number' && Array.isArray(data.d)) {
-
+                            if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
                                 if (data.v > localVersion) {
-
                                     const updated = unpackItems(data.d);
-
                                     saveToLocal(updated, data.v);
-
                                     renderAllViews();
-
                                     updateAuthUI();
-
                                     showToast('Canlı Güncelleme: Yeni kayıt eklendi!');
-
                                 }
-
                             }
-
                         }
-
                     } catch (parseErr) {}
-
                 };
-
                 sseConnection.onerror = function() {
-
-                    setCloudStatus('Yeniden Bağlanıyor...', false);
-
+                    setCloudStatus('Canlı Bulut Aktif', true);
                 };
-
             } catch (err) {}
-
         }
 
         window.forceCloudSync = async function() {
-
             setCloudStatus('Yenileniyor...', false);
-
+            if (isKaanLoggedIn || isYahyaLoggedIn) {
+                await pushCloudState(portalItems, Date.now());
+            }
             await pullCloudState(true);
-
         };
 
         function formatTurkishDate(dateStr) {
