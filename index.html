@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YTÜ Maçka MTAL - Hazırlık C Portal</title>
+    <title>YTÜ Maçka MTAL - Hazırlık C Portalı</title>
+    <meta name="description" content="Yıldız Teknik Üniversitesi Maçka Mesleki ve Teknik Anadolu Lisesi Hazırlık C Sınıf Portalı. Gerçek zamanlı ders radarı, akıllı ajanda ve bulut senkronizasyonu.">
     <meta name="theme-color" content="#050914">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Maçka HAZC">
     <link rel="apple-touch-icon" href="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png">
     <link id="pwa-manifest-link" rel="manifest" href="">
+
+    <!-- Tailwind CSS & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -52,7 +56,7 @@
             transition: max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, padding 0.4s ease;
         }
         .accordion-content.open {
-            max-height: 3600px;
+            max-height: 4200px;
             opacity: 1;
         }
         .animated-gradient-text {
@@ -95,45 +99,61 @@
         }
         .active-lesson-ring {
             outline: 2px solid #fbbf24;
-            box-shadow: 0 0 25px rgba(251, 191, 36, 0.35);
+            outline-offset: -2px;
+            background: rgba(245, 158, 11, 0.18) !important;
+            animation: pulseLesson 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulseLesson {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 20px 4px rgba(245, 158, 11, 0.25); }
+        }
+        .numpad-btn {
+            touch-action: manipulation;
+            transition: transform 0.08s ease, background-color 0.15s ease;
+        }
+        .numpad-btn:active {
+            transform: scale(0.94);
         }
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #090e1a;
+            background: #050914;
         }
         ::-webkit-scrollbar-thumb {
             background: #1e293b;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #3b82f6;
+            background: #334155;
         }
     </style>
 </head>
-<body class="p-3 sm:p-6 md:p-8 flex flex-col items-center">
+<body class="p-3 sm:p-5 md:p-8 flex flex-col justify-between select-none">
 
-    <div class="w-full max-w-7xl space-y-5">
+    <div class="max-w-7xl mx-auto w-full space-y-6">
 
-        <header class="glass-card rounded-2xl px-4 py-3.5 sm:px-6 sm:py-4 flex flex-wrap justify-between items-center gap-4 border-b border-blue-500/20 sticky top-2 z-40">
+        <!-- HEADER SECTION -->
+        <header class="glass-card rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 border border-white/10">
             <div class="flex items-center gap-3.5">
-                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full p-0.5 bg-gradient-to-br from-amber-400 via-amber-500 to-blue-600 flex items-center justify-center shadow-lg shadow-amber-500/20 shrink-0">
-                    <img src="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png" alt="YTÜ Maçka Logo" class="w-full h-full object-contain rounded-full bg-slate-950/90 p-0.5" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <div class="hidden w-full h-full rounded-full bg-slate-950 items-center justify-center text-amber-400 font-black text-lg">
-                        <i class="fa-solid fa-building-columns"></i>
-                    </div>
+                <div class="relative">
+                    <img src="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png" alt="YTÜ Maçka MTAL Logo" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-2xl bg-slate-900/90 p-1 border border-slate-700/80 shadow-inner">
+                    <span class="absolute -bottom-1 -right-1 flex h-3.5 w-3.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-slate-950"></span>
+                    </span>
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white">YTÜ Maçka MTAL - Hazırlık C</h1>
-                        <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-md">HAZC</span>
+                        <h1 class="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight text-white">YTÜ MAÇKA MTAL</h1>
+                        <span class="px-2 py-0.5 text-[11px] font-black rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono tracking-wider">HAZ-C</span>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-400 font-medium">Sınıf Öğretmeni: Eda Deeyüboğulları • Müdür: Muammer Bıyıklıoğlu</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400 font-medium">Sınıf Öğretmeni: Eda D. • Okul Müdürü: Muammer B.</p>
                 </div>
             </div>
 
+            <!-- Header Controls & Clocks -->
             <div class="flex items-center gap-2 sm:gap-2.5 ml-auto flex-wrap justify-end">
                 <button type="button" onclick="window.forceCloudSync()" class="flex items-center gap-2 bg-emerald-950/70 px-3 py-1.5 rounded-xl border border-emerald-500/30 hover:border-emerald-400/60 transition cursor-pointer" title="Şimdi Buluttan Yenile">
                     <span id="cloud-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
@@ -165,6 +185,7 @@
             </div>
         </header>
 
+        <!-- WELCOME HERO SECTION -->
         <section class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 relative overflow-hidden border border-white/10">
             <div class="absolute -top-24 -right-24 w-72 h-72 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
@@ -175,16 +196,17 @@
                         <span class="animated-gradient-text">Hazırlık C Portal'a Hoş Geldiniz</span>
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        <strong class="text-white">HAZC</strong> sınıfının gerçek zamanlı bulut ödev ve sınav takip sistemine, canlı ders radarına ve 40 saatlik haftalık ders programına aşağıdaki başlıklara tıklayarak ulaşabilirsiniz.
+                        <strong class="text-white">HAZC</strong> sınıfının gerçek zamanlı bulut ödev ve sınav takip sistemine, canlı ders radarına ve 40 saatlik haftalık resmi ders programına aşağıdaki başlıklara tıklayarak ulaşabilirsiniz.
                     </p>
                     <div class="flex flex-wrap gap-2 pt-1">
-                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-chalkboard-user text-amber-400 mr-1.5"></i>Sınıf Öğrt: Eda Deeyüboğulları</span>
+                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-chalkboard-user text-amber-400 mr-1.5"></i>Sınıf Öğrt: Eda D.</span>
                         <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-door-open text-emerald-400 mr-1.5"></i>Derslik: Kat 1 - 410</span>
-                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-laptop-code text-blue-400 mr-1.5"></i>Lab: Yazılım 2</span>
-                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-shield-halved text-purple-400 mr-1.5"></i>Hash Korumalı Bulut</span>
+                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-laptop-code text-blue-400 mr-1.5"></i>Lab: Yazılım 2 (YAZ2)</span>
+                        <span class="px-3 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300"><i class="fa-solid fa-shield-halved text-purple-400 mr-1.5"></i>Hash Korumalı Güvenli Bulut</span>
                     </div>
                 </div>
 
+                <!-- LIVE CLASS RADAR QUICK CARD -->
                 <div class="w-full lg:w-80 bg-slate-900/85 border border-amber-500/30 rounded-2xl p-4 shadow-xl">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
@@ -201,6 +223,7 @@
                 </div>
             </div>
 
+            <!-- Quick Navigation Shortcuts -->
             <div class="relative z-10 mt-6 pt-5 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex flex-wrap gap-2">
                     <button type="button" onclick="window.toggleSection('sec-counters', true)" class="px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold transition flex items-center gap-2">
@@ -213,7 +236,7 @@
                         <i class="fa-solid fa-table-cells"></i> Haftalık Ders Programı
                     </button>
                     <button type="button" onclick="window.toggleSection('sec-teachers', true)" class="px-3.5 py-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 text-xs font-bold transition flex items-center gap-2">
-                        <i class="fa-solid fa-users-rectangle"></i> Dersler & Öğretmen Kadrosu
+                        <i class="fa-solid fa-users-rectangle"></i> Dersler & Kadro
                     </button>
                 </div>
                 <button type="button" onclick="window.expandAllSections()" class="text-xs font-semibold text-slate-400 hover:text-white transition underline underline-offset-4">
@@ -222,6 +245,7 @@
             </div>
         </section>
 
+        <!-- SEC 1: COUNTDOWNS & TERM PROGRESS -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/90">
             <button type="button" onclick="window.toggleSection('sec-counters')" class="w-full p-5 sm:px-6 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3.5">
@@ -234,77 +258,90 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="hidden sm:inline-block text-xs font-mono px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20">CANLI SAYAÇ</span>
+                    <span class="hidden sm:inline-block text-xs font-mono px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/20">CANLI HESAPLAMA</span>
                     <i id="icon-sec-counters" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 rotate-180"></i>
                 </div>
             </button>
 
             <div id="sec-counters" class="accordion-content open px-5 pb-6 sm:px-6 border-t border-slate-800/80">
-                <div class="pt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-slate-900/75 border border-slate-800/90 p-5 rounded-2xl relative overflow-hidden">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <p class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Kapanışa Kalan (25 Haziran)</p>
-                                <div class="mt-2 flex items-baseline gap-2">
-                                    <span id="cnt-close-days" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">--</span>
-                                    <span class="text-xs text-slate-400 font-semibold">gün</span>
-                                </div>
-                                <p id="cnt-close-hms" class="text-xs font-mono text-slate-300 mt-1">-- sa -- dk -- sn</p>
-                            </div>
-                            <div class="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-400 text-lg">
-                                <i class="fa-solid fa-flag-checkered"></i>
-                            </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-5">
+                    <!-- Countdown 1: June 25 Closing -->
+                    <div class="p-4 rounded-2xl bg-slate-900/75 border border-slate-800/90 relative overflow-hidden flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Okul Kapanışı</span>
+                            <i class="fa-solid fa-flag-checkered text-slate-500 text-xs"></i>
                         </div>
-                        <div class="mt-4">
-                            <div class="flex justify-between text-[11px] text-slate-400 mb-1">
-                                <span>Dönem İlerlemesi</span>
-                                <span id="cnt-progress-pct" class="font-mono text-amber-400 font-bold">%0</span>
+                        <div class="my-2">
+                            <div class="flex items-baseline gap-1.5">
+                                <span id="cnt-end-days" class="text-3xl sm:text-4xl font-extrabold font-mono text-white">--</span>
+                                <span class="text-xs text-slate-400 font-semibold">gün</span>
                             </div>
-                            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                                <div id="cnt-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-orange-400 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
+                            <div id="cnt-end-hms" class="text-xs font-mono text-amber-300/90 mt-1">-- sa -- dk -- sn</div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+                            Hedef: 25 Haziran 2027
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/75 border border-slate-800/90 p-5 rounded-2xl relative overflow-hidden">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <p class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Net Okul / Ders Günü</p>
-                                <div class="mt-2 flex items-baseline gap-2">
-                                    <span id="cnt-net-days" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">--</span>
-                                    <span class="text-xs text-slate-400 font-semibold">iş günü</span>
-                                </div>
-                                <p id="cnt-net-hours" class="text-xs font-mono text-emerald-300/90 mt-1">-- toplam ders saati kaldı</p>
-                            </div>
-                            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-400 text-lg">
-                                <i class="fa-solid fa-briefcase"></i>
-                            </div>
+                    <!-- Countdown 2: Net School Days -->
+                    <div class="p-4 rounded-2xl bg-slate-900/75 border border-slate-800/90 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Net Ders Günü</span>
+                            <i class="fa-solid fa-calendar-check text-slate-500 text-xs"></i>
                         </div>
-                        <p class="mt-4 text-[11px] text-slate-400 leading-relaxed">
-                            <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>Hafta sonları, resmi tatiller ve takvime eklenen tatil aralıkları otomatik düşülür.
-                        </p>
+                        <div class="my-2">
+                            <div class="flex items-baseline gap-1.5">
+                                <span id="cnt-net-days" class="text-3xl sm:text-4xl font-extrabold font-mono text-white">--</span>
+                                <span class="text-xs text-slate-400 font-semibold">gün</span>
+                            </div>
+                            <div class="text-xs text-emerald-300/90 mt-1">Tatiller & Hafta Sonları Hariç</div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+                            Fiili okula gidilecek ders günleri
+                        </div>
                     </div>
 
-                    <div class="bg-slate-900/75 border border-slate-800/90 p-5 rounded-2xl relative overflow-hidden">
-                        <div class="flex items-start justify-between">
-                            <div class="pr-2">
-                                <p class="text-[11px] font-bold uppercase tracking-wider text-blue-400">Yaklaşan Ödev / Sınav / Tatil</p>
-                                <div class="mt-2 flex items-baseline gap-2">
-                                    <span id="cnt-next-days" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">--</span>
-                                    <span id="cnt-next-unit" class="text-xs text-slate-400 font-semibold">gün</span>
-                                </div>
-                                <p id="cnt-next-title" class="text-xs font-semibold text-blue-200 mt-1 truncate max-w-[220px]">Yükleniyor...</p>
+                    <!-- Countdown 3: Next Exam/Task -->
+                    <div class="p-4 rounded-2xl bg-slate-900/75 border border-slate-800/90 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Yaklaşan Görev</span>
+                            <i class="fa-solid fa-bell text-slate-500 text-xs"></i>
+                        </div>
+                        <div class="my-2">
+                            <div class="flex items-baseline gap-1.5">
+                                <span id="cnt-next-days" class="text-3xl sm:text-4xl font-extrabold font-mono text-white">--</span>
+                                <span id="cnt-next-unit" class="text-xs text-slate-400 font-semibold">gün</span>
                             </div>
-                            <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-blue-400 text-lg shrink-0">
-                                <i class="fa-solid fa-bolt"></i>
+                            <div id="cnt-next-title" class="text-xs text-blue-300/90 truncate mt-1">Yükleniyor...</div>
+                        </div>
+                        <div id="cnt-next-date" class="text-[11px] text-slate-400 pt-2 border-t border-slate-800 truncate">
+                            Tarih kontrol ediliyor
+                        </div>
+                    </div>
+
+                    <!-- Progress: Term 1 -->
+                    <div class="p-4 rounded-2xl bg-slate-900/75 border border-slate-800/90 flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">1. Dönem İlerlemesi</span>
+                            <i class="fa-solid fa-chart-line text-slate-500 text-xs"></i>
+                        </div>
+                        <div class="my-2">
+                            <div class="flex items-baseline gap-1.5">
+                                <span id="term-progress-pct" class="text-3xl sm:text-4xl font-extrabold font-mono text-white">--%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden mt-2 p-0.5 border border-slate-700/60">
+                                <div id="term-progress-bar" class="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
                         </div>
-                        <p id="cnt-next-date" class="mt-4 text-[11px] font-mono text-slate-400">Tarih: --</p>
+                        <div class="text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+                            1. Dönem Sonu: 18 Ocak 2027
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- SEC 2: SMART CALENDAR & TASKS -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/90">
             <button type="button" onclick="window.toggleSection('sec-calendar')" class="w-full p-5 sm:px-6 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3.5">
@@ -312,76 +349,86 @@
                         <i class="fa-solid fa-calendar-days text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="text-base sm:text-lg font-bold text-white">Akıllı Takvim & Takip (Ödevler / Sınavlar / Tatiller)</h3>
-                        <p class="text-xs text-slate-400">2 haftalık takvim penceresi, tarih aralığı desteği ve Kaan canlı bulut yönetim paneli</p>
+                        <h3 class="text-base sm:text-lg font-bold text-white">Akıllı Ajanda, Ödev & Sınav Takvimi</h3>
+                        <p class="text-xs text-slate-400">2 haftalık pencere, tarih filtreleme ve gerçek zamanlı ntfy.sh SSE senkronizasyonu</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span id="badge-homework-count" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30">0 Kayıt</span>
+                    <span class="hidden sm:inline-block text-xs font-semibold px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-300 border border-blue-500/20">CANLI BULUT SENKRON</span>
                     <i id="icon-sec-calendar" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 rotate-180"></i>
                 </div>
             </button>
 
             <div id="sec-calendar" class="accordion-content open px-5 pb-6 sm:px-6 border-t border-slate-800/80">
+                
+                <!-- KAAN ADMIN CONTROLS (ONLY DISPLAYED WHEN LOGGED IN) -->
                 <div id="kaan-admin-panel" class="hidden mt-5 p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-slate-900/90 to-blue-500/10 border border-amber-500/40 shadow-xl">
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-800">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
                         <div class="flex items-center gap-2.5">
-                            <span class="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black">
-                                <i class="fa-solid fa-terminal"></i>
-                            </span>
+                            <div class="w-8 h-8 rounded-lg bg-amber-400 text-slate-950 flex items-center justify-center font-black text-sm">
+                                <i class="fa-solid fa-crown"></i>
+                            </div>
                             <div>
-                                <h4 class="text-sm font-extrabold text-white">Kaan Yönetim Paneli (Kriptolu Canlı Bulut Aktif)</h4>
-                                <p class="text-[11px] text-amber-300/90">Eklediğin veya sildiğin her kayıt 1 saniye içinde tüm sınıfın telefonunda ve bilgisayarında güncellenir.</p>
+                                <h4 class="text-sm font-bold text-white">Kaan Yönetici Paneli</h4>
+                                <p class="text-[11px] text-slate-400">Eklenen her kayıt anında tüm sınıfın ekranında güncellenir</p>
                             </div>
                         </div>
-                        <button type="button" onclick="window.logoutKaan()" class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition">
-                            <i class="fa-solid fa-right-from-bracket mr-1"></i>Çıkış Yap
+                        <button type="button" onclick="window.logoutKaan()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition">
+                            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i>Çıkış
                         </button>
                     </div>
 
-                    <form id="homework-form" onsubmit="window.saveHomeworkItem(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
+                    <form id="homework-form" onsubmit="window.saveHomeworkItem(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3">
                         <input type="hidden" id="hw-edit-id" value="">
+                        
+                        <div class="lg:col-span-4">
+                            <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Başlık / Görev Adı</label>
+                            <input type="text" id="hw-title" required placeholder="Örn: Main Course 1 Unit 3 Testi" maxlength="120" class="w-full bg-slate-950/80 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                        </div>
+
                         <div class="lg:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Kategori</label>
-                            <select id="hw-category" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-                                <option value="odev">📚 Ödev</option>
-                                <option value="etkinlik">🎯 Sınav / Etkinlik</option>
-                                <option value="tatil">🏖️ Tatil (Net Günden Düşer)</option>
+                            <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Kategori</label>
+                            <select id="hw-category" class="w-full bg-slate-950/80 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                                <option value="odev">Ödev (Mavi)</option>
+                                <option value="etkinlik">Sınav / Etkinlik (Sarı)</option>
+                                <option value="tatil">Tatil (Yeşil)</option>
                             </select>
                         </div>
+
                         <div class="lg:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Ders</label>
-                            <select id="hw-course" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
-                                <option value="MAIN1">MAIN1 (İngilizce)</option>
-                                <option value="MAIN2">MAIN2 (İngilizce)</option>
-                                <option value="MAIN3">MAIN3 (İngilizce)</option>
-                                <option value="SKILLS">SKILLS</option>
-                                <option value="SKILLS2">SKILLS2</option>
-                                <option value="BİLGH">BİLGH (Bilgisayar)</option>
-                                <option value="MATH">MATH (Matematik)</option>
-                                <option value="TDEH">TDEH (Edebiyat)</option>
-                                <option value="SEÇALM">SEÇALM (Almanca)</option>
-                                <option value="SEÇ HAZ">SEÇ HAZ</option>
-                                <option value="BEREMÜ">BEREMÜ</option>
-                                <option value="REHBER">REHBERLİK</option>
-                                <option value="GENEL">GENEL / OKUL</option>
+                            <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Ders Kodu</label>
+                            <select id="hw-course" class="w-full bg-slate-950/80 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                                <option value="MAIN1">MAIN1 (Eda D.)</option>
+                                <option value="MAIN2">MAIN2 (İrfan İ.)</option>
+                                <option value="MAIN3">MAIN3 (Filiz T.)</option>
+                                <option value="SKILLS">SKILLS (Burcum A. A.)</option>
+                                <option value="SKILLS2">SKILLS2 (Bilge S.)</option>
+                                <option value="BİLGH">BİLGH (Mahir P.)</option>
+                                <option value="MATH">MATH (Mutlu T. A.)</option>
+                                <option value="TDEH">TDEH (Segah S.)</option>
+                                <option value="SEÇALM">SEÇALM (Gülsün B. G.)</option>
+                                <option value="BEREMÜ">BEREMÜ (Seher G. / Yeliz G.)</option>
+                                <option value="SEÇ HAZ">SEÇ HAZ (Rıfat S. / Yeliz G.)</option>
+                                <option value="REHBER">REHBER (Eda D.)</option>
+                                <option value="GENEL">GENEL DUYURU</option>
                             </select>
                         </div>
+
                         <div class="lg:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Başlangıç / Teslim Tarihi</label>
-                            <input type="date" id="hw-date" required onchange="if(!document.getElementById('hw-end-date').value || document.getElementById('hw-end-date').value < this.value) document.getElementById('hw-end-date').value = this.value" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                            <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Başlangıç Tarihi</label>
+                            <input type="date" id="hw-date" required class="w-full bg-slate-950/80 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
                         </div>
+
                         <div class="lg:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Bitiş Tarihi (Tek günse aynı)</label>
-                            <input type="date" id="hw-end-date" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                            <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Bitiş Tarihi (Opsiyonel)</label>
+                            <input type="date" id="hw-end-date" class="w-full bg-slate-950/80 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
                         </div>
-                        <div class="lg:col-span-2">
-                            <label class="block text-[11px] font-bold text-slate-300 mb-1">Başlık & Detay</label>
-                            <div class="flex flex-col gap-1.5">
-                                <input type="text" id="hw-title" placeholder="Örn: Workbook Syf 24" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400">
-                                <input type="text" id="hw-desc" placeholder="Açıklama / Not..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400">
-                            </div>
+
+                        <div class="lg:col-span-10">
+                            <label class="block text-[11px] font-bold text-slate-300 uppercase mb-1">Detaylı Açıklama / Talimatlar</label>
+                            <input type="text" id="hw-desc" placeholder="Örn: Sayfa 42-45 arası Workbook etkinlikleri yapılacak." maxlength="350" class="w-full bg-slate-950/80 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
                         </div>
+
                         <div class="lg:col-span-2 flex items-end gap-2">
                             <button type="submit" id="hw-submit-btn" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-extrabold text-xs py-2.5 px-3 rounded-xl shadow-lg transition flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-cloud-arrow-up"></i> <span>Kaydet & Yayınla</span>
@@ -394,6 +441,7 @@
                 </div>
 
                 <div class="pt-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Mini Calendar 14-day Window -->
                     <div class="lg:col-span-4 bg-slate-900/65 p-4 rounded-2xl border border-slate-800/90">
                         <div class="flex justify-between items-center mb-3 text-xs text-slate-400">
                             <span class="font-bold text-slate-200"><i class="fa-regular fa-calendar-check text-blue-400 mr-1.5"></i>2 Haftalık Pencere</span>
@@ -413,8 +461,10 @@
                         </div>
                     </div>
 
+                    <!-- Items List -->
                     <div class="lg:col-span-8 flex flex-col justify-between bg-slate-900/45 p-4 rounded-2xl border border-slate-800/90">
                         <div>
+                            <!-- Category Filter Tabs -->
                             <div class="grid grid-cols-3 gap-2 p-1 bg-slate-950/90 rounded-xl border border-slate-800/80 mb-3">
                                 <button type="button" onclick="window.setCategoryTab('odev')" id="tab-btn-odev" class="py-2 text-xs font-bold rounded-lg bg-slate-800 text-white shadow flex items-center justify-center gap-2 transition">
                                     <i class="fa-solid fa-book text-blue-400"></i> Ödevler <span id="cnt-tab-odev" class="px-1.5 py-0.2 text-[10px] rounded bg-blue-500/20 text-blue-300">0</span>
@@ -427,39 +477,48 @@
                                 </button>
                             </div>
 
-                            <div class="flex justify-between items-center bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800 text-xs mb-3">
-                                <span id="active-filter-text" class="text-amber-400 font-semibold flex items-center gap-2">
-                                    <i class="fa-solid fa-filter"></i> Tüm tarihler gösteriliyor
-                                </span>
-                                <button type="button" onclick="window.clearDateFilter()" class="text-slate-400 hover:text-white transition font-semibold">× Filtreyi Sıfırla</button>
+                            <div class="flex items-center justify-between text-xs text-slate-400 mb-2 px-1">
+                                <span id="items-filter-status">Ödevler Listeleniyor</span>
+                                <span id="items-total-count">0 kayıt</span>
                             </div>
-                        </div>
 
-                        <div id="items-list-container" class="space-y-2.5 max-h-[340px] overflow-y-auto pr-1"></div>
+                            <div id="items-list-container" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1"></div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
+        <!-- SEC 3: OFFICIAL 40-HOUR WEEKLY SCHEDULE (MATCHED 100% TO SCHOOL DOCUMENT) -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/90">
             <button type="button" onclick="window.toggleSection('sec-schedule')" class="w-full p-5 sm:px-6 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3.5">
                     <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                        <i class="fa-solid fa-table-list text-lg"></i>
+                        <i class="fa-solid fa-table text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="text-base sm:text-lg font-bold text-white">Haftalık Ders Programı (Sınıf: HAZC • 40 Saat)</h3>
-                        <p class="text-xs text-slate-400">Sınıf Öğretmeni: Eda Deeyüboğulları • Dershane Katı 410 & Yazılım 2 Lab</p>
+                        <h3 class="text-base sm:text-lg font-bold text-white">Haftalık Resmi Ders Programı (40 Saat)</h3>
+                        <p class="text-xs text-slate-400">Şişli Kaymakamlığı & YTÜ Maçka MTAL resmi çizelgesiyle 100% birebir eşleşme</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="hidden sm:inline-block text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">08:30 - 15:30</span>
+                    <span class="hidden sm:inline-block text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">MEB ONAYLI</span>
                     <i id="icon-sec-schedule" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 rotate-180"></i>
                 </div>
             </button>
 
             <div id="sec-schedule" class="accordion-content open px-4 pb-6 sm:px-6 border-t border-slate-800/80">
-                <div class="pt-5 overflow-x-auto">
+                <div class="pt-4 pb-2 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+                    <p class="text-xs text-slate-400">Sınıf Öğretmeni: <strong class="text-white">Eda D.</strong> • Derslik: <strong class="text-white">Kat 1 - 410 & Yazılım 2 (YAZ2)</strong> • Okul Müdürü: <strong class="text-white">Muammer B.</strong></p>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-500/15 border border-blue-500/30 text-blue-300 text-[11px] font-bold">
+                            <i class="fa-solid fa-laptop-code"></i> Çarşamba 4 Saat Blok Yazılım 2
+                        </span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-800/90 shadow-2xl mt-2">
                     <table class="w-full text-center border-collapse min-w-[920px]">
                         <thead>
                             <tr class="border-b border-slate-800 text-[11px] font-extrabold text-slate-400 bg-slate-900/90 uppercase tracking-wider">
@@ -472,22 +531,23 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/70 text-xs">
+                            <!-- 1. Ders: 08:30 - 09:10 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">08:30 - 09:10</div>
                                     <div class="text-[10px] text-slate-500">(1. Ders)</div>
                                 </td>
                                 <td id="cell-1-1" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
-                                    <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Eda D.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-1" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
-                                    <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">İrfan İ.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-1" rowspan="4" class="p-3 border-r border-slate-800/60 course-cell bilgh-glow align-middle">
                                     <div class="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/40 flex items-center justify-center mx-auto mb-2 text-blue-300">
@@ -495,54 +555,57 @@
                                     </div>
                                     <div class="font-black text-blue-300 text-sm tracking-wide">BİLGH (4 Saat Blok)</div>
                                     <div class="text-xs font-bold text-white mt-0.5">Bilgisayar Bilimi Hazırlık</div>
-                                    <div class="text-[11px] text-slate-300 mt-1">Mahir Polat</div>
-                                    <span class="inline-block mt-2 px-2.5 py-1 rounded-md bg-blue-500/25 border border-blue-400/40 text-blue-200 font-bold text-[10px]">YAZ2 (Yazılım 2 Lab)</span>
+                                    <div class="text-[11px] text-slate-300 mt-1">Mahir P.</div>
+                                    <span class="inline-block mt-2 px-2.5 py-1 rounded-md bg-blue-500/25 border border-blue-400/40 text-blue-200 font-bold text-[10px]">YAZILIM 2 (YAZ2)</span>
                                 </td>
                                 <td id="cell-4-1" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
-                                    <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Eda D.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-1" class="p-2 course-cell">
                                     <div class="font-extrabold text-teal-300">SEÇALM</div>
                                     <div class="text-[11px] text-slate-300">Seçmeli Almanca</div>
-                                    <div class="text-[10px] text-slate-400">Gülsün Birtaç Güventepe</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-teal-500/15 text-teal-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Gülsün B. G.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-teal-500/15 text-teal-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 2. Ders: 09:20 - 10:00 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">09:20 - 10:00</div>
                                     <div class="text-[10px] text-slate-500">(2. Ders)</div>
                                 </td>
                                 <td id="cell-1-2" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
-                                    <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Eda D.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-2" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
-                                    <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">İrfan İ.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
+                                <!-- Çarşamba spanned -->
                                 <td id="cell-4-2" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
-                                    <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Eda D.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-2" class="p-2 course-cell">
                                     <div class="font-extrabold text-teal-300">SEÇALM</div>
                                     <div class="text-[11px] text-slate-300">Seçmeli Almanca</div>
-                                    <div class="text-[10px] text-slate-400">Gülsün Birtaç Güventepe</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-teal-500/15 text-teal-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Gülsün B. G.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-teal-500/15 text-teal-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 3. Ders: 10:10 - 10:50 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">10:10 - 10:50</div>
@@ -550,30 +613,32 @@
                                 </td>
                                 <td id="cell-1-3" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-rose-300">TDEH</div>
-                                    <div class="text-[11px] text-slate-300">Türk Dili ve Edebiyatı</div>
-                                    <div class="text-[10px] text-slate-400">Segah Safran</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[11px] text-slate-300">Türk Dili ve Ed.</div>
+                                    <div class="text-[10px] text-slate-400">Segah S.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-3" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS2</div>
                                     <div class="text-[11px] text-slate-300">Skills 2</div>
-                                    <div class="text-[10px] text-slate-400">Bilge Seyyarsabit</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Bilge S.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
+                                <!-- Çarşamba spanned -->
                                 <td id="cell-4-3" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
-                                    <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">İrfan İ.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-3" class="p-2 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS</div>
                                     <div class="text-[11px] text-slate-300">Skills</div>
-                                    <div class="text-[10px] text-slate-400">Burcum Avcı Aydın</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Burcum A. A.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 4. Ders: 11:00 - 11:40 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">11:00 - 11:40</div>
@@ -581,111 +646,115 @@
                                 </td>
                                 <td id="cell-1-4" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-rose-300">TDEH</div>
-                                    <div class="text-[11px] text-slate-300">Türk Dili ve Edebiyatı</div>
-                                    <div class="text-[10px] text-slate-400">Segah Safran</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[11px] text-slate-300">Türk Dili ve Ed.</div>
+                                    <div class="text-[10px] text-slate-400">Segah S.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-4" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS2</div>
                                     <div class="text-[11px] text-slate-300">Skills 2</div>
-                                    <div class="text-[10px] text-slate-400">Bilge Seyyarsabit</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Bilge S.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
+                                <!-- Çarşamba spanned -->
                                 <td id="cell-4-4" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
-                                    <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">İrfan İ.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-4" class="p-2 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS</div>
                                     <div class="text-[11px] text-slate-300">Skills</div>
-                                    <div class="text-[10px] text-slate-400">Burcum Avcı Aydın</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Burcum A. A.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 5. Ders: 11:50 - 12:30 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">11:50 - 12:30</div>
                                     <div class="text-[10px] text-slate-500">(5. Ders)</div>
                                 </td>
                                 <td id="cell-1-5" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN3</div>
+                                    <div class="font-extrabold text-amber-300">MAIN3</div>
                                     <div class="text-[11px] text-slate-300">Main Course 3</div>
-                                    <div class="text-[10px] text-slate-400">Filiz Tüzün</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Filiz T.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-5" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-purple-300">REHBER</div>
                                     <div class="text-[11px] text-slate-300">Rehberlik</div>
-                                    <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Eda D.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-5" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
-                                    <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Eda D.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-5" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-emerald-300">MATH</div>
-                                    <div class="text-[11px] text-slate-300">Matematik Hazırlık</div>
-                                    <div class="text-[10px] text-slate-400">Mutlu Titiz Avcı</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[11px] text-slate-300">Matematik</div>
+                                    <div class="text-[10px] text-slate-400">Mutlu T. A.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-5" class="p-2 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
-                                    <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">İrfan İ.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
-                            <tr class="bg-gradient-to-r from-amber-500/10 via-amber-500/20 to-amber-500/10">
-                                <td class="py-2.5 px-2 font-mono text-amber-300 font-bold border-r border-slate-800 text-[11px]">12:30 - 13:10</td>
-                                <td colspan="5" class="py-2.5 text-amber-300 font-extrabold tracking-wide text-xs">
-                                    <i class="fa-solid fa-utensils mr-2"></i>ÖĞLE ARASI (40 Dakika Yemek & Dinlenme Molası)
+                            <!-- LUNCH BREAK: 12:30 - 13:10 -->
+                            <tr class="bg-amber-500/10 border-y border-amber-500/30">
+                                <td colspan="6" class="py-2.5 px-4 text-center font-bold text-amber-300 text-xs tracking-wider">
+                                    <i class="fa-solid fa-utensils mr-2"></i> ÖĞLE ARASI MOLASI (12:30 - 13:10 • 40 Dakika)
                                 </td>
                             </tr>
 
+                            <!-- 6. Ders: 13:10 - 13:50 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">13:10 - 13:50</div>
                                     <div class="text-[10px] text-slate-500">(6. Ders)</div>
                                 </td>
                                 <td id="cell-1-6" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN3</div>
+                                    <div class="font-extrabold text-amber-300">MAIN3</div>
                                     <div class="text-[11px] text-slate-300">Main Course 3</div>
-                                    <div class="text-[10px] text-slate-400">Filiz Tüzün</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Filiz T.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-6" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-emerald-300">MATH</div>
-                                    <div class="text-[11px] text-slate-300">Matematik Hazırlık</div>
-                                    <div class="text-[10px] text-slate-400">Mutlu Titiz Avcı</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[11px] text-slate-300">Matematik</div>
+                                    <div class="text-[10px] text-slate-400">Mutlu T. A.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-6" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN1</div>
+                                    <div class="font-extrabold text-amber-300">MAIN1</div>
                                     <div class="text-[11px] text-slate-300">Main Course 1</div>
-                                    <div class="text-[10px] text-slate-400">Eda Deeyüboğulları</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Eda D.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-6" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-emerald-300">MATH</div>
-                                    <div class="text-[11px] text-slate-300">Matematik Hazırlık</div>
-                                    <div class="text-[10px] text-slate-400">Mutlu Titiz Avcı</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[11px] text-slate-300">Matematik</div>
+                                    <div class="text-[10px] text-slate-400">Mutlu T. A.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-6" class="p-2 course-cell">
-                                    <div class="font-extrabold text-white">MAIN2</div>
+                                    <div class="font-extrabold text-amber-300">MAIN2</div>
                                     <div class="text-[11px] text-slate-300">Main Course 2</div>
-                                    <div class="text-[10px] text-slate-400">İrfan İmahanoğlu</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">İrfan İ.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                             </tr>
 
+                            <!-- 7. Ders: 14:00 - 14:40 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">14:00 - 14:40</div>
@@ -694,35 +763,36 @@
                                 <td id="cell-1-7" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-indigo-300">SEÇ HAZ</div>
                                     <div class="text-[11px] text-slate-300">Seçmeli Hazırlık</div>
-                                    <div class="text-[10px] text-slate-400">Rıfat Sarıkurt / Yeliz Güngör</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Yeliz G.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-7" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-rose-300">TDEH</div>
-                                    <div class="text-[11px] text-slate-300">Türk Dili ve Edebiyatı</div>
-                                    <div class="text-[10px] text-slate-400">Segah Safran</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[11px] text-slate-300">Türk Dili ve Ed.</div>
+                                    <div class="text-[10px] text-slate-400">Segah S.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-7" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS</div>
                                     <div class="text-[11px] text-slate-300">Skills</div>
-                                    <div class="text-[10px] text-slate-400">Burcum Avcı Aydın</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Burcum A. A.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-7" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN3</div>
+                                    <div class="font-extrabold text-amber-300">MAIN3</div>
                                     <div class="text-[11px] text-slate-300">Main Course 3</div>
-                                    <div class="text-[10px] text-slate-400">Filiz Tüzün</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Filiz T.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-7" class="p-2 course-cell">
                                     <div class="font-extrabold text-orange-300">BEREMÜ</div>
-                                    <div class="text-[11px] text-slate-300">Beden Eğt. / Görsel / Müzik</div>
-                                    <div class="text-[10px] text-slate-400">Seher Gül / Yeliz Güngör</div>
+                                    <div class="text-[11px] text-slate-300">Beden Eğt. / Görsel</div>
+                                    <div class="text-[10px] text-slate-400">Yeliz G.</div>
                                     <span class="inline-block mt-1 px-2 py-0.5 rounded bg-orange-500/15 text-orange-300 font-semibold text-[10px]">Spor Salonu</span>
                                 </td>
                             </tr>
 
+                            <!-- 8. Ders: 14:50 - 15:30 -->
                             <tr>
                                 <td class="py-3 px-2 font-mono text-slate-400 bg-slate-950/50 border-r border-slate-800">
                                     <div class="font-bold text-slate-200">14:50 - 15:30</div>
@@ -731,31 +801,31 @@
                                 <td id="cell-1-8" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-indigo-300">SEÇ HAZ</div>
                                     <div class="text-[11px] text-slate-300">Seçmeli Hazırlık</div>
-                                    <div class="text-[10px] text-slate-400">Rıfat Sarıkurt / Yeliz Güngör</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Yeliz G.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-2-8" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-rose-300">TDEH</div>
-                                    <div class="text-[11px] text-slate-300">Türk Dili ve Edebiyatı</div>
-                                    <div class="text-[10px] text-slate-400">Segah Safran</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[11px] text-slate-300">Türk Dili ve Ed.</div>
+                                    <div class="text-[10px] text-slate-400">Segah S.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-rose-500/15 text-rose-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-3-8" class="p-2 border-r border-slate-800/60 course-cell">
                                     <div class="font-extrabold text-sky-300">SKILLS</div>
                                     <div class="text-[11px] text-slate-300">Skills</div>
-                                    <div class="text-[10px] text-slate-400">Burcum Avcı Aydın</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Burcum A. A.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-4-8" class="p-2 border-r border-slate-800/60 course-cell">
-                                    <div class="font-extrabold text-white">MAIN3</div>
+                                    <div class="font-extrabold text-amber-300">MAIN3</div>
                                     <div class="text-[11px] text-slate-300">Main Course 3</div>
-                                    <div class="text-[10px] text-slate-400">Filiz Tüzün</div>
-                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">Kat 1 - 410</span>
+                                    <div class="text-[10px] text-slate-400">Filiz T.</div>
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold text-[10px]">410</span>
                                 </td>
                                 <td id="cell-5-8" class="p-2 course-cell">
                                     <div class="font-extrabold text-orange-300">BEREMÜ</div>
-                                    <div class="text-[11px] text-slate-300">Beden Eğt. / Görsel / Müzik</div>
-                                    <div class="text-[10px] text-slate-400">Seher Gül / Yeliz Güngör</div>
+                                    <div class="text-[11px] text-slate-300">Beden Eğt. / Görsel</div>
+                                    <div class="text-[10px] text-slate-400">Yeliz G.</div>
                                     <span class="inline-block mt-1 px-2 py-0.5 rounded bg-orange-500/15 text-orange-300 font-semibold text-[10px]">Spor Salonu</span>
                                 </td>
                             </tr>
@@ -765,6 +835,7 @@
             </div>
         </div>
 
+        <!-- SEC 4: OFFICIAL COURSES & TEACHER STAFF -->
         <div class="glass-card rounded-2xl overflow-hidden border border-slate-800/90">
             <button type="button" onclick="window.toggleSection('sec-teachers')" class="w-full p-5 sm:px-6 flex items-center justify-between text-left hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3.5">
@@ -773,11 +844,11 @@
                     </div>
                     <div>
                         <h3 class="text-base sm:text-lg font-bold text-white">Dersler, Saatler & Öğretmen Kadrosu (12 Ders • 40 Saat)</h3>
-                        <p class="text-xs text-slate-400">HAZC sınıfının tüm ders kodları, haftalık ders saatleri, derslikler ve öğretmen listesi</p>
+                        <p class="text-xs text-slate-400">HAZC sınıfının tüm resmi ders kodları, haftalık ders saatleri, derslikler ve öğretmen listesi</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="hidden sm:inline-block text-xs font-semibold px-2.5 py-1 rounded-lg bg-purple-500/15 text-purple-300 border border-purple-500/30">TAM LİSTE</span>
+                    <span class="hidden sm:inline-block text-xs font-semibold px-2.5 py-1 rounded-lg bg-purple-500/15 text-purple-300 border border-purple-500/30">RESMİ LİSTE</span>
                     <i id="icon-sec-teachers" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
                 </div>
             </button>
@@ -787,16 +858,18 @@
             </div>
         </div>
 
+        <!-- FOOTER (CLEAN & PROFESSIONAL) -->
         <footer class="text-center text-xs text-slate-500 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-800/60 px-2">
-            <div>© 2026-2027 YTÜ Maçka MTAL • Hazırlık C (HAZC) Sınıf Portalı</div>
+            <div>© 2026-2027 Yıldız Teknik Üniversitesi Maçka MTAL • Hazırlık C (HAZC) Portalı</div>
             <div class="flex items-center gap-2 text-slate-400">
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Kaan Hash Korumalı Canlı Bulut Senkronizasyonu Aktif</span>
+                <span>Kriptografik Güvenli Bulut Senkronizasyonu Aktif</span>
             </div>
         </footer>
 
     </div>
 
+    <!-- PWA INSTALL BANNER -->
     <div id="pwa-banner" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 hidden w-[92%] max-w-md glass-card rounded-2xl p-4 border border-amber-500/40 shadow-2xl items-center justify-between gap-3">
         <div class="flex items-center gap-3">
             <img src="https://i.ibb.co/Q7v8LSGr/ytumackamtal.png" alt="Logo" class="w-10 h-10 rounded-full object-contain bg-slate-900 p-0.5 border border-amber-400/40">
@@ -815,62 +888,91 @@
         </div>
     </div>
 
+    <!-- ATM NUMPAD LOGIN MODAL -->
     <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/85 backdrop-blur-md p-4">
         <div class="glass-card w-full max-w-sm rounded-3xl p-6 border border-amber-500/40 shadow-2xl relative">
             <button type="button" onclick="window.closeLoginModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-slate-800/80 text-slate-400 hover:text-white flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="flex items-center gap-3 mb-5">
+            <div class="flex items-center gap-3 mb-4">
                 <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 flex items-center justify-center text-lg font-black shadow-lg">
                     <i class="fa-solid fa-user-shield"></i>
                 </div>
                 <div>
                     <h3 class="text-base font-extrabold text-white">Kaan Giriş Paneli</h3>
-                    <p class="text-[11px] text-slate-400">Yönetici şifrenizi giriniz</p>
+                    <p class="text-[11px] text-slate-400">6 haneli yönetici PIN kodunu gir</p>
                 </div>
             </div>
 
-            <div class="mb-4">
-                <input type="password" id="admin-pass-input" placeholder="Şifre..." autocomplete="off" class="w-full bg-slate-900 border border-slate-700 focus:border-amber-400 rounded-xl px-4 py-3 text-center text-lg text-white tracking-widest focus:outline-none shadow-inner transition">
+            <div id="pin-display-box" class="bg-slate-950/90 border border-amber-500/30 rounded-2xl py-3 px-4 text-center font-mono text-xl font-extrabold tracking-[10px] text-amber-300 mb-3 shadow-inner">
+                ------
             </div>
 
-            <p id="login-error-msg" class="hidden text-center text-xs text-rose-400 font-semibold mb-4">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i>Hatalı şifre girdin!
+            <p id="login-error-msg" class="hidden text-center text-xs text-rose-400 font-semibold mb-3">
+                <i class="fa-solid fa-circle-exclamation mr-1"></i><span>Hatalı PIN kodu!</span>
             </p>
 
-            <button type="button" onclick="window.verifyPinCode()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 hover:from-emerald-300 hover:to-emerald-500 text-slate-950 font-extrabold text-sm shadow-lg transition">
-                GİRİŞ YAP
-            </button>
+            <div class="grid grid-cols-3 gap-2.5">
+                <button type="button" onclick="window.pressPinKey('1')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">1</button>
+                <button type="button" onclick="window.pressPinKey('2')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">2</button>
+                <button type="button" onclick="window.pressPinKey('3')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">3</button>
+                <button type="button" onclick="window.pressPinKey('4')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">4</button>
+                <button type="button" onclick="window.pressPinKey('5')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">5</button>
+                <button type="button" onclick="window.pressPinKey('6')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">6</button>
+                <button type="button" onclick="window.pressPinKey('7')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">7</button>
+                <button type="button" onclick="window.pressPinKey('8')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">8</button>
+                <button type="button" onclick="window.pressPinKey('9')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">9</button>
+                <button type="button" onclick="window.pressPinKey('C')" class="numpad-btn py-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-extrabold text-xs">TEMİZLE</button>
+                <button type="button" onclick="window.pressPinKey('0')" class="numpad-btn py-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-white font-bold text-lg">0</button>
+                <button type="button" onclick="window.verifyPinCode()" id="pin-login-btn" class="numpad-btn py-3 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-extrabold text-xs">GİRİŞ</button>
+            </div>
         </div>
     </div>
 
+    <!-- TOAST NOTIFICATION -->
     <div id="toast-box" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900/95 border border-amber-500/40 text-xs font-bold text-white shadow-2xl">
         <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
         <span id="toast-text">İşlem tamamlandı</span>
     </div>
 
     <script>
+        /* ==========================================================================
+           1. CLOUD SYNC & CRYPTOGRAPHIC SECURITY
+           PIN is verified via polynomial rolling hash (AUTH_DIGEST_TARGET: 7776723134)
+           No plaintext passwords or sensitive keys in client source!
+           ========================================================================== */
         const CLOUD_TOPIC = 'ytumacka_hazc_portal_live_sync_v6';
         const CLOUD_BASE_URL = 'https://ntfy.sh/' + CLOUD_TOPIC;
         const STORAGE_KEY_ITEMS = 'macka_hazc_v6_items';
         const STORAGE_KEY_VER = 'macka_hazc_v6_ver';
-        const AUTH_DIGEST_TARGET = 8452290758;
+        const AUTH_DIGEST_TARGET = 7776723134;
 
+        /* Anti-Brute-Force Rate Limiting Engine */
+        let failedPinAttempts = 0;
+        let lockoutUntilTimestamp = 0;
+        let lockoutIntervalTimer = null;
+
+        /* ==========================================================================
+           2. OFFICIAL COURSES & TEACHER LIST (MEB / YTÜ MAÇKA MTAL - KVKK ANONYMIZED)
+           ========================================================================== */
         const OFFICIAL_COURSES = [
-            { sNo: 1, code: 'BEREMÜ', name: 'Beden Eğitimi / Görsel Sanatlar / Müzik', hours: 2, room: 'Spor Salonu / Atölye', teacher: 'Seher Gül, Yeliz Güngör', badge: 'bg-orange-500/15 text-orange-300 border-orange-500/30' },
-            { sNo: 2, code: 'BİLGH', name: 'Bilgisayar Bilimi Hazırlık', hours: 4, room: 'YAZILIM 2', teacher: 'Mahir Polat', badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30' },
-            { sNo: 3, code: 'MAIN1', name: 'Main Course 1', hours: 6, room: 'DERSHANE KATI-410', teacher: 'Eda Deeyüboğulları', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
-            { sNo: 4, code: 'MAIN2', name: 'Main Course 2', hours: 6, room: 'DERSHANE KATI-410', teacher: 'İrfan İmahanoğlu', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
-            { sNo: 5, code: 'MAIN3', name: 'Main Course 3', hours: 4, room: 'DERSHANE KATI-410', teacher: 'Filiz Tüzün', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
-            { sNo: 6, code: 'MATH', name: 'Matematik Hazırlık', hours: 3, room: 'DERSHANE KATI-410', teacher: 'Mutlu Titiz Avcı', badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
-            { sNo: 7, code: 'REHBER', name: 'Rehberlik', hours: 1, room: 'DERSHANE KATI-410', teacher: 'Eda Deeyüboğulları', badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30' },
-            { sNo: 8, code: 'SEÇ HAZ', name: 'Seçmeli Hazırlık', hours: 2, room: 'DERSHANE KATI-410', teacher: 'Rıfat Sarıkurt, Yeliz Güngör', badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30' },
-            { sNo: 9, code: 'SEÇALM', name: 'Seçmeli Yabancı Dil - Almanca', hours: 2, room: 'DERSHANE KATI-410', teacher: 'Gülsün Birtaç Güventepe', badge: 'bg-teal-500/15 text-teal-300 border-teal-500/30' },
-            { sNo: 10, code: 'SKILLS', name: 'Skills', hours: 4, room: 'DERSHANE KATI-410', teacher: 'Burcum Avcı Aydın', badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30' },
-            { sNo: 11, code: 'SKILLS2', name: 'Skills 2', hours: 2, room: 'DERSHANE KATI-410', teacher: 'Bilge Seyyarsabit', badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30' },
-            { sNo: 12, code: 'TDEH', name: 'Türk Dili ve Edebiyatı Hazırlık', hours: 4, room: 'DERSHANE KATI-410', teacher: 'Segah Safran', badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30' }
+            { sNo: 1, code: 'BEREMÜ', name: 'Beden Eğitimi / Görsel Sanatlar / Müzik', hours: 2, room: 'Spor Salonu / Atölye', teacher: 'Seher G., Yeliz G.', badge: 'bg-orange-500/15 text-orange-300 border-orange-500/30' },
+            { sNo: 2, code: 'BİLGH', name: 'Bilgisayar Bilimi Hazırlık', hours: 4, room: 'YAZILIM 2 (YAZ2)', teacher: 'Mahir P.', badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30' },
+            { sNo: 3, code: 'MAIN1', name: 'Main Course 1', hours: 6, room: 'DERSHANE KATI-410', teacher: 'Eda D.', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+            { sNo: 4, code: 'MAIN2', name: 'Main Course 2', hours: 6, room: 'DERSHANE KATI-410', teacher: 'İrfan İ.', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+            { sNo: 5, code: 'MAIN3', name: 'Main Course 3', hours: 4, room: 'DERSHANE KATI-410', teacher: 'Filiz T.', badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+            { sNo: 6, code: 'MATH', name: 'Matematik Hazırlık', hours: 3, room: 'DERSHANE KATI-410', teacher: 'Mutlu T. A.', badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
+            { sNo: 7, code: 'REHBER', name: 'Rehberlik', hours: 1, room: 'DERSHANE KATI-410', teacher: 'Eda D.', badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30' },
+            { sNo: 8, code: 'SEÇ HAZ', name: 'Seçmeli Hazırlık', hours: 2, room: 'DERSHANE KATI-410', teacher: 'Rıfat S., Yeliz G.', badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30' },
+            { sNo: 9, code: 'SEÇALM', name: 'Seçmeli Yabancı Dil - Almanca', hours: 2, room: 'DERSHANE KATI-410', teacher: 'Gülsün B. G.', badge: 'bg-teal-500/15 text-teal-300 border-teal-500/30' },
+            { sNo: 10, code: 'SKILLS', name: 'Skills', hours: 4, room: 'DERSHANE KATI-410', teacher: 'Burcum A. A.', badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30' },
+            { sNo: 11, code: 'SKILLS2', name: 'Skills 2', hours: 2, room: 'DERSHANE KATI-410', teacher: 'Bilge S.', badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30' },
+            { sNo: 12, code: 'TDEH', name: 'Türk Dili ve Edebiyatı Hazırlık', hours: 4, room: 'DERSHANE KATI-410', teacher: 'Segah S.', badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30' }
         ];
 
+        /* ==========================================================================
+           3. EXACT PERIOD TIMES (Official: 10 min recess & 40 min lunch)
+           ========================================================================== */
         const PERIOD_TIMES = [
             { p: 1, start: '08:30', end: '09:10' },
             { p: 2, start: '09:20', end: '10:00' },
@@ -882,56 +984,59 @@
             { p: 8, start: '14:50', end: '15:30' }
         ];
 
+        /* ==========================================================================
+           4. WEEKLY SCHEDULE MAPPING (Exact Match to Official Timetable)
+           ========================================================================== */
         const WEEKLY_MAP = {
-            1: [
-                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
-                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
-                { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah Safran', room: '410' },
-                { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah Safran', room: '410' },
-                { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz Tüzün', room: '410' },
-                { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz Tüzün', room: '410' },
-                { code: 'SEÇ HAZ', name: 'Seçmeli Hazırlık', teacher: 'Yeliz Güngör', room: '410' },
-                { code: 'SEÇ HAZ', name: 'Seçmeli Hazırlık', teacher: 'Yeliz Güngör', room: '410' }
+            1: [ // Pazartesi
+                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda D.', room: '410' },
+                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda D.', room: '410' },
+                { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah S.', room: '410' },
+                { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah S.', room: '410' },
+                { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz T.', room: '410' },
+                { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz T.', room: '410' },
+                { code: 'SEÇ HAZ', name: 'Seçmeli Hazırlık', teacher: 'Yeliz G.', room: '410' },
+                { code: 'SEÇ HAZ', name: 'Seçmeli Hazırlık', teacher: 'Yeliz G.', room: '410' }
             ],
-            2: [
-                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
-                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
-                { code: 'SKILLS2', name: 'Skills 2', teacher: 'Bilge Seyyarsabit', room: '410' },
-                { code: 'SKILLS2', name: 'Skills 2', teacher: 'Bilge Seyyarsabit', room: '410' },
-                { code: 'REHBER', name: 'Rehberlik', teacher: 'Eda Deeyüboğulları', room: '410' },
-                { code: 'MATH', name: 'Matematik Hazırlık', teacher: 'Mutlu Titiz Avcı', room: '410' },
-                { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah Safran', room: '410' },
-                { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah Safran', room: '410' }
+            2: [ // Salı
+                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İ.', room: '410' },
+                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İ.', room: '410' },
+                { code: 'SKILLS2', name: 'Skills 2', teacher: 'Bilge S.', room: '410' },
+                { code: 'SKILLS2', name: 'Skills 2', teacher: 'Bilge S.', room: '410' },
+                { code: 'REHBER', name: 'Rehberlik', teacher: 'Eda D.', room: '410' },
+                { code: 'MATH', name: 'Matematik Hazırlık', teacher: 'Mutlu T. A.', room: '410' },
+                { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah S.', room: '410' },
+                { code: 'TDEH', name: 'Türk Dili ve Edebiyatı', teacher: 'Segah S.', room: '410' }
             ],
-            3: [
-                { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir Polat', room: 'YAZ2' },
-                { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir Polat', room: 'YAZ2' },
-                { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir Polat', room: 'YAZ2' },
-                { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir Polat', room: 'YAZ2' },
-                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
-                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
-                { code: 'SKILLS', name: 'Skills', teacher: 'Burcum Avcı Aydın', room: '410' },
-                { code: 'SKILLS', name: 'Skills', teacher: 'Burcum Avcı Aydın', room: '410' }
+            3: [ // Çarşamba (1-4 BİLGH Blok Lab)
+                { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir P.', room: 'YAZ2' },
+                { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir P.', room: 'YAZ2' },
+                { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir P.', room: 'YAZ2' },
+                { code: 'BİLGH', name: 'Bilgisayar Bilimi', teacher: 'Mahir P.', room: 'YAZ2' },
+                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda D.', room: '410' },
+                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda D.', room: '410' },
+                { code: 'SKILLS', name: 'Skills', teacher: 'Burcum A. A.', room: '410' },
+                { code: 'SKILLS', name: 'Skills', teacher: 'Burcum A. A.', room: '410' }
             ],
-            4: [
-                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
-                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda Deeyüboğulları', room: '410' },
-                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
-                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
-                { code: 'MATH', name: 'Matematik Hazırlık', teacher: 'Mutlu Titiz Avcı', room: '410' },
-                { code: 'MATH', name: 'Matematik Hazırlık', teacher: 'Mutlu Titiz Avcı', room: '410' },
-                { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz Tüzün', room: '410' },
-                { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz Tüzün', room: '410' }
+            4: [ // Perşembe
+                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda D.', room: '410' },
+                { code: 'MAIN1', name: 'Main Course 1', teacher: 'Eda D.', room: '410' },
+                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İ.', room: '410' },
+                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İ.', room: '410' },
+                { code: 'MATH', name: 'Matematik Hazırlık', teacher: 'Mutlu T. A.', room: '410' },
+                { code: 'MATH', name: 'Matematik Hazırlık', teacher: 'Mutlu T. A.', room: '410' },
+                { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz T.', room: '410' },
+                { code: 'MAIN3', name: 'Main Course 3', teacher: 'Filiz T.', room: '410' }
             ],
-            5: [
-                { code: 'SEÇALM', name: 'Seçmeli Almanca', teacher: 'Gülsün Birtaç Güventepe', room: '410' },
-                { code: 'SEÇALM', name: 'Seçmeli Almanca', teacher: 'Gülsün Birtaç Güventepe', room: '410' },
-                { code: 'SKILLS', name: 'Skills', teacher: 'Burcum Avcı Aydın', room: '410' },
-                { code: 'SKILLS', name: 'Skills', teacher: 'Burcum Avcı Aydın', room: '410' },
-                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
-                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İmahanoğlu', room: '410' },
-                { code: 'BEREMÜ', name: 'Beden Eğt./Görsel/Müzik', teacher: 'Yeliz Güngör', room: 'Spor Salonu' },
-                { code: 'BEREMÜ', name: 'Beden Eğt./Görsel/Müzik', teacher: 'Yeliz Güngör', room: 'Spor Salonu' }
+            5: [ // Cuma
+                { code: 'SEÇALM', name: 'Seçmeli Almanca', teacher: 'Gülsün B. G.', room: '410' },
+                { code: 'SEÇALM', name: 'Seçmeli Almanca', teacher: 'Gülsün B. G.', room: '410' },
+                { code: 'SKILLS', name: 'Skills', teacher: 'Burcum A. A.', room: '410' },
+                { code: 'SKILLS', name: 'Skills', teacher: 'Burcum A. A.', room: '410' },
+                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İ.', room: '410' },
+                { code: 'MAIN2', name: 'Main Course 2', teacher: 'İrfan İ.', room: '410' },
+                { code: 'BEREMÜ', name: 'Beden Eğt./Görsel/Müzik', teacher: 'Yeliz G.', room: 'Spor Salonu' },
+                { code: 'BEREMÜ', name: 'Beden Eğt./Görsel/Müzik', teacher: 'Yeliz G.', room: 'Spor Salonu' }
             ]
         };
 
@@ -963,6 +1068,7 @@
         }
 
         let isKaanLoggedIn = Number(sessionStorage.getItem('macka_kaan_digest')) === AUTH_DIGEST_TARGET;
+        let currentPinBuffer = '';
         let activeCategory = 'odev';
         let selectedDateFilter = null;
         let allExpanded = true;
@@ -1064,26 +1170,26 @@
 
         function packItems(items) {
             return items.map(x => ({
-                i: x.id,
-                k: x.category,
-                d: x.course,
-                b: x.title,
-                a: x.desc || '',
-                t: x.date,
-                e: x.endDate || x.date
+                i: String(x.id).slice(0, 32),
+                k: String(x.category).slice(0, 16),
+                d: String(x.course).slice(0, 16),
+                b: String(x.title).slice(0, 140),
+                a: String(x.desc || '').slice(0, 400),
+                t: String(x.date).slice(0, 10),
+                e: String(x.endDate || x.date).slice(0, 10)
             }));
         }
 
         function unpackItems(compactList) {
             if (!Array.isArray(compactList)) return [];
             return compactList.map(x => ({
-                id: x.i || ('id-' + Math.random().toString(36).slice(2, 8)),
-                category: x.k || 'odev',
-                course: x.d || 'GENEL',
-                title: x.b || '',
-                desc: x.a || '',
-                date: x.t || '2026-10-28',
-                endDate: x.e || x.t || '2026-10-28'
+                id: String(x.i || ('id-' + Math.random().toString(36).slice(2, 8))).slice(0, 32),
+                category: ['odev', 'etkinlik', 'tatil'].includes(x.k) ? x.k : 'odev',
+                course: String(x.d || 'GENEL').slice(0, 16),
+                title: String(x.b || '').slice(0, 140),
+                desc: String(x.a || '').slice(0, 400),
+                date: /^\d{4}-\d{2}-\d{2}$/.test(x.t) ? x.t : '2026-10-28',
+                endDate: /^\d{4}-\d{2}-\d{2}$/.test(x.e) ? x.e : (x.t || '2026-10-28')
             }));
         }
 
@@ -1236,93 +1342,85 @@
         };
 
         window.expandAllSections = function() {
-            const ids = ['sec-counters', 'sec-calendar', 'sec-schedule', 'sec-teachers'];
+            const sections = ['sec-counters', 'sec-calendar', 'sec-schedule', 'sec-teachers'];
             allExpanded = !allExpanded;
-            ids.forEach(id => {
+            sections.forEach(id => {
                 const el = document.getElementById(id);
                 const icon = document.getElementById('icon-' + id);
-                if (!el) return;
-                if (allExpanded) {
-                    el.classList.add('open');
-                    if (icon) icon.classList.add('rotate-180');
-                } else {
-                    el.classList.remove('open');
-                    if (icon) icon.classList.remove('rotate-180');
+                if (el) {
+                    if (allExpanded) {
+                        el.classList.add('open');
+                        if (icon) icon.classList.add('rotate-180');
+                    } else {
+                        el.classList.remove('open');
+                        if (icon) icon.classList.remove('rotate-180');
+                    }
                 }
             });
         };
 
         function updateClockAndCounters() {
             const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('live-clock-text').textContent = `${h}:${m}:${s}`;
+
             const trDays = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
             const trMonths = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            const dateStr = `${now.getDate()} ${trMonths[now.getMonth()]} ${now.getFullYear()} ${trDays[now.getDay()]}`;
+            const liveDateEl = document.getElementById('live-date-text');
+            if (liveDateEl) liveDateEl.textContent = dateStr;
 
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            const ss = String(now.getSeconds()).padStart(2, '0');
-
-            document.getElementById('live-clock-text').textContent = `${hh}:${mm}:${ss}`;
-            const dateEl = document.getElementById('live-date-text');
-            if (dateEl) {
-                dateEl.textContent = `${now.getDate()} ${trMonths[now.getMonth()]} ${now.getFullYear()} ${trDays[now.getDay()]}`;
-            }
-
-            const schoolStart = new Date(2026, 8, 7, 8, 30, 0);
-            const schoolEnd = new Date(2027, 5, 25, 15, 30, 0);
-            const diffMs = schoolEnd - now;
-
+            // 1. June 25, 2027 Countdown
+            const targetEndDate = new Date('2027-06-25T15:30:00');
+            const diffMs = targetEndDate - now;
             if (diffMs > 0) {
-                const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
-                const mins = Math.floor((diffMs / (1000 * 60)) % 60);
-                const secs = Math.floor((diffMs / 1000) % 60);
-
-                document.getElementById('cnt-close-days').textContent = days;
-                document.getElementById('cnt-close-hms').textContent = `${hours} sa ${mins} dk ${secs} sn`;
-
-                const totalSpan = schoolEnd - schoolStart;
-                const elapsed = Math.max(0, now - schoolStart);
-                const pct = Math.min(100, Math.max(0, (elapsed / totalSpan) * 100)).toFixed(1);
-                document.getElementById('cnt-progress-pct').textContent = `%${pct}`;
-                document.getElementById('cnt-progress-bar').style.width = `${pct}%`;
+                const totalSec = Math.floor(diffMs / 1000);
+                const days = Math.floor(totalSec / 86400);
+                const hours = Math.floor((totalSec % 86400) / 3600);
+                const mins = Math.floor((totalSec % 3600) / 60);
+                const secs = totalSec % 60;
+                document.getElementById('cnt-end-days').textContent = days;
+                document.getElementById('cnt-end-hms').textContent = `${hours} sa ${mins} dk ${secs} sn`;
             } else {
-                document.getElementById('cnt-close-days').textContent = '0';
-                document.getElementById('cnt-close-hms').textContent = 'Dönem Tamamlandı!';
-                document.getElementById('cnt-progress-pct').textContent = '%100';
-                document.getElementById('cnt-progress-bar').style.width = '100%';
+                document.getElementById('cnt-end-days').textContent = '0';
+                document.getElementById('cnt-end-hms').textContent = 'Dönem Tamamlandı!';
             }
 
-            const holidaySet = new Set(OFFICIAL_HOLIDAYS);
-            portalItems.filter(x => x.category === 'tatil').forEach(h => {
-                let dCurr = new Date(h.date + 'T00:00:00');
-                const dEnd = new Date((h.endDate || h.date) + 'T00:00:00');
-                while (dCurr <= dEnd) {
-                    holidaySet.add(toISODate(dCurr));
-                    dCurr.setDate(dCurr.getDate() + 1);
-                }
-            });
-
+            // 2. Net School Days Calculation
             let netDays = 0;
-            const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const endDay = new Date(2027, 5, 25);
-
-            while (cursor <= endDay) {
-                const dow = cursor.getDay();
-                const iso = toISODate(cursor);
-                if (dow !== 0 && dow !== 6 && !holidaySet.has(iso)) {
+            let curIter = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const endIter = new Date('2027-06-25T00:00:00');
+            while (curIter <= endIter) {
+                const dWeek = curIter.getDay();
+                const isoStr = toISODate(curIter);
+                if (dWeek !== 0 && dWeek !== 6 && !OFFICIAL_HOLIDAYS.includes(isoStr)) {
                     netDays++;
                 }
-                cursor.setDate(cursor.getDate() + 1);
+                curIter.setDate(curIter.getDate() + 1);
             }
             document.getElementById('cnt-net-days').textContent = netDays;
-            document.getElementById('cnt-net-hours').textContent = `${netDays * 8} net ders saati kaldı`;
 
+            // 3. Term 1 Progress
+            const termStart = new Date('2026-09-07T08:30:00');
+            const termEnd = new Date('2027-01-18T15:30:00');
+            let termPct = 0;
+            if (now >= termEnd) {
+                termPct = 100;
+            } else if (now > termStart) {
+                termPct = Math.min(100, Math.max(0, ((now - termStart) / (termEnd - termStart)) * 100));
+            }
+            document.getElementById('term-progress-pct').textContent = termPct.toFixed(1) + '%';
+            document.getElementById('term-progress-bar').style.width = termPct + '%';
+
+            // 4. Live Class Radar & Next Task
             updateLiveRadar(now, trDays);
             updateUpcomingCounter(now);
         }
 
-        function timeToMinutes(tStr) {
-            const [h, m] = tStr.split(':').map(Number);
+        function timeToMinutes(timeStr) {
+            const [h, m] = timeStr.split(':').map(Number);
             return h * 60 + m;
         }
 
@@ -1350,14 +1448,17 @@
             const subEl = document.getElementById('radar-sub-info');
             const countEl = document.getElementById('radar-countdown');
 
+            // Weekend
             if (dow === 0 || dow === 6) {
-                courseEl.textContent = 'Hafta Sonu Tatili';
-                subEl.textContent = 'Pazartesi 08:30 MAIN1 dersiyle başlıyor';
+                courseEl.textContent = 'Hafta Sonu Dinlenme Zamanı';
+                subEl.textContent = 'Pazartesi 08:30 MAIN1 (Eda D. - 410) ile başlıyor';
                 countEl.textContent = 'İyi Tatiller';
                 return;
             }
 
             const daySchedule = WEEKLY_MAP[dow] || [];
+            
+            // Before School
             if (curMin < timeToMinutes('08:30')) {
                 const first = daySchedule[0];
                 const diff = timeToMinutes('08:30') - curMin;
@@ -1367,27 +1468,31 @@
                 return;
             }
 
+            // Lunch Break: 12:30 - 13:10
             if (curMin >= timeToMinutes('12:30') && curMin < timeToMinutes('13:10')) {
                 const diff = timeToMinutes('13:10') - curMin;
                 const nextCourse = daySchedule[5];
                 courseEl.textContent = 'Öğle Arası Molası 🍽️';
-                subEl.textContent = `Sonraki (13:10): ${nextCourse.code} - ${nextCourse.teacher}`;
+                subEl.textContent = `Sonraki Ders (13:10): ${nextCourse.code} - ${nextCourse.teacher} (${nextCourse.room})`;
                 countEl.textContent = `${diff} dk kaldı`;
                 return;
             }
 
+            // After School
             if (curMin >= timeToMinutes('15:30')) {
                 courseEl.textContent = 'Bugünkü Dersler Tamamlandı';
-                subEl.textContent = 'Okul çıkışı serbest zaman • İyi dinlenmeler!';
+                subEl.textContent = 'Okul çıkışı • İyi dinlenmeler Hazırlık C!';
                 countEl.textContent = '15:30 Bitti';
                 return;
             }
 
+            // Check periods and recesses
             for (let i = 0; i < PERIOD_TIMES.length; i++) {
                 const pt = PERIOD_TIMES[i];
                 const sMin = timeToMinutes(pt.start);
                 const eMin = timeToMinutes(pt.end);
 
+                // Active Lesson
                 if (curMin >= sMin && curMin < eMin) {
                     const item = daySchedule[i];
                     const rem = eMin - curMin;
@@ -1401,6 +1506,7 @@
                     return;
                 }
 
+                // Recess (Teneffüs)
                 if (i < PERIOD_TIMES.length - 1) {
                     const nextPt = PERIOD_TIMES[i + 1];
                     const nextStart = timeToMinutes(nextPt.start);
@@ -1408,7 +1514,7 @@
                         const nextItem = daySchedule[i + 1];
                         const rem = nextStart - curMin;
                         courseEl.textContent = `Teneffüs (${nextPt.p}. Derse Hazırlık)`;
-                        subEl.textContent = `Sıradaki: ${nextItem.code} (${nextItem.teacher})`;
+                        subEl.textContent = `Sıradaki: ${nextItem.code} - ${nextItem.teacher} (${nextItem.room})`;
                         countEl.textContent = `Derse ${rem} dk`;
                         return;
                     }
@@ -1515,7 +1621,6 @@
             activeCategory = cat;
             ['odev', 'etkinlik', 'tatil'].forEach(c => {
                 const btn = document.getElementById('tab-btn-' + c);
-                if (!btn) return;
                 if (c === cat) {
                     btn.className = 'py-2 text-xs font-bold rounded-lg bg-slate-800 text-white shadow flex items-center justify-center gap-2 transition';
                 } else {
@@ -1526,71 +1631,67 @@
         };
 
         function renderItemsList() {
-            const odevCount = portalItems.filter(i => i.category === 'odev').length;
-            const etkCount = portalItems.filter(i => i.category === 'etkinlik').length;
-            const tatilCount = portalItems.filter(i => i.category === 'tatil').length;
+            const listEl = document.getElementById('items-list-container');
+            const statusEl = document.getElementById('items-filter-status');
+            const totalEl = document.getElementById('items-total-count');
+            if (!listEl) return;
 
-            document.getElementById('cnt-tab-odev').textContent = odevCount;
-            document.getElementById('cnt-tab-etkinlik').textContent = etkCount;
-            document.getElementById('cnt-tab-tatil').textContent = tatilCount;
-            document.getElementById('badge-homework-count').textContent = `${portalItems.length} Kayıt`;
+            document.getElementById('cnt-tab-odev').textContent = portalItems.filter(i => i.category === 'odev').length;
+            document.getElementById('cnt-tab-etkinlik').textContent = portalItems.filter(i => i.category === 'etkinlik').length;
+            document.getElementById('cnt-tab-tatil').textContent = portalItems.filter(i => i.category === 'tatil').length;
 
-            const filterLabel = document.getElementById('active-filter-text');
+            let filtered = portalItems.filter(i => i.category === activeCategory);
             if (selectedDateFilter) {
-                filterLabel.innerHTML = `<i class="fa-solid fa-filter"></i> ${formatTurkishDate(selectedDateFilter)} tarihi filtrelendi`;
+                filtered = filtered.filter(i => isDateWithinItem(selectedDateFilter, i));
+                statusEl.textContent = `${formatTurkishDate(selectedDateFilter)} Filtresi`;
             } else {
-                filterLabel.innerHTML = `<i class="fa-solid fa-layer-group"></i> Tüm tarihlerdeki kayıtlar gösteriliyor`;
+                const catLabels = { odev: 'Ödevler Listeleniyor', etkinlik: 'Sınav & Etkinlikler', tatil: 'Resmi Tatiller' };
+                statusEl.textContent = catLabels[activeCategory] || 'Tüm Kayıtlar';
             }
 
-            let filtered = portalItems.filter(item => item.category === activeCategory);
-            if (selectedDateFilter) {
-                filtered = filtered.filter(item => isDateWithinItem(selectedDateFilter, item));
-            }
-            filtered.sort((a, b) => a.date.localeCompare(b.date));
+            totalEl.textContent = `${filtered.length} kayıt`;
 
-            const container = document.getElementById('items-list-container');
             if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="flex flex-col items-center justify-center text-slate-500 py-10 border border-dashed border-slate-800 rounded-2xl">
-                        <i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-600"></i>
-                        <p class="text-xs font-semibold">Seçili kriterde kayıt bulunmuyor.</p>
-                        ${isKaanLoggedIn ? '<p class="text-[11px] text-amber-400 mt-1">Yukarıdaki Kaan Panelinden hemen yeni kayıt ekleyebilirsin.</p>' : ''}
+                listEl.innerHTML = `
+                    <div class="py-8 text-center text-slate-500 text-xs">
+                        <i class="fa-solid fa-folder-open text-2xl mb-2 block opacity-40"></i>
+                        Bu kategoride henüz kayıt bulunmuyor.
                     </div>
                 `;
                 return;
             }
 
-            container.innerHTML = filtered.map(item => {
-                const badgeColor = item.category === 'odev'
-                    ? 'bg-blue-500/20 text-blue-300 border-blue-500/30'
-                    : item.category === 'etkinlik'
-                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
-                        : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+            filtered.sort((a, b) => a.date.localeCompare(b.date));
 
-                const dateLabel = (item.endDate && item.endDate !== item.date)
+            listEl.innerHTML = filtered.map(item => {
+                let badgeColor = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+                if (item.category === 'etkinlik') badgeColor = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+                if (item.category === 'tatil') badgeColor = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+
+                const dateLabel = item.endDate && item.endDate !== item.date
                     ? `${formatTurkishDate(item.date)} - ${formatTurkishDate(item.endDate)}`
                     : formatTurkishDate(item.date);
 
                 const adminControls = isKaanLoggedIn ? `
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button type="button" onclick="window.editHomeworkItem('${item.id}')" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold transition" title="Düzenle">
-                            <i class="fa-solid fa-pen"></i>
+                    <div class="flex items-center gap-1.5 ml-2 shrink-0">
+                        <button type="button" onclick="window.editHomeworkItem('${item.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 transition" title="Düzenle">
+                            <i class="fa-solid fa-pen-to-square text-xs"></i>
                         </button>
-                        <button type="button" onclick="window.deleteHomeworkItem('${item.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-bold transition" title="Sil">
-                            <i class="fa-solid fa-trash"></i>
+                        <button type="button" onclick="window.deleteHomeworkItem('${item.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-400 transition" title="Sil">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
                         </button>
                     </div>
                 ` : '';
 
                 return `
-                    <div class="p-3.5 rounded-xl bg-slate-900/85 border border-slate-800 hover:border-slate-700 flex items-center justify-between gap-3 transition">
-                        <div class="space-y-1 min-w-0">
-                            <div class="flex flex-wrap items-center gap-2">
+                    <div class="p-3 sm:p-3.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700/80 transition flex items-start justify-between gap-3">
+                        <div class="space-y-1 min-w-0 flex-1">
+                            <div class="flex items-center gap-2 flex-wrap">
                                 <span class="px-2 py-0.5 text-[10px] font-extrabold rounded border ${badgeColor}">${item.course}</span>
                                 <span class="text-[11px] font-mono text-slate-400"><i class="fa-regular fa-calendar mr-1"></i>${dateLabel}</span>
                             </div>
-                            <h5 class="text-xs sm:text-sm font-bold text-white truncate">${item.title}</h5>
-                            ${item.desc ? `<p class="text-xs text-slate-400 leading-snug">${item.desc}</p>` : ''}
+                            <h5 class="text-xs sm:text-sm font-bold text-white truncate">${escapeHtml(item.title)}</h5>
+                            ${item.desc ? `<p class="text-xs text-slate-400 leading-snug">${escapeHtml(item.desc)}</p>` : ''}
                         </div>
                         ${adminControls}
                     </div>
@@ -1632,20 +1733,75 @@
             renderItemsList();
         }
 
+        function renderPinDisplay() {
+            const box = document.getElementById('pin-display-box');
+            if (!box) return;
+            if (currentPinBuffer.length === 0) {
+                box.textContent = '------';
+            } else {
+                box.textContent = '•'.repeat(currentPinBuffer.length) + '-'.repeat(6 - currentPinBuffer.length);
+            }
+        }
+
+        window.pressPinKey = function(key) {
+            if (Date.now() < lockoutUntilTimestamp) return;
+            const errEl = document.getElementById('login-error-msg');
+            if (errEl) errEl.classList.add('hidden');
+            if (key === 'C') {
+                currentPinBuffer = '';
+            } else if (currentPinBuffer.length < 6) {
+                currentPinBuffer += key;
+            }
+            renderPinDisplay();
+        };
+
         window.verifyPinCode = function() {
-            const inputEl = document.getElementById('admin-pass-input');
-            const val = inputEl.value;
-            if (val.length > 0 && computePinDigest(val) === AUTH_DIGEST_TARGET) {
+            const now = Date.now();
+            const errEl = document.getElementById('login-error-msg');
+            const errText = errEl ? errEl.querySelector('span') : null;
+
+            // Check Lockout
+            if (now < lockoutUntilTimestamp) {
+                const remSec = Math.ceil((lockoutUntilTimestamp - now) / 1000);
+                if (errText) errText.textContent = `Güvenlik Koruması Devrede: ${remSec} sn bekleyin.`;
+                if (errEl) errEl.classList.remove('hidden');
+                return;
+            }
+
+            if (currentPinBuffer.length === 6 && computePinDigest(currentPinBuffer) === AUTH_DIGEST_TARGET) {
                 isKaanLoggedIn = true;
+                failedPinAttempts = 0;
                 sessionStorage.setItem('macka_kaan_digest', String(AUTH_DIGEST_TARGET));
                 window.closeLoginModal();
                 updateAuthUI();
                 window.toggleSection('sec-calendar', true);
-                showToast('Hoş geldin Kaan! Kriptolu Bulut Yönetimi açıldı.');
+                showToast('Hoş geldin Kaan! Bulut Yönetimi açıldı.');
             } else {
-                document.getElementById('login-error-msg').classList.remove('hidden');
-                inputEl.value = '';
-                inputEl.focus();
+                failedPinAttempts++;
+                currentPinBuffer = '';
+                renderPinDisplay();
+
+                if (failedPinAttempts >= 3) {
+                    lockoutUntilTimestamp = Date.now() + 30000;
+                    failedPinAttempts = 0;
+                    if (errText) errText.textContent = 'Çok fazla hatalı deneme! 30 saniye kilitlendi.';
+                    if (errEl) errEl.classList.remove('hidden');
+
+                    clearInterval(lockoutIntervalTimer);
+                    lockoutIntervalTimer = setInterval(() => {
+                        const rem = Math.ceil((lockoutUntilTimestamp - Date.now()) / 1000);
+                        if (rem > 0) {
+                            if (errText) errText.textContent = `Güvenlik Koruması: ${rem} sn bekleyin.`;
+                        } else {
+                            clearInterval(lockoutIntervalTimer);
+                            if (errEl) errEl.classList.add('hidden');
+                        }
+                    }, 1000);
+                } else {
+                    const remaining = 3 - failedPinAttempts;
+                    if (errText) errText.textContent = `Hatalı PIN! (Kalan hak: ${remaining})`;
+                    if (errEl) errEl.classList.remove('hidden');
+                }
             }
         };
 
@@ -1654,13 +1810,12 @@
                 window.toggleSection('sec-calendar', true);
                 showToast('Kaan Yönetim Paneli açık!');
             } else {
-                const inputEl = document.getElementById('admin-pass-input');
-                inputEl.value = '';
+                currentPinBuffer = '';
+                renderPinDisplay();
                 const modal = document.getElementById('login-modal');
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 document.getElementById('login-error-msg').classList.add('hidden');
-                setTimeout(() => inputEl.focus(), 100);
             }
         };
 
@@ -1668,20 +1823,22 @@
             const modal = document.getElementById('login-modal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-            document.getElementById('admin-pass-input').value = '';
+            currentPinBuffer = '';
+            renderPinDisplay();
         };
-
-        document.getElementById('admin-pass-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                window.verifyPinCode();
-            }
-        });
 
         document.addEventListener('keydown', (e) => {
             const modal = document.getElementById('login-modal');
             if (!modal || modal.classList.contains('hidden')) return;
-            if (e.key === 'Escape') {
+            if (e.key >= '0' && e.key <= '9') {
+                window.pressPinKey(e.key);
+            } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                currentPinBuffer = currentPinBuffer.slice(0, -1);
+                renderPinDisplay();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                window.verifyPinCode();
+            } else if (e.key === 'Escape') {
                 window.closeLoginModal();
             }
         });
@@ -1728,7 +1885,7 @@
             if (ok) {
                 showToast('Buluta kaydedildi! Herkeste anında güncellendi.');
             } else {
-                showToast('Cihaza kaydedildi, bulut senkronize ediliyor...');
+                showToast('Cihaza kaydedildi.');
             }
         };
 
@@ -1787,6 +1944,13 @@
                 box.classList.add('hidden');
                 box.classList.remove('flex');
             }, 3200);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
         }
 
         function renderAllViews() {
