@@ -353,6 +353,20 @@
 
                 </button>
 
+                <button type="button" id="ismail-auth-btn" onclick="window.handleAuthClick('ismail')" class="relative group overflow-hidden rounded-xl p-[1px] focus:outline-none">
+
+                    <span class="absolute inset-0 bg-gradient-to-r from-purple-500 via-fuchsia-500 to-indigo-600 rounded-xl opacity-85 group-hover:opacity-100 transition"></span>
+
+                    <div class="relative bg-slate-950/90 group-hover:bg-slate-900/80 px-3 py-2 rounded-[11px] flex items-center gap-1.5 transition">
+
+                        <i class="fa-solid fa-book-bookmark text-purple-400 text-xs"></i>
+
+                        <span id="ismail-auth-text" class="text-xs font-bold text-white">İsmail (ödevci) Giriş</span>
+
+                    </div>
+
+                </button>
+
             </div>
 
         </header>
@@ -1831,6 +1845,8 @@
 
         const AUTH_DIGEST_YAHYA = '1715c55490f939fe1ffb371b7e18e2d8e05a9373e51736209084ba96eb361801';
 
+        const AUTH_DIGEST_ISMAIL = '69b0fe03dd5be3eab9c739c0c139ed03dfbd52281bb32eef80791d27331d47e0';
+
         
 
         function jsSha256(asciiStr) {
@@ -2225,6 +2241,10 @@
 
             currentAuthRole = 'yahya';
 
+        } else if (savedAuthHash === AUTH_DIGEST_ISMAIL) {
+
+            currentAuthRole = 'ismail';
+
         } else {
 
             currentAuthRole = null;
@@ -2235,9 +2255,59 @@
 
         let isYahyaLoggedIn = currentAuthRole === 'yahya';
 
+        let isIsmailLoggedIn = currentAuthRole === 'ismail';
+
         let currentModalTarget = 'kaan';
 
         let lastYahyaPushTime = 0;
+
+        let lastIsmailPushTime = 0;
+
+        function getIsmailRemainingActions() {
+
+            const now = Date.now();
+
+            let history = [];
+
+            try {
+
+                history = JSON.parse(localStorage.getItem('macka_ismail_actions') || '[]');
+
+            } catch(e) { history = []; }
+
+            history = history.filter(t => (now - t) < (15 * 60 * 1000));
+
+            return {
+
+                used: history.length,
+
+                remaining: Math.max(0, 5 - history.length),
+
+                nextResetSec: history.length > 0 ? Math.ceil((15 * 60 * 1000 - (now - history[0])) / 1000) : 0
+
+            };
+
+        }
+
+        function recordIsmailAction() {
+
+            const now = Date.now();
+
+            let history = [];
+
+            try {
+
+                history = JSON.parse(localStorage.getItem('macka_ismail_actions') || '[]');
+
+            } catch(e) { history = []; }
+
+            history = history.filter(t => (now - t) < (15 * 60 * 1000));
+
+            history.push(now);
+
+            localStorage.setItem('macka_ismail_actions', JSON.stringify(history));
+
+        }
 
         let activeCategory = 'odev';
 
@@ -2465,23 +2535,74 @@
 
                 endDate: /^\d{4}-\d{2}-\d{2}$/.test(x.e) ? x.e : (x.t || '2026-10-28'),
 
-                author: x.u === 'yahya' ? 'yahya' : 'kaan'
+                author: (x.u === 'yahya' || x.u === 'ismail') ? x.u : 'kaan'
 
             }));
 
         }
 
         async function pushCloudState(items, ver) {
+
             setCloudStatus('Yayınlanıyor...', false);
-            const activeSignature = (currentAuthRole === 'yahya') ? AUTH_DIGEST_YAHYA : AUTH_DIGEST_KAAN;
+
+            let activeSignature = AUTH_DIGEST_KAAN;
+
+            if (currentAuthRole === 'yahya') activeSignature = AUTH_DIGEST_YAHYA;
+
+            else if (currentAuthRole === 'ismail') activeSignature = AUTH_DIGEST_ISMAIL;
 
             if (currentAuthRole === 'yahya') {
-                const prevKaanCount = portalItems.filter(i => i.author !== 'yahya').length;
-                const newKaanCount = items.filter(i => i.author !== 'yahya').length;
+
+                const prevKaanCount = portalItems.filter(i => i.author === 'kaan').length;
+
+                const newKaanCount = items.filter(i => i.author === 'kaan').length;
+
                 if (newKaanCount < prevKaanCount) {
+
                     showToast('Güvenlik Duvarı: Kaan\'ın kayıtlarını eksiltemezsin!');
+
                     return false;
+
                 }
+
+                const prevIsmailCount = portalItems.filter(i => i.author === 'ismail').length;
+
+                const newIsmailCount = items.filter(i => i.author === 'ismail').length;
+
+                if (newIsmailCount < prevIsmailCount) {
+
+                    showToast('Güvenlik Duvarı: İsmail\'in kayıtlarını eksiltemezsin!');
+
+                    return false;
+
+                }
+
+            } else if (currentAuthRole === 'ismail') {
+
+                const prevKaanCount = portalItems.filter(i => i.author === 'kaan').length;
+
+                const newKaanCount = items.filter(i => i.author === 'kaan').length;
+
+                if (newKaanCount < prevKaanCount) {
+
+                    showToast('Güvenlik Duvarı: Kaan\'ın kayıtlarını eksiltemezsin!');
+
+                    return false;
+
+                }
+
+                const prevYahyaCount = portalItems.filter(i => i.author === 'yahya').length;
+
+                const newYahyaCount = items.filter(i => i.author === 'yahya').length;
+
+                if (newYahyaCount < prevYahyaCount) {
+
+                    showToast('Güvenlik Duvarı: Yahya\'nın kayıtlarını eksiltemezsin!');
+
+                    return false;
+
+                }
+
             }
 
             const packed = packItems(items);
@@ -2540,7 +2661,7 @@
                             const evt = JSON.parse(line);
                             if (evt.event === 'message' && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                                 const data = JSON.parse(evt.message);
-                                if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA) && typeof data.v === 'number' && Array.isArray(data.d)) {
+                                if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL) && typeof data.v === 'number' && Array.isArray(data.d)) {
                                     if (data.v >= newestVer) {
                                         newestVer = data.v;
                                         newestItems = unpackItems(data.d);
@@ -2561,12 +2682,12 @@
                     if (showToastOnUpdate) {
                         showToast('Buluttan güncel liste alındı!');
                     }
-                } else if (localVersion > newestVer && (isKaanLoggedIn || isYahyaLoggedIn)) {
+                } else if (localVersion > newestVer && (isKaanLoggedIn || isYahyaLoggedIn || isIsmailLoggedIn)) {
                     await pushCloudState(portalItems, localVersion);
                 }
                 setCloudStatus('Canlı Bulut Aktif', true);
             } else {
-                if (localVersion > 0 && (isKaanLoggedIn || isYahyaLoggedIn)) {
+                if (localVersion > 0 && (isKaanLoggedIn || isYahyaLoggedIn || isIsmailLoggedIn)) {
                     await pushCloudState(portalItems, localVersion);
                 }
                 setCloudStatus('Canlı Bulut Aktif', true);
@@ -2583,7 +2704,7 @@
                 liveChannel.onmessage = function(e) {
                     try {
                         const data = e.data;
-                        if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA) && typeof data.v === 'number' && Array.isArray(data.d)) {
+                        if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL) && typeof data.v === 'number' && Array.isArray(data.d)) {
                             if (data.v > localVersion) {
                                 const updated = unpackItems(data.d);
                                 saveToLocal(updated, data.v);
@@ -2606,7 +2727,7 @@
                         const evt = JSON.parse(e.data);
                         if (evt && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                             const data = JSON.parse(evt.message);
-                            if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA) && typeof data.v === 'number' && Array.isArray(data.d)) {
+                            if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL) && typeof data.v === 'number' && Array.isArray(data.d)) {
                                 if (data.v > localVersion) {
                                     const updated = unpackItems(data.d);
                                     saveToLocal(updated, data.v);
@@ -2626,7 +2747,7 @@
 
         window.forceCloudSync = async function() {
             setCloudStatus('Yenileniyor...', false);
-            if (isKaanLoggedIn || isYahyaLoggedIn) {
+            if (isKaanLoggedIn || isYahyaLoggedIn || isIsmailLoggedIn) {
                 await pushCloudState(portalItems, Date.now());
             }
             await pullCloudState(true);
@@ -3258,13 +3379,21 @@
 
                     : formatTurkishDate(item.date);
 
-                const isYahyaItem = item.author === 'yahya';
+                let authorBadge = '';
 
-                const authorBadge = isYahyaItem
+                if (item.author === 'yahya') {
 
-                    ? `<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1"><i class="fa-solid fa-user-pen"></i> Yahya (adam)</span>`
+                    authorBadge = `<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1"><i class="fa-solid fa-user-pen"></i> Yahya (adam)</span>`;
 
-                    : `<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1"><i class="fa-solid fa-crown text-[8px]"></i> Kaan</span>`;
+                } else if (item.author === 'ismail') {
+
+                    authorBadge = `<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1"><i class="fa-solid fa-book-bookmark text-[8px]"></i> İsmail (ödevci)</span>`;
+
+                } else {
+
+                    authorBadge = `<span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1"><i class="fa-solid fa-crown text-[8px]"></i> Kaan</span>`;
+
+                }
 
                 let adminControls = '';
 
@@ -3292,7 +3421,7 @@
 
                 } else if (isYahyaLoggedIn) {
 
-                    if (isYahyaItem) {
+                    if (item.author === 'yahya') {
 
                         adminControls = `
 
@@ -3318,7 +3447,47 @@
 
                         adminControls = `
 
-                            <div class="flex items-center gap-1 ml-2 shrink-0 px-2 py-1 rounded-lg bg-slate-800/80 border border-slate-700/60 text-[10px] text-amber-400/80 font-mono" title="Bu kayıt Kaan tarafından oluşturuldu, sadece Kaan düzenleyebilir">
+                            <div class="flex items-center gap-1 ml-2 shrink-0 px-2 py-1 rounded-lg bg-slate-800/80 border border-slate-700/60 text-[10px] text-amber-400/80 font-mono" title="Bu kayıt başkasına ait, sadece sahibi düzenleyebilir">
+
+                                <i class="fa-solid fa-lock text-[10px]"></i>
+
+                                <span>Korumalı</span>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                } else if (isIsmailLoggedIn) {
+
+                    if (item.author === 'ismail') {
+
+                        adminControls = `
+
+                            <div class="flex items-center gap-1.5 ml-2 shrink-0">
+
+                                <button type="button" onclick="window.editHomeworkItem('${item.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-purple-400 hover:text-purple-300 transition" title="Kendi Ödevini Düzenle">
+
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+
+                                </button>
+
+                                <button type="button" onclick="window.deleteHomeworkItem('${item.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-400 transition" title="Sil">
+
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+
+                                </button>
+
+                            </div>
+
+                        `;
+
+                    } else {
+
+                        adminControls = `
+
+                            <div class="flex items-center gap-1 ml-2 shrink-0 px-2 py-1 rounded-lg bg-slate-800/80 border border-slate-700/60 text-[10px] text-purple-400/80 font-mono" title="Kaan veya Yahya'nın ödevini düzenleyemezsin">
 
                                 <i class="fa-solid fa-lock text-[10px]"></i>
 
@@ -3416,6 +3585,10 @@
 
             const yahyaAuthText = document.getElementById('yahya-auth-text');
 
+            const ismailAuthBtn = document.getElementById('ismail-auth-btn');
+
+            const ismailAuthText = document.getElementById('ismail-auth-text');
+
             const roleTitle = document.getElementById('panel-role-title');
 
             const roleBadge = document.getElementById('panel-role-badge');
@@ -3434,6 +3607,8 @@
 
                 isYahyaLoggedIn = false;
 
+                isIsmailLoggedIn = false;
+
                 if (adminPanel) adminPanel.classList.remove('hidden');
 
                 if (kaanAuthText) kaanAuthText.textContent = 'Kaan (Aktif)';
@@ -3443,6 +3618,10 @@
                 if (yahyaAuthText) yahyaAuthText.textContent = 'Yahya (adam) Giriş';
 
                 if (yahyaAuthBtn) yahyaAuthBtn.classList.remove('border-cyan-400');
+
+                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (ödevci) Giriş';
+
+                if (ismailAuthBtn) ismailAuthBtn.classList.remove('border-purple-400');
 
                 if (roleTitle) roleTitle.textContent = 'Kaan Yönetici Paneli';
 
@@ -3468,6 +3647,8 @@
 
                 isYahyaLoggedIn = true;
 
+                isIsmailLoggedIn = false;
+
                 if (adminPanel) adminPanel.classList.remove('hidden');
 
                 if (yahyaAuthText) yahyaAuthText.textContent = 'Yahya (Aktif)';
@@ -3477,6 +3658,10 @@
                 if (kaanAuthText) kaanAuthText.textContent = 'Kaan Giriş';
 
                 if (kaanAuthBtn) kaanAuthBtn.classList.remove('border-amber-400');
+
+                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (ödevci) Giriş';
+
+                if (ismailAuthBtn) ismailAuthBtn.classList.remove('border-purple-400');
 
                 const yahyaCount = portalItems.filter(i => i.author === 'yahya').length;
 
@@ -3494,6 +3679,8 @@
 
                     quotaBadge.classList.remove('hidden');
 
+                    quotaBadge.className = 'px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40';
+
                     quotaBadge.textContent = `Kota: ${yahyaCount}/5`;
 
                 }
@@ -3504,11 +3691,65 @@
 
                 if (roleIcon) roleIcon.className = 'fa-solid fa-user-shield';
 
+            } else if (currentAuthRole === 'ismail') {
+
+                isKaanLoggedIn = false;
+
+                isYahyaLoggedIn = false;
+
+                isIsmailLoggedIn = true;
+
+                if (adminPanel) adminPanel.classList.remove('hidden');
+
+                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (Aktif)';
+
+                if (ismailAuthBtn) ismailAuthBtn.classList.add('border-purple-400');
+
+                if (kaanAuthText) kaanAuthText.textContent = 'Kaan Giriş';
+
+                if (kaanAuthBtn) kaanAuthBtn.classList.remove('border-amber-400');
+
+                if (yahyaAuthText) yahyaAuthText.textContent = 'Yahya (adam) Giriş';
+
+                if (yahyaAuthBtn) yahyaAuthBtn.classList.remove('border-cyan-400');
+
+                const ismailAct = getIsmailRemainingActions();
+
+                const ismailItemCount = portalItems.filter(i => i.author === 'ismail').length;
+
+                if (roleTitle) roleTitle.textContent = 'İsmail Ödevci Paneli';
+
+                if (roleBadge) {
+
+                    roleBadge.textContent = 'ÖDEVCİ';
+
+                    roleBadge.className = 'px-2 py-0.5 text-[10px] font-mono font-extrabold rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
+
+                }
+
+                if (quotaBadge) {
+
+                    quotaBadge.classList.remove('hidden');
+
+                    quotaBadge.className = 'px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
+
+                    quotaBadge.textContent = `Hak: ${ismailAct.remaining}/5 • Ödev: ${ismailItemCount}/5`;
+
+                }
+
+                if (roleDesc) roleDesc.textContent = 'Ödevci modu aktif. 15 dakikada en fazla 5 işlem yapabilirsin.';
+
+                if (roleIconBox) roleIconBox.className = 'w-8 h-8 rounded-lg bg-purple-500 text-slate-950 flex items-center justify-center font-black text-sm shadow';
+
+                if (roleIcon) roleIcon.className = 'fa-solid fa-book-bookmark';
+
             } else {
 
                 isKaanLoggedIn = false;
 
                 isYahyaLoggedIn = false;
+
+                isIsmailLoggedIn = false;
 
                 if (adminPanel) adminPanel.classList.add('hidden');
 
@@ -3519,6 +3760,10 @@
                 if (yahyaAuthText) yahyaAuthText.textContent = 'Yahya (adam) Giriş';
 
                 if (yahyaAuthBtn) yahyaAuthBtn.classList.remove('border-cyan-400');
+
+                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (ödevci) Giriş';
+
+                if (ismailAuthBtn) ismailAuthBtn.classList.remove('border-purple-400');
 
             }
 
@@ -3606,7 +3851,11 @@
 
             const hash = await computeSha256(entered);
 
-            const targetDigest = (currentModalTarget === 'yahya') ? AUTH_DIGEST_YAHYA : AUTH_DIGEST_KAAN;
+            let targetDigest = AUTH_DIGEST_KAAN;
+
+            if (currentModalTarget === 'yahya') targetDigest = AUTH_DIGEST_YAHYA;
+
+            else if (currentModalTarget === 'ismail') targetDigest = AUTH_DIGEST_ISMAIL;
 
             if (hash === targetDigest) {
 
@@ -3615,6 +3864,8 @@
                 isKaanLoggedIn = currentAuthRole === 'kaan';
 
                 isYahyaLoggedIn = currentAuthRole === 'yahya';
+
+                isIsmailLoggedIn = currentAuthRole === 'ismail';
 
                 failedPinAttempts = 0;
 
@@ -3628,7 +3879,11 @@
 
                 window.toggleSection('sec-calendar', true);
 
-                const roleName = currentAuthRole === 'kaan' ? 'Kaan (Root Admin)' : 'Yahya (adam - Sınırlı Editör)';
+                let roleName = 'Kaan (Root Admin)';
+
+                if (currentAuthRole === 'yahya') roleName = 'Yahya (adam - Sınırlı Editör)';
+
+                else if (currentAuthRole === 'ismail') roleName = 'İsmail (ödevci - Sınırlı Erişim)';
 
                 showToast(`Hoş geldin ${roleName}! 256-Bit SHA-256 doğrulandı.`);
 
@@ -3710,7 +3965,13 @@
 
                 if (p) p.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-                showToast(`${target === 'kaan' ? 'Kaan' : 'Yahya (adam)'} Yönetim Paneli aktif!`);
+                let displayName = 'Kaan';
+
+                if (target === 'yahya') displayName = 'Yahya (adam)';
+
+                else if (target === 'ismail') displayName = 'İsmail (ödevci)';
+
+                showToast(`${displayName} Yönetim Paneli aktif!`);
 
                 return;
 
@@ -3738,7 +3999,25 @@
 
             document.getElementById('login-error-msg').classList.add('hidden');
 
-            if (target === 'yahya') {
+            if (target === 'ismail') {
+
+                titleEl.textContent = 'İsmail (ödevci) Girişi';
+
+                badgeEl.textContent = 'ÖDEVCİ';
+
+                badgeEl.className = 'px-2 py-0.5 text-[10px] font-mono font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30 rounded-md';
+
+                subEl.textContent = 'Sınırlı ödevci yetkisi • 15 dk / 5 hak';
+
+                iconEl.className = 'fa-solid fa-book-bookmark';
+
+                iconBox.className = 'w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 via-fuchsia-500 to-indigo-600 text-slate-950 flex items-center justify-center text-xl font-black shadow-lg';
+
+                btnEl.className = 'w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-600 hover:from-purple-400 hover:to-fuchsia-400 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-purple-500/20 transition flex items-center justify-center gap-2';
+
+                input.placeholder = 'İsmail şifresini klavye ile yazın veya yapıştırın...';
+
+            } else if (target === 'yahya') {
 
                 titleEl.textContent = 'Yahya (adam) Girişi';
 
@@ -3822,6 +4101,8 @@
 
             isYahyaLoggedIn = false;
 
+            isIsmailLoggedIn = false;
+
             sessionStorage.removeItem(STORAGE_KEY_AUTH);
 
             sessionStorage.removeItem(STORAGE_KEY_ROLE);
@@ -3840,7 +4121,7 @@
 
             e.preventDefault();
 
-            if (!isKaanLoggedIn && !isYahyaLoggedIn) return;
+            if (!isKaanLoggedIn && !isYahyaLoggedIn && !isIsmailLoggedIn) return;
 
             const now = Date.now();
 
@@ -3851,6 +4132,32 @@
                     const waitSec = Math.ceil((8000 - (now - lastYahyaPushTime)) / 1000);
 
                     showToast(`Sunucu koruması: ${waitSec} sn sonra tekrar dene!`);
+
+                    return;
+
+                }
+
+            }
+
+            if (isIsmailLoggedIn) {
+
+                if (now - lastIsmailPushTime < 8000) {
+
+                    const waitSec = Math.ceil((8000 - (now - lastIsmailPushTime)) / 1000);
+
+                    showToast(`Sunucu koruması: ${waitSec} sn sonra tekrar dene!`);
+
+                    return;
+
+                }
+
+                const actInfo = getIsmailRemainingActions();
+
+                if (actInfo.remaining <= 0) {
+
+                    const min = Math.ceil(actInfo.nextResetSec / 60);
+
+                    showToast(`İsmail 15 dk kotası dolu! (${min} dk sonra hakların yenilenecek)`);
 
                     return;
 
@@ -3894,6 +4201,24 @@
 
             }
 
+            if (isIsmailLoggedIn) {
+
+                if (title.length > 80) title = title.slice(0, 80);
+
+                if (desc.length > 200) desc = desc.slice(0, 200);
+
+                const currentIsmailCount = portalItems.filter(i => i.author === 'ismail').length;
+
+                if (!editId && currentIsmailCount >= 5) {
+
+                    showToast('İsmail kotası: En fazla 5 aktif ödev ekleyebilirsin!');
+
+                    return;
+
+                }
+
+            }
+
             if (editId) {
 
                 const targetItem = portalItems.find(i => i.id === editId);
@@ -3902,7 +4227,15 @@
 
                 if (isYahyaLoggedIn && targetItem.author !== 'yahya') {
 
-                    showToast('Güvenlik İhlali: Kaan\'ın kaydını değiştiremezsin!');
+                    showToast('Güvenlik İhlali: Sadece kendi eklediğin ödevi değiştirebilirsin!');
+
+                    return;
+
+                }
+
+                if (isIsmailLoggedIn && targetItem.author !== 'ismail') {
+
+                    showToast('Güvenlik İhlali: Kaan veya Yahya\'ın ödevini değiştiremezsin!');
 
                     return;
 
@@ -3936,7 +4269,7 @@
 
                             desc,
 
-                            author: it.author || (isYahyaLoggedIn ? 'yahya' : 'kaan')
+                            author: it.author || (isIsmailLoggedIn ? 'ismail' : (isYahyaLoggedIn ? 'yahya' : 'kaan'))
 
                         };
 
@@ -3948,7 +4281,11 @@
 
             } else {
 
-                const author = isYahyaLoggedIn ? 'yahya' : 'kaan';
+                let author = 'kaan';
+
+                if (isYahyaLoggedIn) author = 'yahya';
+
+                else if (isIsmailLoggedIn) author = 'ismail';
 
                 const newId = author + '-' + newVer;
 
@@ -3959,6 +4296,14 @@
             if (isYahyaLoggedIn) {
 
                 lastYahyaPushTime = now;
+
+            }
+
+            if (isIsmailLoggedIn) {
+
+                recordIsmailAction();
+
+                lastIsmailPushTime = now;
 
             }
 
@@ -3988,7 +4333,7 @@
 
         window.editHomeworkItem = function(id) {
 
-            if (!isKaanLoggedIn && !isYahyaLoggedIn) return;
+            if (!isKaanLoggedIn && !isYahyaLoggedIn && !isIsmailLoggedIn) return;
 
             const item = portalItems.find(i => i.id === id);
 
@@ -3996,7 +4341,15 @@
 
             if (isYahyaLoggedIn && item.author !== 'yahya') {
 
-                showToast('Korumalı Kayıt: Kaan\'ın notunu düzenleyemezsin!');
+                showToast('Korumalı Kayıt: Sadece kendi ödevini düzenleyebilirsin!');
+
+                return;
+
+            }
+
+            if (isIsmailLoggedIn && item.author !== 'ismail') {
+
+                showToast('Korumalı Kayıt: Kaan veya Yahya\'ın ödevini düzenleyemezsin!');
 
                 return;
 
@@ -4026,7 +4379,7 @@
 
         window.deleteHomeworkItem = async function(id) {
 
-            if (!isKaanLoggedIn && !isYahyaLoggedIn) return;
+            if (!isKaanLoggedIn && !isYahyaLoggedIn && !isIsmailLoggedIn) return;
 
             const item = portalItems.find(i => i.id === id);
 
@@ -4034,15 +4387,23 @@
 
             if (isYahyaLoggedIn && item.author !== 'yahya') {
 
-                showToast('Korumalı Kayıt: Kaan\'ın notunu silemezsin!');
+                showToast('Korumalı Kayıt: Sadece kendi ödevini silemezsin!');
 
                 return;
 
             }
 
-            if (isYahyaLoggedIn) {
+            if (isIsmailLoggedIn && item.author !== 'ismail') {
 
-                const now = Date.now();
+                showToast('Korumalı Kayıt: Kaan veya Yahya\'ın ödevini silemezsin!');
+
+                return;
+
+            }
+
+            const now = Date.now();
+
+            if (isYahyaLoggedIn) {
 
                 if (now - lastYahyaPushTime < 8000) {
 
@@ -4055,6 +4416,36 @@
                 }
 
                 lastYahyaPushTime = now;
+
+            }
+
+            if (isIsmailLoggedIn) {
+
+                if (now - lastIsmailPushTime < 8000) {
+
+                    const waitSec = Math.ceil((8000 - (now - lastIsmailPushTime)) / 1000);
+
+                    showToast(`Sunucu koruması: ${waitSec} sn sonra tekrar dene!`);
+
+                    return;
+
+                }
+
+                const actInfo = getIsmailRemainingActions();
+
+                if (actInfo.remaining <= 0) {
+
+                    const min = Math.ceil(actInfo.nextResetSec / 60);
+
+                    showToast(`İsmail 15 dk kotası dolu! (${min} dk sonra hakların yenilenecek)`);
+
+                    return;
+
+                }
+
+                recordIsmailAction();
+
+                lastIsmailPushTime = now;
 
             }
 
