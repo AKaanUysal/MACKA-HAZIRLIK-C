@@ -1871,6 +1871,121 @@
 
         const AUTH_DIGEST_ISMAIL = '69b0fe03dd5be3eab9c739c0c139ed03dfbd52281bb32eef80791d27331d47e0';
 
+        const ECDSA_VAULT = {"kaan": {"pub": {"crv": "P-256", "ext": true, "key_ops": ["verify"], "kty": "EC", "x": "2o7mapd6IQWxq2fiP7Ai_3rHlgI07qUpDooAzgtOMog", "y": "bfk_d_VpHewIN7DHXE2jqBFv1g58PTimM5Zv7AtR1gQ"}, "encPriv": "b5y9BT8eKfIkCwzwk+7NUChKuwJOZ2ukLhcn6vlbifM6KLrUiz9uqRkaIyQo96wNza42HFo2AT4v3qIHkFAAXqaZyvewjKQbHpSHYQGeEAqKYMJtPqxKZWPk5Yq3AaoevhaVb3iG8XYqJfLdsgVpOMZadFhf+8v2GIbLNlzPXVBC9zaNAS/2yNYA5l1DrNqO6UNpI+RgFb1zRw6DVy0VjNZa8NjZp1fUizdEMpD1YvEtq3BNsLrY3uxZbqB8f8HJy6/wp4zhB0H07Skyc3ogak+OnflIKxqSAEQuhXM3", "iv": "gvgJ9L+/XJWI0sxU"}, "yahya": {"pub": {"crv": "P-256", "ext": true, "key_ops": ["verify"], "kty": "EC", "x": "IyFYjWhu51_tsDcbniAfZ-fB_unX_YWOthHpFnycKhg", "y": "KCndzTyiqZIDLIVgKgCSiJ2_AD6Jawv86X8Iwug1xII"}, "encPriv": "SJoTkoQhxdvnt497I/w+RWsSkE+CNBqyjZr2M1rcun54W5prZ4vskwxNqn4akED4+7YMMxAhxMYOz/3lh6Dj7MZQfH0XJBMrqv+st9mcBDx3c7yP1Hn3ln8yZVxWeGOEGOBABadiKTCNu5S1x5lhZtulQ9VKoV/pkwwWVjrRbCouGJo8WzP/nqhphuoa4TFA3szV/YUZpg2K7gs0nuYyt40NmTyS0J+4A1nJ+ASJieQG8rHehyT1gVGPHsX8C2TYOKNBkb+b6Baj/8h94MgDvMED9kfBNb2bEfeSmsMt", "iv": "7KuCbmHmCJ9OYOY2"}, "ismail": {"pub": {"crv": "P-256", "ext": true, "key_ops": ["verify"], "kty": "EC", "x": "Rq-nmYtnhEG-Mik46DqCOkF-66TdGU6Iulk50ulCXcQ", "y": "DGkK__3P6d3HRGw3S6SPxsu1UdGcEwh6x8tKonfsCWM"}, "encPriv": "7UUgwMusf/8r960bW8WwI19q/6mMTwVYf0z+nB6NzOrJwHllJ7Dfccz4WRvrjLEQhwAyg1HGmnIM4RqpQtt4VNuro9ETg6nfna3DxmtojPuX5GGMMMZd2aeYGc4IDheNMC0k7v7lsGqzXaxgQ277xQ2RvqqYYz2wvc4uLEvgio7ugIgQrfhFLthXZSS66RDLaKiOEudrZhjX6d/PKTjvDiiSLTfmPUPax3rbbFWyogq7Mh4C9yLDbdwvYeqx9vn/Pcm566usnC3kuMxlModPW8vWqD15x4l8q7fuuo7W", "iv": "yhlPwSb6tf1eAs+r"}};
+        let activePrivateKey = null;
+
+        function hexToBuf(hex) {
+            const bytes = new Uint8Array(hex.length / 2);
+            for (let i = 0; i < bytes.length; i++) {
+                bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+            }
+            return bytes;
+        }
+
+        function bufToHex(buf) {
+            const bytes = new Uint8Array(buf);
+            let hex = '';
+            for (let i = 0; i < bytes.length; i++) {
+                hex += bytes[i].toString(16).padStart(2, '0');
+            }
+            return hex;
+        }
+
+        function b64ToBuf(b64) {
+            const bin = atob(b64);
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            return bytes;
+        }
+
+        const cachedPublicCryptoKeys = {};
+        async function getPublicCryptoKey(role) {
+            if (cachedPublicCryptoKeys[role]) return cachedPublicCryptoKeys[role];
+            const info = ECDSA_VAULT[role];
+            if (!info || !info.pub) return null;
+            try {
+                const key = await crypto.subtle.importKey(
+                    "jwk",
+                    info.pub,
+                    { name: "ECDSA", namedCurve: "P-256" },
+                    false,
+                    ["verify"]
+                );
+                cachedPublicCryptoKeys[role] = key;
+                return key;
+            } catch(e) {
+                return null;
+            }
+        }
+
+        async function decryptUserPrivateKey(role, password) {
+            const info = ECDSA_VAULT[role];
+            if (!info) return null;
+            try {
+                const enc = new TextEncoder();
+                const dec = new TextDecoder();
+                const pwdKey = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
+                const salt = enc.encode("macka_hazc_" + role + "_salt");
+                const aesKey = await crypto.subtle.deriveKey(
+                    { name: "PBKDF2", salt: salt, iterations: 1000, hash: "SHA-256" },
+                    pwdKey,
+                    { name: "AES-GCM", length: 256 },
+                    false,
+                    ["decrypt"]
+                );
+                const privBuf = await crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: b64ToBuf(info.iv) },
+                    aesKey,
+                    b64ToBuf(info.encPriv)
+                );
+                const privJwk = JSON.parse(dec.decode(privBuf));
+                const privCryptoKey = await crypto.subtle.importKey(
+                    "jwk",
+                    privJwk,
+                    { name: "ECDSA", namedCurve: "P-256" },
+                    false,
+                    ["sign"]
+                );
+                return privCryptoKey;
+            } catch(e) {
+                return null;
+            }
+        }
+
+        async function signEcdsaPayload(role, canonicalStr) {
+            if (!activePrivateKey) return null;
+            try {
+                const enc = new TextEncoder();
+                const sigBuf = await crypto.subtle.sign(
+                    { name: "ECDSA", hash: "SHA-256" },
+                    activePrivateKey,
+                    enc.encode(canonicalStr)
+                );
+                return bufToHex(sigBuf);
+            } catch(e) {
+                return null;
+            }
+        }
+
+        async function verifyEcdsaPayload(role, canonicalStr, sigHex) {
+            if (!role || !sigHex || typeof sigHex !== 'string') return false;
+            try {
+                const pubKey = await getPublicCryptoKey(role);
+                if (!pubKey) return false;
+                const enc = new TextEncoder();
+                const sigBuf = hexToBuf(sigHex);
+                const isValid = await crypto.subtle.verify(
+                    { name: "ECDSA", hash: "SHA-256" },
+                    pubKey,
+                    sigBuf,
+                    enc.encode(canonicalStr)
+                );
+                return isValid;
+            } catch(e) {
+                return false;
+            }
+        }
+
         
 
         function jsSha256(asciiStr) {
@@ -2275,6 +2390,14 @@
 
         }
 
+        const savedPass = sessionStorage.getItem('macka_hazc_active_pass');
+
+        if (savedPass && currentAuthRole) {
+
+            decryptUserPrivateKey(currentAuthRole, savedPass).then(k => { activePrivateKey = k; }).catch(() => {});
+
+        }
+
         let isKaanLoggedIn = currentAuthRole === 'kaan';
 
         let isYahyaLoggedIn = currentAuthRole === 'yahya';
@@ -2604,15 +2727,21 @@
             }
 
             const packed = packItems(items);
-            const payload = JSON.stringify({
+            const canonicalStr = `${ver}:${currentAuthRole}:${JSON.stringify(packed)}`;
+            let ecdsaSig = await signEcdsaPayload(currentAuthRole, canonicalStr);
+            if (!ecdsaSig) ecdsaSig = activeSignature;
+
+            const payloadObj = {
                 v: ver,
-                s: activeSignature,
+                u: currentAuthRole,
+                s: ecdsaSig,
                 d: packed
-            });
+            };
+            const payload = JSON.stringify(payloadObj);
 
             if (liveChannel) {
                 try {
-                    liveChannel.postMessage({ v: ver, s: activeSignature, d: packed });
+                    liveChannel.postMessage(payloadObj);
                 } catch (bcErr) {}
             }
 
@@ -2659,7 +2788,18 @@
                             const evt = JSON.parse(line);
                             if (evt.event === 'message' && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                                 const data = JSON.parse(evt.message);
-                                if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL) && typeof data.v === 'number' && Array.isArray(data.d)) {
+                                if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
+                const signerRole = data.u || (data.s === AUTH_DIGEST_KAAN ? 'kaan' : (data.s === AUTH_DIGEST_YAHYA ? 'yahya' : (data.s === AUTH_DIGEST_ISMAIL ? 'ismail' : null)));
+                if (!signerRole) {
+                    console.warn('[Siber Savunma] Sahte veya imzasız veri reddedildi!');
+                    return;
+                }
+                const canonicalStr = `${data.v}:${signerRole}:${JSON.stringify(data.d)}`;
+                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s) || (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL);
+                if (!isSigValid) {
+                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte Postman saldırısı engellendi.');
+                    return;
+                }
                                     if (data.v >= newestVer) {
                                         newestVer = data.v;
                                         newestItems = unpackItems(data.d);
@@ -2699,10 +2839,21 @@
 
             if (liveChannel && !window._liveChannelListening) {
                 window._liveChannelListening = true;
-                liveChannel.onmessage = function(e) {
+                liveChannel.onmessage = async function(e) {
                     try {
                         const data = e.data;
-                        if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL) && typeof data.v === 'number' && Array.isArray(data.d)) {
+                        if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
+                const signerRole = data.u || (data.s === AUTH_DIGEST_KAAN ? 'kaan' : (data.s === AUTH_DIGEST_YAHYA ? 'yahya' : (data.s === AUTH_DIGEST_ISMAIL ? 'ismail' : null)));
+                if (!signerRole) {
+                    console.warn('[Siber Savunma] Sahte veya imzasız veri reddedildi!');
+                    return;
+                }
+                const canonicalStr = `${data.v}:${signerRole}:${JSON.stringify(data.d)}`;
+                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s) || (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL);
+                if (!isSigValid) {
+                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte Postman saldırısı engellendi.');
+                    return;
+                }
                             if (data.v > localVersion) {
                                 const updated = unpackItems(data.d);
                                 saveToLocal(updated, data.v);
@@ -2720,12 +2871,23 @@
                 sseConnection.onopen = function() {
                     setCloudStatus('Canlı Bulut Aktif', true);
                 };
-                sseConnection.onmessage = function(e) {
+                sseConnection.onmessage = async function(e) {
                     try {
                         const evt = JSON.parse(e.data);
                         if (evt && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                             const data = JSON.parse(evt.message);
-                            if (data && (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL) && typeof data.v === 'number' && Array.isArray(data.d)) {
+                            if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
+                const signerRole = data.u || (data.s === AUTH_DIGEST_KAAN ? 'kaan' : (data.s === AUTH_DIGEST_YAHYA ? 'yahya' : (data.s === AUTH_DIGEST_ISMAIL ? 'ismail' : null)));
+                if (!signerRole) {
+                    console.warn('[Siber Savunma] Sahte veya imzasız veri reddedildi!');
+                    return;
+                }
+                const canonicalStr = `${data.v}:${signerRole}:${JSON.stringify(data.d)}`;
+                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s) || (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL);
+                if (!isSigValid) {
+                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte Postman saldırısı engellendi.');
+                    return;
+                }
                                 if (data.v > localVersion) {
                                     const updated = unpackItems(data.d);
                                     saveToLocal(updated, data.v);
@@ -3868,6 +4030,14 @@
                 sessionStorage.setItem(STORAGE_KEY_AUTH, targetDigest);
 
                 sessionStorage.setItem(STORAGE_KEY_ROLE, currentAuthRole);
+
+                sessionStorage.setItem('macka_hazc_active_pass', enteredPin);
+
+                try {
+
+                    activePrivateKey = await decryptUserPrivateKey(currentAuthRole, enteredPin);
+
+                } catch(decErr) {}
 
                 window.closeLoginModal();
 
