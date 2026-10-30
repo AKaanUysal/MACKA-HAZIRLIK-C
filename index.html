@@ -361,7 +361,7 @@
 
                         <i class="fa-solid fa-book-bookmark text-purple-400 text-xs"></i>
 
-                        <span id="ismail-auth-text" class="text-xs font-bold text-white">İsmail (ödevci) Giriş</span>
+                        <span id="ismail-auth-text" class="text-xs font-bold text-white">İsmail (Bakımda)</span>
 
                     </div>
 
@@ -370,6 +370,28 @@
             </div>
 
         </header>
+
+
+        <div id="ismail-countdown-banner" class="glass-card rounded-2xl p-3 sm:p-4 border border-purple-500/30 bg-gradient-to-r from-purple-950/40 via-slate-900/60 to-purple-950/40 flex flex-wrap items-center justify-between gap-3 shadow-lg shadow-purple-500/5">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center font-bold text-base shadow-inner">
+                    <i class="fa-solid fa-user-clock animate-pulse"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-xs sm:text-sm font-extrabold text-white tracking-wide">İsmail Gelme Sayacı</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono font-black rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30">İÇERİK YÖNETİCİSİ</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1"><i class="fa-solid fa-wrench text-[9px]"></i> Bakımda</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Olası siber saldırılarda Root veritabanını korumak için güvenlik katmanları aktif. İsmail 15 dk Rate-Limit korumalı İçerik Yöneticisi olarak ödev akışını yönetecek.</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-950/90 px-3.5 py-2 rounded-xl border border-purple-500/40 text-purple-300 font-mono text-xs sm:text-sm font-black shadow-inner">
+                <i class="fa-solid fa-hourglass-half text-purple-400 animate-spin"></i>
+                <span id="ismail-countdown-timer">Hesaplanıyor...</span>
+            </div>
+        </div>
+
 
         
 
@@ -2281,7 +2303,7 @@
 
                 used: history.length,
 
-                remaining: Math.max(0, 5 - history.length),
+                remaining: Math.max(0, 10 - history.length),
 
                 nextResetSec: history.length > 0 ? Math.ceil((15 * 60 * 1000 - (now - history[0])) / 1000) : 0
 
@@ -2577,33 +2599,7 @@
 
                 }
 
-            } else if (currentAuthRole === 'ismail') {
 
-                const prevKaanCount = portalItems.filter(i => i.author === 'kaan').length;
-
-                const newKaanCount = items.filter(i => i.author === 'kaan').length;
-
-                if (newKaanCount < prevKaanCount) {
-
-                    showToast('Güvenlik Duvarı: Kaan\'ın kayıtlarını eksiltemezsin!');
-
-                    return false;
-
-                }
-
-                const prevYahyaCount = portalItems.filter(i => i.author === 'yahya').length;
-
-                const newYahyaCount = items.filter(i => i.author === 'yahya').length;
-
-                if (newYahyaCount < prevYahyaCount) {
-
-                    showToast('Güvenlik Duvarı: Yahya\'nın kayıtlarını eksiltemezsin!');
-
-                    return false;
-
-                }
-
-            }
 
             const packed = packItems(items);
             const payload = JSON.stringify({
@@ -2880,6 +2876,24 @@
             const liveDateEl = document.getElementById('live-date-text');
 
             if (liveDateEl) liveDateEl.textContent = dateStr;
+            const ismailTargetDate = new Date('2026-11-02T08:30:00');
+            const ismailDiff = ismailTargetDate - now;
+            const ismailTimerEl = document.getElementById('ismail-countdown-timer');
+            const ismailModalTimerEl = document.getElementById('ismail-modal-countdown-timer');
+            if (ismailTimerEl || ismailModalTimerEl) {
+                let timerText = '';
+                if (ismailDiff <= 0) {
+                    timerText = 'İsmail Geldi! (Yetkiler Açık)';
+                } else {
+                    const days = Math.floor(ismailDiff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((ismailDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((ismailDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((ismailDiff % (1000 * 60)) / 1000);
+                    timerText = `${days}g ${hours}s ${minutes}dk ${seconds}sn`;
+                }
+                if (ismailTimerEl) ismailTimerEl.textContent = timerText;
+                if (ismailModalTimerEl) ismailModalTimerEl.textContent = timerText;
+            }
 
             const targetEndDate = new Date('2027-06-25T15:30:00');
 
@@ -3461,43 +3475,25 @@
 
                 } else if (isIsmailLoggedIn) {
 
-                    if (item.author === 'ismail') {
+                    adminControls = `
 
-                        adminControls = `
+                        <div class="flex items-center gap-1.5 ml-2 shrink-0">
 
-                            <div class="flex items-center gap-1.5 ml-2 shrink-0">
+                            <button type="button" onclick="window.editHomeworkItem('${item.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-purple-900/50 text-purple-400 hover:text-purple-300 transition" title="İçerik Yöneticisi ile Düzenle">
 
-                                <button type="button" onclick="window.editHomeworkItem('${item.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-purple-400 hover:text-purple-300 transition" title="Kendi Ödevini Düzenle">
+                                <i class="fa-solid fa-pen-to-square text-xs"></i>
 
-                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                            </button>
 
-                                </button>
+                            <button type="button" onclick="window.deleteHomeworkItem('${item.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-400 transition" title="Sil">
 
-                                <button type="button" onclick="window.deleteHomeworkItem('${item.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-400 transition" title="Sil">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
 
-                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
 
-                                </button>
+                        </div>
 
-                            </div>
-
-                        `;
-
-                    } else {
-
-                        adminControls = `
-
-                            <div class="flex items-center gap-1 ml-2 shrink-0 px-2 py-1 rounded-lg bg-slate-800/80 border border-slate-700/60 text-[10px] text-purple-400/80 font-mono" title="Kaan veya Yahya'nın ödevini düzenleyemezsin">
-
-                                <i class="fa-solid fa-lock text-[10px]"></i>
-
-                                <span>Korumalı</span>
-
-                            </div>
-
-                        `;
-
-                    }
+                    `;
 
                 }
 
@@ -3619,7 +3615,7 @@
 
                 if (yahyaAuthBtn) yahyaAuthBtn.classList.remove('border-cyan-400');
 
-                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (ödevci) Giriş';
+                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (Bakımda)';
 
                 if (ismailAuthBtn) ismailAuthBtn.classList.remove('border-purple-400');
 
@@ -3659,7 +3655,7 @@
 
                 if (kaanAuthBtn) kaanAuthBtn.classList.remove('border-amber-400');
 
-                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (ödevci) Giriş';
+                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (Bakımda)';
 
                 if (ismailAuthBtn) ismailAuthBtn.classList.remove('border-purple-400');
 
@@ -3701,7 +3697,7 @@
 
                 if (adminPanel) adminPanel.classList.remove('hidden');
 
-                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (Aktif)';
+                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (İçerik Yön.)';
 
                 if (ismailAuthBtn) ismailAuthBtn.classList.add('border-purple-400');
 
@@ -3715,13 +3711,11 @@
 
                 const ismailAct = getIsmailRemainingActions();
 
-                const ismailItemCount = portalItems.filter(i => i.author === 'ismail').length;
-
-                if (roleTitle) roleTitle.textContent = 'İsmail Ödevci Paneli';
+                if (roleTitle) roleTitle.textContent = 'İsmail (İçerik Yöneticisi) Paneli';
 
                 if (roleBadge) {
 
-                    roleBadge.textContent = 'ÖDEVCİ';
+                    roleBadge.textContent = 'İÇERİK YÖNETİCİSİ';
 
                     roleBadge.className = 'px-2 py-0.5 text-[10px] font-mono font-extrabold rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
 
@@ -3733,15 +3727,15 @@
 
                     quotaBadge.className = 'px-2 py-0.5 text-[10px] font-mono font-bold rounded bg-purple-500/20 text-purple-300 border border-purple-500/40';
 
-                    quotaBadge.textContent = `Hak: ${ismailAct.remaining}/5 • Ödev: ${ismailItemCount}/5`;
+                    quotaBadge.textContent = `RATE-LIMIT: ${ismailAct.remaining}/10 • GÜVENLİK AKTİF`;
 
                 }
 
-                if (roleDesc) roleDesc.textContent = 'Ödevci modu aktif. 15 dakikada en fazla 5 işlem yapabilirsin.';
+                if (roleDesc) roleDesc.textContent = 'İçerik Yöneticisi modu aktif. Bot ve virüs saldırılarına karşı 15 dakikalık Rate-Limit koruması devrede. Sınıfın tüm ödev akışını yönetebilirsin.';
 
                 if (roleIconBox) roleIconBox.className = 'w-8 h-8 rounded-lg bg-purple-500 text-slate-950 flex items-center justify-center font-black text-sm shadow';
 
-                if (roleIcon) roleIcon.className = 'fa-solid fa-book-bookmark';
+                if (roleIcon) roleIcon.className = 'fa-solid fa-shield-halved';
 
             } else {
 
@@ -3761,7 +3755,7 @@
 
                 if (yahyaAuthBtn) yahyaAuthBtn.classList.remove('border-cyan-400');
 
-                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (ödevci) Giriş';
+                if (ismailAuthText) ismailAuthText.textContent = 'İsmail (Bakımda)';
 
                 if (ismailAuthBtn) ismailAuthBtn.classList.remove('border-purple-400');
 
@@ -3883,7 +3877,7 @@
 
                 if (currentAuthRole === 'yahya') roleName = 'Yahya (adam - Sınırlı Editör)';
 
-                else if (currentAuthRole === 'ismail') roleName = 'İsmail (ödevci - Sınırlı Erişim)';
+                else if (currentAuthRole === 'ismail') roleName = 'İsmail (İçerik Yöneticisi - Rate-Limit Korumalı)';
 
                 showToast(`Hoş geldin ${roleName}! 256-Bit SHA-256 doğrulandı.`);
 
@@ -3969,7 +3963,7 @@
 
                 if (target === 'yahya') displayName = 'Yahya (adam)';
 
-                else if (target === 'ismail') displayName = 'İsmail (ödevci)';
+                else if (target === 'ismail') displayName = 'İsmail (İçerik Yöneticisi)';
 
                 showToast(`${displayName} Yönetim Paneli aktif!`);
 
@@ -4001,21 +3995,23 @@
 
             if (target === 'ismail') {
 
-                titleEl.textContent = 'İsmail (ödevci) Girişi';
+                titleEl.textContent = 'İsmail Girişi (Bakımda)';
 
-                badgeEl.textContent = 'ÖDEVCİ';
+                badgeEl.textContent = 'İÇERİK YÖNETİCİSİ • RATE-LIMIT';
 
-                badgeEl.className = 'px-2 py-0.5 text-[10px] font-mono font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30 rounded-md';
+                badgeEl.className = 'px-2 py-0.5 text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40 rounded-md';
 
-                subEl.textContent = 'Sınırlı ödevci yetkisi • 15 dk / 5 hak';
+                subEl.innerHTML = '<span class="text-amber-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> Güvenlik Katmanı Aktif (Bakımda)</span><div class="mt-2 p-2.5 rounded-xl bg-purple-950/40 border border-purple-500/30 text-purple-200 text-xs flex items-center justify-between"><span>İsmail Gelme Sayacı:</span><span id="ismail-modal-countdown-timer" class="font-mono text-amber-300 font-black">--</span></div><div class="mt-1 text-[11px] text-slate-400">Olası bir siber saldırıda ana veritabanı (Root) çökmesin diye yetkiler güvenlik katmanlarına bölündü. Saniyede 100 ödev basan bot ve virüs saldırılarına karşı 15 dakikalık Rate-Limit korumalı <strong>İçerik Yöneticisi</strong> modu tanımlandı.</div>';
 
-                iconEl.className = 'fa-solid fa-book-bookmark';
+                iconEl.className = 'fa-solid fa-shield-halved text-purple-400 animate-pulse';
 
-                iconBox.className = 'w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 via-fuchsia-500 to-indigo-600 text-slate-950 flex items-center justify-center text-xl font-black shadow-lg';
+                iconBox.className = 'w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl font-black shadow-lg';
 
-                btnEl.className = 'w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 via-fuchsia-500 to-purple-600 hover:from-purple-400 hover:to-fuchsia-400 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg shadow-purple-500/20 transition flex items-center justify-center gap-2';
+                btnEl.className = 'w-full py-3 rounded-2xl bg-gradient-to-r from-purple-500 via-fuchsia-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-purple-500/20 transition flex items-center justify-center gap-2';
 
-                input.placeholder = 'İsmail şifresini klavye ile yazın veya yapıştırın...';
+                btnEl.innerHTML = '<i class="fa-solid fa-shield"></i> <span>Giriş Yap (İçerik Yöneticisi)</span>';
+
+                input.placeholder = 'İsmail 81 haneli şifresi (Bakım bypass)...';
 
             } else if (target === 'yahya') {
 
@@ -4141,11 +4137,11 @@
 
             if (isIsmailLoggedIn) {
 
-                if (now - lastIsmailPushTime < 8000) {
+                if (now - lastIsmailPushTime < 4000) {
 
-                    const waitSec = Math.ceil((8000 - (now - lastIsmailPushTime)) / 1000);
+                    const waitSec = Math.ceil((4000 - (now - lastIsmailPushTime)) / 1000);
 
-                    showToast(`Sunucu koruması: ${waitSec} sn sonra tekrar dene!`);
+                    showToast(`Siber Koruma: Bot flood engellendi! ${waitSec} sn bekleyin.`);
 
                     return;
 
@@ -4157,13 +4153,15 @@
 
                     const min = Math.ceil(actInfo.nextResetSec / 60);
 
-                    showToast(`İsmail 15 dk kotası dolu! (${min} dk sonra hakların yenilenecek)`);
+                    showToast(`Siber Güvenlik: 15 dk Rate-Limit devrede! Bot/virüs koruması için sistem kilitlendi (${min} dk sonra açılacak).`);
 
                     return;
 
                 }
 
             }
+
+
 
             const editId = document.getElementById('hw-edit-id').value;
 
@@ -4201,23 +4199,7 @@
 
             }
 
-            if (isIsmailLoggedIn) {
 
-                if (title.length > 80) title = title.slice(0, 80);
-
-                if (desc.length > 200) desc = desc.slice(0, 200);
-
-                const currentIsmailCount = portalItems.filter(i => i.author === 'ismail').length;
-
-                if (!editId && currentIsmailCount >= 5) {
-
-                    showToast('İsmail kotası: En fazla 5 aktif ödev ekleyebilirsin!');
-
-                    return;
-
-                }
-
-            }
 
             if (editId) {
 
@@ -4233,13 +4215,7 @@
 
                 }
 
-                if (isIsmailLoggedIn && targetItem.author !== 'ismail') {
 
-                    showToast('Güvenlik İhlali: Kaan veya Yahya\'ın ödevini değiştiremezsin!');
-
-                    return;
-
-                }
 
             }
 
@@ -4307,6 +4283,8 @@
 
             }
 
+
+
             saveToLocal(updatedList, newVer);
 
             window.setCategoryTab(category);
@@ -4347,13 +4325,7 @@
 
             }
 
-            if (isIsmailLoggedIn && item.author !== 'ismail') {
 
-                showToast('Korumalı Kayıt: Kaan veya Yahya\'ın ödevini düzenleyemezsin!');
-
-                return;
-
-            }
 
             document.getElementById('hw-edit-id').value = item.id;
 
@@ -4393,13 +4365,7 @@
 
             }
 
-            if (isIsmailLoggedIn && item.author !== 'ismail') {
 
-                showToast('Korumalı Kayıt: Kaan veya Yahya\'ın ödevini silemezsin!');
-
-                return;
-
-            }
 
             const now = Date.now();
 
@@ -4421,11 +4387,11 @@
 
             if (isIsmailLoggedIn) {
 
-                if (now - lastIsmailPushTime < 8000) {
+                if (now - lastIsmailPushTime < 4000) {
 
-                    const waitSec = Math.ceil((8000 - (now - lastIsmailPushTime)) / 1000);
+                    const waitSec = Math.ceil((4000 - (now - lastIsmailPushTime)) / 1000);
 
-                    showToast(`Sunucu koruması: ${waitSec} sn sonra tekrar dene!`);
+                    showToast(`Siber Koruma: Bot flood engellendi! ${waitSec} sn bekleyin.`);
 
                     return;
 
@@ -4437,7 +4403,7 @@
 
                     const min = Math.ceil(actInfo.nextResetSec / 60);
 
-                    showToast(`İsmail 15 dk kotası dolu! (${min} dk sonra hakların yenilenecek)`);
+                    showToast(`Siber Güvenlik: 15 dk Rate-Limit devrede! Bot/virüs koruması için sistem kilitlendi (${min} dk sonra açılacak).`);
 
                     return;
 
@@ -4448,6 +4414,8 @@
                 lastIsmailPushTime = now;
 
             }
+
+
 
             const newVer = Date.now();
 
@@ -4584,4 +4552,3 @@
 </body>
 
 </html>
-
