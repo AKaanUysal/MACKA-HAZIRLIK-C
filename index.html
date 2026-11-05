@@ -1853,7 +1853,7 @@
 
         
 
-        const CLOUD_TOPIC = 'ytumacka_hazc_portal_sync_v7';
+        const CLOUD_TOPIC = 'ytumacka_hazc_v8_sec_7e9a2b4f1c8d0e3a5b6c9d2f';
         const CLOUD_SERVERS = [
             'https://ntfy.tedomum.fr/' + CLOUD_TOPIC,
             'https://ntfy.sh/' + CLOUD_TOPIC
@@ -2623,7 +2623,15 @@
 
                 const parsed = JSON.parse(raw);
 
-                portalItems = sanitizeItems(Array.isArray(parsed) ? parsed.filter(i => !(i.title && i.title.toLowerCase() === 'test' && i.desc && i.desc.toLowerCase() === 'test')) : [...DEFAULT_ITEMS]);
+                let clean = Array.isArray(parsed) ? parsed.filter(i => !(i.title && i.title.toLowerCase() === 'test' && i.desc && i.desc.toLowerCase() === 'test')) : [];
+
+                if (!clean || clean.length === 0) {
+
+                    clean = [...DEFAULT_ITEMS];
+
+                }
+
+                portalItems = sanitizeItems(clean);
 
             } catch (e) {
 
@@ -2800,20 +2808,23 @@
                             if (evt.event === 'message' && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                                 const data = JSON.parse(evt.message);
                                 if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
-                const signerRole = data.u;
-                if (!['kaan', 'yahya', 'ismail'].includes(signerRole)) {
-                    console.warn('[Siber Savunma] Geçersiz rol reddedildi!');
-                    return;
-                }
-                const canonicalStr = `${data.v}:${signerRole}:${JSON.stringify(data.d)}`;
-                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s);
-                if (!isSigValid) {
-                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte konsol/Postman saldırısı engellendi.');
-                    return;
-                }
+                                    const signerRole = data.u;
+                                    if (!['kaan', 'yahya', 'ismail'].includes(signerRole)) {
+                                        console.warn('[Siber Savunma] Geçersiz rol atlandı.');
+                                        continue;
+                                    }
+                                    const canonicalStr = `${data.v}:${signerRole}:${JSON.stringify(data.d)}`;
+                                    const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s);
+                                    if (!isSigValid) {
+                                        console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte veri paketi atlandı.');
+                                        continue;
+                                    }
                                     if (data.v >= newestVer) {
                                         newestVer = data.v;
-                                        newestItems = unpackItems(data.d);
+                                        const unpacked = unpackItems(data.d);
+                                        if (unpacked && unpacked.length > 0) {
+                                            newestItems = unpacked;
+                                        }
                                     }
                                 }
                             }
@@ -2843,6 +2854,28 @@
             }
         }
 
+        let liveUpdateDebounceTimer = null;
+        let lastLiveUpdateTime = 0;
+
+        function scheduleDebouncedLiveUpdate(updatedItems, version, toastMsg) {
+            saveToLocal(updatedItems, version);
+            const now = Date.now();
+            if (now - lastLiveUpdateTime < 500) {
+                if (liveUpdateDebounceTimer) clearTimeout(liveUpdateDebounceTimer);
+                liveUpdateDebounceTimer = setTimeout(() => {
+                    lastLiveUpdateTime = Date.now();
+                    renderAllViews();
+                    updateAuthUI();
+                    if (toastMsg) showToast(toastMsg);
+                }, 500);
+            } else {
+                lastLiveUpdateTime = now;
+                renderAllViews();
+                updateAuthUI();
+                if (toastMsg) showToast(toastMsg);
+            }
+        }
+
         function startLiveStream() {
             if (sseConnection) {
                 try { sseConnection.close(); } catch (e) {}
@@ -2867,10 +2900,9 @@
                 }
                             if (data.v > localVersion) {
                                 const updated = unpackItems(data.d);
-                                saveToLocal(updated, data.v);
-                                renderAllViews();
-                                updateAuthUI();
-                                showToast('Canlı Güncelleme: Anında senkronize edildi!');
+                                if (updated && updated.length > 0) {
+                                    scheduleDebouncedLiveUpdate(updated, data.v, 'Canlı Güncelleme: Anında senkronize edildi!');
+                                }
                             }
                         }
                     } catch (bcErr) {}
@@ -2901,10 +2933,9 @@
                 }
                                 if (data.v > localVersion) {
                                     const updated = unpackItems(data.d);
-                                    saveToLocal(updated, data.v);
-                                    renderAllViews();
-                                    updateAuthUI();
-                                    showToast('Canlı Güncelleme: Yeni kayıt eklendi!');
+                                    if (updated && updated.length > 0) {
+                                        scheduleDebouncedLiveUpdate(updated, data.v, 'Canlı Güncelleme: Yeni kayıt eklendi!');
+                                    }
                                 }
                             }
                         }
@@ -2956,9 +2987,11 @@
 
         function isDateWithinItem(isoDate, item) {
 
-            const start = item.date;
+            if (!item) return false;
 
-            const end = item.endDate || item.date;
+            const start = item.date || '';
+
+            const end = item.endDate || item.date || '';
 
             return isoDate >= start && isoDate <= end;
 
@@ -3570,11 +3603,21 @@
 
                 }
 
-                return a.date.localeCompare(b.date);
+                return (a.date || '').localeCompare(b.date || '');
 
             });
 
-            listEl.innerHTML = filtered.map(item => {
+            const totalCount = filtered.length;
+            const displayLimit = 50;
+            const renderQueue = filtered.slice(0, displayLimit);
+
+            if (totalCount > displayLimit) {
+                totalEl.textContent = `${totalCount} kayıt (İlk ${displayLimit} listeleniyor - DoS Koruması)`;
+            } else {
+                totalEl.textContent = `${totalCount} kayıt`;
+            }
+
+            listEl.innerHTML = renderQueue.map(item => {
 
                 const itemTarget = item.endDate || item.date;
 
@@ -3741,6 +3784,18 @@
             }).join('');
 
         }
+
+                window.resetPortalToDefaults = function() {
+            localStorage.removeItem(STORAGE_KEY_ITEMS);
+            localStorage.removeItem(STORAGE_KEY_VER);
+            sessionStorage.clear();
+            portalItems = sanitizeItems([...DEFAULT_ITEMS]);
+            localVersion = Date.now();
+            saveToLocal(portalItems, localVersion);
+            renderAllViews();
+            updateAuthUI();
+            showToast('Sistem başarıyla fabrika ayarlarına döndürüldü!');
+        };
 
         function renderTeachersGrid() {
 
@@ -4312,6 +4367,8 @@
 
         window.logoutAuth = function() {
 
+            activePrivateKey = null;
+
             currentAuthRole = null;
 
             isKaanLoggedIn = false;
@@ -4324,15 +4381,20 @@
 
             sessionStorage.removeItem(STORAGE_KEY_ROLE);
 
+            sessionStorage.removeItem('macka_hazc_active_pass');
+
             window.resetHomeworkForm();
 
             updateAuthUI();
+
+            renderAllViews();
 
             showToast('Yönetici oturumu kapatıldı.');
 
         };
 
         window.logoutKaan = window.logoutAuth;
+        window.logoutUser = window.logoutAuth;
 
         window.saveHomeworkItem = async function(e) {
 
