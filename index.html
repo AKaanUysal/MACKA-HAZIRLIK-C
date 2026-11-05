@@ -2368,47 +2368,37 @@
 
         ];
 
-        let currentAuthRole = sessionStorage.getItem(STORAGE_KEY_ROLE) || null;
-
-        const savedAuthHash = sessionStorage.getItem(STORAGE_KEY_AUTH);
-
-        if (savedAuthHash === AUTH_DIGEST_KAAN) {
-
-            currentAuthRole = 'kaan';
-
-        } else if (savedAuthHash === AUTH_DIGEST_YAHYA) {
-
-            currentAuthRole = 'yahya';
-
-        } else if (savedAuthHash === AUTH_DIGEST_ISMAIL) {
-
-            currentAuthRole = 'ismail';
-
-        } else {
-
-            currentAuthRole = null;
-
-        }
-
-        const savedPass = sessionStorage.getItem('macka_hazc_active_pass');
-
-        if (savedPass && currentAuthRole) {
-
-            decryptUserPrivateKey(currentAuthRole, savedPass).then(k => { activePrivateKey = k; }).catch(() => {});
-
-        }
-
-        let isKaanLoggedIn = currentAuthRole === 'kaan';
-
-        let isYahyaLoggedIn = currentAuthRole === 'yahya';
-
-        let isIsmailLoggedIn = currentAuthRole === 'ismail';
-
+        let activePrivateKey = null;
+        let currentAuthRole = null;
+        let isKaanLoggedIn = false;
+        let isYahyaLoggedIn = false;
+        let isIsmailLoggedIn = false;
         let currentModalTarget = 'kaan';
-
         let lastYahyaPushTime = 0;
-
         let lastIsmailPushTime = 0;
+
+        (async function initSessionFromVault() {
+            const savedRole = sessionStorage.getItem(STORAGE_KEY_ROLE);
+            const savedPass = sessionStorage.getItem('macka_hazc_active_pass');
+            if (savedRole && savedPass && ['kaan', 'yahya', 'ismail'].includes(savedRole)) {
+                try {
+                    const key = await decryptUserPrivateKey(savedRole, savedPass);
+                    if (key) {
+                        activePrivateKey = key;
+                        currentAuthRole = savedRole;
+                        isKaanLoggedIn = currentAuthRole === 'kaan';
+                        isYahyaLoggedIn = currentAuthRole === 'yahya';
+                        isIsmailLoggedIn = currentAuthRole === 'ismail';
+                        updateAuthUI();
+                        renderAllViews();
+                        return;
+                    }
+                } catch(e) {}
+            }
+            sessionStorage.removeItem(STORAGE_KEY_AUTH);
+            sessionStorage.removeItem(STORAGE_KEY_ROLE);
+            sessionStorage.removeItem('macka_hazc_active_pass');
+        })();
 
         function getIsmailRemainingActions() {
 
@@ -2633,7 +2623,7 @@
 
                 const parsed = JSON.parse(raw);
 
-                portalItems = sanitizeItems(Array.isArray(parsed) ? parsed : [...DEFAULT_ITEMS]);
+                portalItems = sanitizeItems(Array.isArray(parsed) ? parsed.filter(i => !(i.title && i.title.toLowerCase() === 'test' && i.desc && i.desc.toLowerCase() === 'test')) : [...DEFAULT_ITEMS]);
 
             } catch (e) {
 
@@ -2709,13 +2699,12 @@
 
         async function pushCloudState(items, ver) {
 
+            if (!activePrivateKey || !currentAuthRole) {
+                showToast('Kriptografik Güvenlik Duvarı: Geçerli ECDSA anahtarı olmadan buluta yayın yapılamaz!');
+                return false;
+            }
+
             setCloudStatus('Yayınlanıyor...', false);
-
-            let activeSignature = AUTH_DIGEST_KAAN;
-
-            if (currentAuthRole === 'yahya') activeSignature = AUTH_DIGEST_YAHYA;
-
-            else if (currentAuthRole === 'ismail') activeSignature = AUTH_DIGEST_ISMAIL;
 
             if (currentAuthRole === 'yahya') {
 
@@ -2747,8 +2736,11 @@
 
             const packed = packItems(items);
             const canonicalStr = `${ver}:${currentAuthRole}:${JSON.stringify(packed)}`;
-            let ecdsaSig = await signEcdsaPayload(currentAuthRole, canonicalStr);
-            if (!ecdsaSig) ecdsaSig = activeSignature;
+            const ecdsaSig = await signEcdsaPayload(currentAuthRole, canonicalStr);
+            if (!ecdsaSig) {
+                showToast('Kriptografik imza üretilemedi! Yetkisiz işlem engellendi.');
+                return false;
+            }
 
             const payloadObj = {
                 v: ver,
@@ -2808,15 +2800,15 @@
                             if (evt.event === 'message' && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                                 const data = JSON.parse(evt.message);
                                 if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
-                const signerRole = data.u || (data.s === AUTH_DIGEST_KAAN ? 'kaan' : (data.s === AUTH_DIGEST_YAHYA ? 'yahya' : (data.s === AUTH_DIGEST_ISMAIL ? 'ismail' : null)));
-                if (!signerRole) {
-                    console.warn('[Siber Savunma] Sahte veya imzasız veri reddedildi!');
+                const signerRole = data.u;
+                if (!['kaan', 'yahya', 'ismail'].includes(signerRole)) {
+                    console.warn('[Siber Savunma] Geçersiz rol reddedildi!');
                     return;
                 }
                 const canonicalStr = `${data.v}:${signerRole}:${JSON.stringify(data.d)}`;
-                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s) || (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL);
+                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s);
                 if (!isSigValid) {
-                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte Postman saldırısı engellendi.');
+                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte konsol/Postman saldırısı engellendi.');
                     return;
                 }
                                     if (data.v >= newestVer) {
@@ -2862,15 +2854,15 @@
                     try {
                         const data = e.data;
                         if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
-                const signerRole = data.u || (data.s === AUTH_DIGEST_KAAN ? 'kaan' : (data.s === AUTH_DIGEST_YAHYA ? 'yahya' : (data.s === AUTH_DIGEST_ISMAIL ? 'ismail' : null)));
-                if (!signerRole) {
-                    console.warn('[Siber Savunma] Sahte veya imzasız veri reddedildi!');
+                const signerRole = data.u;
+                if (!['kaan', 'yahya', 'ismail'].includes(signerRole)) {
+                    console.warn('[Siber Savunma] Geçersiz rol reddedildi!');
                     return;
                 }
                 const canonicalStr = `${data.v}:${signerRole}:${JSON.stringify(data.d)}`;
-                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s) || (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL);
+                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s);
                 if (!isSigValid) {
-                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte Postman saldırısı engellendi.');
+                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte konsol/Postman saldırısı engellendi.');
                     return;
                 }
                             if (data.v > localVersion) {
@@ -2896,15 +2888,15 @@
                         if (evt && typeof evt.message === 'string' && evt.message.startsWith('{')) {
                             const data = JSON.parse(evt.message);
                             if (data && typeof data.v === 'number' && Array.isArray(data.d)) {
-                const signerRole = data.u || (data.s === AUTH_DIGEST_KAAN ? 'kaan' : (data.s === AUTH_DIGEST_YAHYA ? 'yahya' : (data.s === AUTH_DIGEST_ISMAIL ? 'ismail' : null)));
-                if (!signerRole) {
-                    console.warn('[Siber Savunma] Sahte veya imzasız veri reddedildi!');
+                const signerRole = data.u;
+                if (!['kaan', 'yahya', 'ismail'].includes(signerRole)) {
+                    console.warn('[Siber Savunma] Geçersiz rol reddedildi!');
                     return;
                 }
                 const canonicalStr = `${data.v}:${signerRole}:${JSON.stringify(data.d)}`;
-                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s) || (data.s === AUTH_DIGEST_KAAN || data.s === AUTH_DIGEST_YAHYA || data.s === AUTH_DIGEST_ISMAIL);
+                const isSigValid = await verifyEcdsaPayload(signerRole, canonicalStr, data.s);
                 if (!isSigValid) {
-                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte Postman saldırısı engellendi.');
+                    console.warn('[Siber Savunma] Geçersiz ECDSA imzası! Sahte konsol/Postman saldırısı engellendi.');
                     return;
                 }
                                 if (data.v > localVersion) {
@@ -4346,6 +4338,12 @@
 
             e.preventDefault();
 
+            if (!activePrivateKey || !currentAuthRole) {
+                showToast('Yetkisiz Erişim: Geçerli ECDSA anahtarı bulunamadı. Lütfen şifrenizle giriş yapın!');
+                window.logoutUser();
+                return;
+            }
+
             if (!isKaanLoggedIn && !isYahyaLoggedIn && !isIsmailLoggedIn) return;
 
             const now = Date.now();
@@ -4579,6 +4577,12 @@
         };
 
         window.deleteHomeworkItem = async function(id) {
+
+            if (!activePrivateKey || !currentAuthRole) {
+                showToast('Yetkisiz Erişim: Geçerli ECDSA anahtarı bulunamadı. Lütfen şifrenizle giriş yapın!');
+                window.logoutUser();
+                return;
+            }
 
             if (!isKaanLoggedIn && !isYahyaLoggedIn && !isIsmailLoggedIn) return;
 
