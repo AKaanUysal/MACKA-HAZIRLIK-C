@@ -141,4 +141,4 @@ Because this system adheres to a zero-build, zero-dependency architectural desig
 ## 📄 License & Intellectual Property
 
 Custom built for **YTÜ Maçka MTAL Hazırlık C**.  
-All rights reserved. © 2026 Davut Kaan Uysal.
+All rights reserved. © 2026  AKaan Uysal.
