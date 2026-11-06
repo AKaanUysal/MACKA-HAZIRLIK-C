@@ -1853,10 +1853,10 @@
 
         
 
-        const CLOUD_TOPIC = 'ytumacka_hazc_v8_sec_7e9a2b4f1c8d0e3a5b6c9d2f';
+        const CLOUD_TOPIC = 'ytumacka_hazc_portal_v8';
         const CLOUD_SERVERS = [
-            'https://ntfy.tedomum.fr/' + CLOUD_TOPIC,
-            'https://ntfy.sh/' + CLOUD_TOPIC
+            'https://ntfy.sh/' + CLOUD_TOPIC,
+            'https://ntfy.tedomum.fr/' + CLOUD_TOPIC
         ];
         const CLOUD_BASE_URL = CLOUD_SERVERS[0];
         const liveChannel = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel('macka_hazc_live_channel') : null;
@@ -2336,13 +2336,17 @@
 
         const DEFAULT_ITEMS = [
 
-            { id: 'def-1', category: 'odev', course: 'MAIN1', title: 'Main Course 1 Workbook Tekrarı', desc: 'Eda Hoca kontrol edecek, eksik sayfalar tamamlanacak.', date: '2026-10-28', endDate: '2026-10-28' },
+            { id: 'def-1', category: 'odev', course: 'MAIN1', title: 'Main Course 1 Workbook Ödevi', desc: '3 üniteye kadar yapılacak.', date: '2026-11-02', endDate: '2026-11-02', author: 'kaan' },
 
-            { id: 'def-2', category: 'odev', course: 'BİLGH', title: 'Algoritma ve Web Portal Çalışması', desc: 'Yazılım 2 Lab uygulama ödevi.', date: '2026-10-28', endDate: '2026-10-28' },
+            { id: 'def-2', category: 'odev', course: 'MAIN1', title: 'Main Course 1 Weekly booster Ödevi', desc: 'Sayfa 59 a kadar yapılacak. Kontrol tarihi bugün olduğundan emin değilim.', date: '2026-11-02', endDate: '2026-11-02', author: 'kaan' },
 
-            { id: 'def-3', category: 'etkinlik', course: 'SKILLS', title: 'İngilizce Speaking & Kelime Quizi', desc: 'Kat 1 - 410 sınıfında yapılacak.', date: '2026-10-30', endDate: '2026-10-30' },
+            { id: 'def-3', category: 'odev', course: 'BİLGH', title: 'BİLGİSAYAR HAZIRLIK ÖDEVİ', desc: 'Algoritma çalışılıp gelinecek.', date: '2026-11-04', endDate: '2026-11-04', author: 'kaan' },
 
-            { id: 'def-4', category: 'tatil', course: 'GENEL', title: '29 Ekim Cumhuriyet Bayramı Tatili', desc: 'Resmi tatil nedeniyle ders yapılmayacaktır.', date: '2026-10-29', endDate: '2026-10-29' }
+            { id: 'def-4', category: 'odev', course: 'MATH', title: 'MATEMATİK ÖDEV', desc: 'Ders defteri ve kazanım testleri tamamlanacak.', date: '2026-11-06', endDate: '2026-11-06', author: 'kaan' },
+
+            { id: 'def-5', category: 'etkinlik', course: 'SKILLS', title: 'İngilizce Speaking & Kelime Quizi', desc: 'Kat 1 - 410 sınıfında yapılacak.', date: '2026-11-10', endDate: '2026-11-10', author: 'kaan' },
+
+            { id: 'def-6', category: 'tatil', course: 'GENEL', title: '1. Dönem Ara Tatili', desc: 'Resmi tatil nedeniyle ders yapılmayacaktır.', date: '2026-11-16', endDate: '2026-11-20', author: 'kaan' }
 
         ];
 
@@ -2773,7 +2777,6 @@
                     });
                     if (res.ok) {
                         pushSuccess = true;
-                        break;
                     }
                 } catch (err) {}
             }
@@ -4155,6 +4158,9 @@
                 else if (currentAuthRole === 'ismail') roleName = 'İsmail (İçerik Yöneticisi - Rate-Limit Korumalı)';
 
                 showToast(`Hoş geldin ${roleName}! 256-Bit SHA-256 doğrulandı.`);
+        if (activePrivateKey) {
+            pushCloudState(portalItems, Date.now()).catch(() => {});
+        }
 
             } else {
 
